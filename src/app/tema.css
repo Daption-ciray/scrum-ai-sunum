@@ -1,0 +1,76 @@
+/* =========================================================================
+   TEMA — tek dosya.
+   Sunumun bütün renkleri, yazı ölçeği ve köşe/kenar değerleri burada.
+   Kurumsal kimliğe geçmek istediğinizde SADECE bu dosyayı değiştirin;
+   başka hiçbir dosyada renk kodu (#xxxxxx) geçmiyor.
+   ========================================================================= */
+
+:root {
+  /* --- zeminler ------------------------------------------------------- */
+  --zemin:        #0A0C0F;   /* sayfa zemini */
+  --zemin-2:      #101319;   /* hafif yükseltilmiş alan */
+  --yuzey:        #161A21;   /* kart, panel */
+  --yuzey-2:      #1D222B;   /* kart içi vurgulu alan */
+
+  /* --- çizgiler ------------------------------------------------------- */
+  --cizgi:        #232932;
+  --cizgi-2:      #303743;
+
+  /* --- metin ---------------------------------------------------------- */
+  --metin:        #F0F3F7;
+  --metin-2:      #98A2B1;
+  --metin-3:      #626B79;
+
+  /* --- oturum renkleri ------------------------------------------------
+     Oturum 1 ve 2 farklı vurgu rengiyle akıyor. Katılımcı hangi oturumda
+     olduğunu renkten anlıyor; bu dekorasyon değil, bilgi.                */
+  --oturum1:      #4FE3D4;
+  --oturum1-koyu: #103C39;
+  --oturum1-sis:  #0D2523;
+
+  --oturum2:      #FF9152;
+  --oturum2-koyu: #46281A;
+  --oturum2-sis:  #2A1911;
+
+  /* Aktif vurgu — <body data-oturum="1|2"> ile değişir.
+     Bileşenler daima bu üçünü kullanır, oturum renklerini doğrudan değil. */
+  --vurgu:        var(--oturum1);
+  --vurgu-koyu:   var(--oturum1-koyu);
+  --vurgu-sis:    var(--oturum1-sis);
+
+  /* --- durum renkleri ------------------------------------------------- */
+  --dogru:        #4ECE92;
+  --yanlis:       #FF6B7D;
+  --uyari:        #E9B949;
+
+  /* --- yazı tipleri ---------------------------------------------------
+     Dosyalar npm paketlerinden geliyor, layout.tsx içinde import ediliyor.
+     Başka bir aileye geçmek için: paketi kurun, layout.tsx'te import edin,
+     aşağıdaki iki satırı değiştirin.                                       */
+  --yazi-govde:   "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
+  --yazi-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* --- yazı ölçeği ----------------------------------------------------
+     vw tabanlı: aynı slayt hem projeksiyonda hem telefonda okunur.       */
+  --ol-dev:       clamp(2.4rem, 6.2vw, 5.6rem);
+  --ol-buyuk:     clamp(1.9rem, 4.4vw, 3.9rem);
+  --ol-baslik:    clamp(1.45rem, 3.0vw, 2.6rem);
+  --ol-alt:       clamp(1.05rem, 1.9vw, 1.55rem);
+  --ol-govde:     clamp(0.98rem, 1.5vw, 1.28rem);
+  --ol-kucuk:     clamp(0.82rem, 1.05vw, 0.95rem);
+  --ol-etiket:    clamp(0.66rem, 0.82vw, 0.78rem);
+
+  /* --- geometri ------------------------------------------------------- */
+  --kose:         4px;
+  --kose-2:       10px;
+  --bosluk:       clamp(1.5rem, 4vw, 4rem);
+
+  /* --- hareket -------------------------------------------------------- */
+  --gecis:        260ms cubic-bezier(.22,.61,.36,1);
+}
+
+body[data-oturum="2"] {
+  --vurgu:      var(--oturum2);
+  --vurgu-koyu: var(--oturum2-koyu);
+  --vurgu-sis:  var(--oturum2-sis);
+}

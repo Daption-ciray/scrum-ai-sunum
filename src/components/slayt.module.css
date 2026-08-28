@@ -1,0 +1,253 @@
+/* Slayt yüzeyi. Bütün slayt tipleri bu ızgaranın içinde yaşıyor. */
+
+.sahne {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--bosluk);
+  padding-top: clamp(1rem, 2.5vw, 2rem);
+  overflow-y: auto;
+}
+
+.icerik {
+  width: 100%;
+  max-width: 1180px;
+  animation: girisi var(--gecis) both;
+}
+
+@keyframes girisi {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------------- kapak ---------------- */
+.kapak { display: flex; flex-direction: column; gap: clamp(1rem, 2.4vw, 2rem); }
+.kapakUst { color: var(--vurgu); letter-spacing: .2em; }
+.kapakBaslik { font-size: var(--ol-dev); line-height: 1.02; }
+.kapakAlt { font-size: var(--ol-alt); color: var(--metin-2); }
+.kapakMeta {
+  font-size: var(--ol-kucuk);
+  color: var(--metin-3);
+  border-left: 2px solid var(--vurgu);
+  padding-left: .9em;
+  max-width: 46ch;
+}
+
+/* ---------------- bölüm ayracı ---------------- */
+.bolum { display: flex; flex-direction: column; gap: 1rem; }
+.bolumNumara { font-size: var(--ol-dev); color: var(--vurgu-koyu); line-height: 1; }
+.bolumBaslik { font-size: var(--ol-buyuk); }
+.bolumOzet { font-size: var(--ol-alt); color: var(--metin-2); max-width: 52ch; }
+
+/* ---------------- ortak başlık ---------------- */
+.baslik { font-size: var(--ol-baslik); margin-bottom: .35em; }
+.giris {
+  font-size: var(--ol-alt);
+  color: var(--metin-2);
+  max-width: 62ch;
+  margin-bottom: clamp(1.2rem, 2.6vw, 2.2rem);
+}
+.baslikBosluk { margin-bottom: clamp(1.2rem, 2.6vw, 2.2rem); }
+
+/* ---------------- madde listesi ---------------- */
+.maddeler { display: flex; flex-direction: column; gap: clamp(.7rem, 1.5vw, 1.15rem); }
+.madde {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 clamp(.8rem, 1.6vw, 1.3rem);
+  align-items: baseline;
+}
+.maddeIsaret {
+  width: .5em; height: .5em;
+  border-radius: 50%;
+  background: var(--vurgu);
+  transform: translateY(-.15em);
+}
+.maddeAna { font-size: var(--ol-alt); font-weight: 600; letter-spacing: -.015em; }
+.maddeAlt {
+  grid-column: 2;
+  font-size: var(--ol-govde);
+  color: var(--metin-2);
+  max-width: 66ch;
+  margin-top: .15em;
+}
+
+/* ---------------- vurgu ---------------- */
+.vurguSarma { display: flex; flex-direction: column; gap: 1.6rem; align-items: flex-start; }
+.vurguMetin {
+  font-size: var(--ol-buyuk);
+  line-height: 1.14;
+  max-width: 20ch;
+  letter-spacing: -.03em;
+}
+.vurguKaynak {
+  font-size: var(--ol-kucuk);
+  color: var(--metin-3);
+  border-top: 1px solid var(--cizgi-2);
+  padding-top: .8rem;
+}
+
+/* ---------------- ikili karşılaştırma ---------------- */
+.ikili {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(.9rem, 2vw, 1.6rem);
+}
+.sutun {
+  background: var(--yuzey);
+  border: 1px solid var(--cizgi);
+  border-top: 2px solid var(--cizgi-2);
+  border-radius: var(--kose);
+  padding: clamp(1.1rem, 2.2vw, 1.7rem);
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+}
+.sutunOlumlu { border-top-color: var(--dogru); }
+.sutunOlumsuz { border-top-color: var(--uyari); }
+.sutunBaslik { font-size: var(--ol-alt); }
+.sutunListe { display: flex; flex-direction: column; gap: .6rem; }
+.sutunListe li {
+  font-size: var(--ol-govde);
+  color: var(--metin-2);
+  padding-left: 1.1em;
+  position: relative;
+}
+.sutunListe li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: .62em;
+  width: .38em; height: 1px;
+  background: var(--metin-3);
+}
+
+/* ---------------- katmanlar ---------------- */
+.katmanlar { display: flex; flex-direction: column; gap: .5rem; }
+.katman {
+  display: grid;
+  grid-template-columns: minmax(0, auto) 1fr;
+  gap: 0 clamp(1rem, 2vw, 1.8rem);
+  align-items: center;
+  background: var(--yuzey);
+  border: 1px solid var(--cizgi);
+  border-radius: var(--kose);
+  padding: clamp(.75rem, 1.6vw, 1.15rem) clamp(1rem, 2vw, 1.5rem);
+  /* İç içe geçme, sola artan girinti ile gösteriliyor. */
+  margin-left: calc(var(--derinlik) * clamp(.7rem, 2.2vw, 2.4rem));
+}
+.katmanAd {
+  font-size: var(--ol-alt);
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--vurgu);
+}
+.katmanAciklama { font-size: var(--ol-govde); color: var(--metin-2); }
+
+/* ---------------- tablo ---------------- */
+.tabloSarma { overflow-x: auto; border: 1px solid var(--cizgi); border-radius: var(--kose); }
+.tablo { width: 100%; border-collapse: collapse; min-width: 520px; }
+.tablo th {
+  text-align: left;
+  padding: .85em 1.1em;
+  border-bottom: 1px solid var(--cizgi-2);
+  color: var(--vurgu);
+  font-size: var(--ol-etiket);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.tablo td {
+  padding: .8em 1.1em;
+  border-bottom: 1px solid var(--cizgi);
+  font-size: var(--ol-govde);
+  color: var(--metin-2);
+  vertical-align: top;
+}
+.tablo tr:last-child td { border-bottom: 0; }
+.tablo td:first-child { color: var(--metin); font-weight: 600; }
+
+/* ---------------- taslak ---------------- */
+.taslak {
+  border: 1px dashed var(--cizgi-2);
+  border-radius: var(--kose-2);
+  padding: clamp(1.3rem, 3vw, 2.4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  background: var(--zemin-2);
+}
+.taslakRozet {
+  align-self: flex-start;
+  color: var(--uyari);
+  border: 1px solid var(--uyari);
+  border-radius: 999px;
+  padding: .3em .9em;
+}
+.taslakNot { font-size: var(--ol-alt); color: var(--metin-2); max-width: 60ch; }
+.taslakListe { display: flex; flex-direction: column; gap: .45rem; }
+.taslakListe li {
+  font-size: var(--ol-govde);
+  color: var(--metin-3);
+  padding-left: 1.2em;
+  position: relative;
+}
+.taslakListe li::before {
+  content: "→";
+  position: absolute; left: 0;
+  color: var(--cizgi-2);
+}
+
+/* ---------------- perde ---------------- */
+.perde {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .9rem;
+  flex-direction: column;
+  color: var(--metin-3);
+}
+.perdeNokta {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--vurgu);
+  animation: nabiz 2.4s ease-in-out infinite;
+}
+@keyframes nabiz {
+  0%, 100% { opacity: .25; transform: scale(1); }
+  50%      { opacity: 1;  transform: scale(1.5); }
+}
+
+/* ---------------- dar ekran: tablo karta dönüşür ----------------
+   Telefondan katılan biri yatay kaydırma olduğunu fark etmeyebilir;
+   kesilen sütun görülmemiş sütundur. Bu yüzden satırları kart yapıyoruz. */
+@media (max-width: 680px) {
+  .tabloSarma { border: 0; overflow: visible; }
+  .tablo { min-width: 0; display: block; }
+  .tablo thead { display: none; }
+  .tablo tbody, .tablo tr, .tablo td { display: block; width: 100%; }
+  .tablo tr {
+    background: var(--yuzey);
+    border: 1px solid var(--cizgi);
+    border-radius: var(--kose);
+    padding: .8rem .95rem;
+    margin-bottom: .5rem;
+  }
+  .tablo td { border: 0; padding: .3rem 0; }
+  .tablo td[data-bos] { display: none; }
+  .tablo td::before {
+    content: attr(data-etiket);
+    display: block;
+    font-family: var(--yazi-mono), monospace;
+    font-size: var(--ol-etiket);
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--vurgu);
+    margin-bottom: .2rem;
+  }
+}
+
+/* Sunucu panelindeki küçük önizlemede kart moduna geçme —
+   panel dar olsa da orada tam tablo görünsün. */
+.onizlemeIci .tablo { display: table; }

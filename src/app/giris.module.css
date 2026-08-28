@@ -1,0 +1,49 @@
+.sayfa {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 6vw, 4rem);
+}
+.kutu {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.ust { color: var(--vurgu); letter-spacing: .2em; }
+.baslik { font-size: clamp(1.7rem, 5vw, 2.5rem); line-height: 1.08; }
+.aciklama { color: var(--metin-2); font-size: var(--ol-govde); max-width: 40ch; }
+
+.form { display: flex; flex-direction: column; gap: .7rem; }
+.etiketAlan { color: var(--metin-3); }
+.girdi {
+  width: 100%;
+  background: var(--yuzey);
+  border: 1px solid var(--cizgi-2);
+  border-radius: var(--kose);
+  color: var(--metin);
+  font: inherit;
+  font-size: var(--ol-alt);
+  padding: .8em 1em;
+  transition: border-color var(--gecis);
+}
+.girdi::placeholder { color: var(--metin-3); }
+.girdi:focus { border-color: var(--vurgu); outline: none; }
+
+.dugme {
+  background: var(--vurgu);
+  color: var(--zemin);
+  border: 0;
+  border-radius: var(--kose);
+  padding: .85em 1.2em;
+  font-weight: 600;
+  font-size: var(--ol-govde);
+  cursor: pointer;
+  transition: filter var(--gecis);
+}
+.dugme:hover:not(:disabled) { filter: brightness(1.1); }
+.dugme:disabled { opacity: .4; cursor: not-allowed; }
+
+.hata { color: var(--yanlis); font-size: var(--ol-kucuk); }
+.dipnot { color: var(--metin-3); font-size: var(--ol-kucuk); max-width: 40ch; }

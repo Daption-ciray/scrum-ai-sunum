@@ -1,0 +1,118 @@
+.kabuk { min-height: 100dvh; display: flex; flex-direction: column; background: var(--zemin); }
+
+.ust {
+  display: flex;
+  align-items: center;
+  gap: clamp(.7rem, 2vw, 1.4rem);
+  padding: .75rem clamp(1rem, 3vw, 2rem);
+  border-bottom: 1px solid var(--cizgi);
+  background: var(--zemin);
+  flex-wrap: wrap;
+}
+
+.oturumRozet {
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  color: var(--vurgu);
+  border: 1px solid var(--vurgu-koyu);
+  background: var(--vurgu-sis);
+  border-radius: 999px;
+  padding: .3em .75em;
+  white-space: nowrap;
+}
+
+.blok {
+  font-size: var(--ol-kucuk);
+  color: var(--metin-2);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sag { margin-left: auto; display: flex; align-items: center; gap: clamp(.6rem, 1.6vw, 1.1rem); }
+
+.sayac { color: var(--metin-3); white-space: nowrap; }
+
+.durumNoktasi {
+  display: inline-flex; align-items: center; gap: .45em;
+  color: var(--metin-3); white-space: nowrap;
+}
+.durumNoktasi::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--dogru);
+}
+.kopuk { color: var(--uyari); }
+.kopuk::before { background: var(--uyari); }
+
+/* ilerleme: blok blok. Katılımcı nerede olduğunu görüyor. */
+.ilerleme { display: flex; gap: 2px; height: 3px; background: var(--zemin); }
+.dilim { flex: 1; background: var(--cizgi); transition: background var(--gecis); }
+.dilimGecti { background: var(--vurgu-koyu); }
+.dilimAktif { background: var(--vurgu); }
+
+.uyariSerit {
+  padding: .55rem clamp(1rem, 3vw, 2rem);
+  background: var(--vurgu-sis);
+  border-bottom: 1px solid var(--cizgi);
+  color: var(--uyari);
+  font-size: var(--ol-kucuk);
+}
+
+/* ---------------- galeri düğmesi ---------------- */
+.galeriDugme {
+  display: flex; align-items: center; gap: 8px;
+  background: transparent;
+  border: 1px solid var(--cizgi-2);
+  border-radius: var(--kose);
+  color: var(--metin-2);
+  font-family: var(--yazi-mono), monospace;
+  font-size: var(--ol-etiket);
+  font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  padding: 7px 12px; min-height: 34px; cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--gecis), border-color var(--gecis);
+}
+.galeriDugme:hover { color: var(--metin); border-color: var(--vurgu); }
+
+/* ---------------- sunucudan ayrılma şeridi ----------------
+   Serbest gezinme seçildi; bu şerit engellemiyor, sadece nerede
+   olduğunuzu ve sunucunun nerede olduğunu söylüyor. */
+.kaydiSerit {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px clamp(12px, 3vw, 32px);
+  background: var(--oturum2-sis);
+  border-bottom: 1px solid var(--oturum2-koyu);
+  flex-wrap: wrap;
+}
+.kaydiMetin { font-size: var(--ol-kucuk); color: var(--oturum2); }
+.kaydiMetin b { font-weight: 600; }
+.kaydiDugme {
+  margin-left: auto;
+  background: var(--oturum2); border: 0; border-radius: var(--kose);
+  color: var(--zemin);
+  font-weight: 600; font-size: var(--ol-kucuk);
+  padding: 8px 14px; min-height: 36px; cursor: pointer;
+  white-space: nowrap;
+  transition: filter var(--gecis);
+}
+.kaydiDugme:hover { filter: brightness(1.1); }
+
+/* ---------------- serbest gezinme okları ---------------- */
+.gezOk {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 64px;
+  background: color-mix(in srgb, var(--zemin) 74%, transparent);
+  border: 1px solid var(--cizgi);
+  border-radius: var(--kose);
+  color: var(--metin-2);
+  cursor: pointer; z-index: 20;
+  transition: color var(--gecis), border-color var(--gecis), opacity var(--gecis);
+}
+.gezOk:hover { color: var(--vurgu); border-color: var(--vurgu); }
+.gezOk:disabled { opacity: .25; cursor: not-allowed; }
+.gezSol { left: 10px; }
+.gezSag { right: 10px; }
+@media (max-width: 640px) { .gezOk { width: 38px; height: 54px; } }
