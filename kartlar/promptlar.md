@@ -1,8 +1,39 @@
-# Kart görselleri — fal.ai promptları
+# Kart görselleri — fal.ai
 
-14 blok kartı için hazır promptlar. Şu an `public/kartlar/blok-01…14.jpg`
-dosyaları Canvas ile üretilmiş durumda; fal'da üretip **aynı adlarla** üzerine
-yazmanız yeterli, kodda hiçbir şey değişmiyor.
+14 blok kartını fal.ai ile üretmek için hazır betik ve promptlar. Şu an
+`public/kartlar/blok-01…14.jpg` dosyaları Canvas ile üretilmiş durumda;
+fal'la üretince üzerlerine yazılıyor, kodda hiçbir şey değişmiyor.
+
+## Çalıştırma
+
+```bash
+# anahtarı https://fal.ai/dashboard/keys adresinden alın
+FAL_KEY=xxxxx node kartlar/fal-uret.mjs
+
+# önce ne üretileceğini görün (anahtar gerekmez, hiçbir dosyaya dokunmaz)
+node kartlar/fal-uret.mjs --dry-run
+
+# sadece belirli kartları yeniden üret
+FAL_KEY=xxxxx node kartlar/fal-uret.mjs --only 3,9,14
+
+# daha ucuz/hızlı model
+FAL_KEY=xxxxx node kartlar/fal-uret.mjs --model fal-ai/flux/schnell
+```
+
+Bağımlılığı yok, Node 18+ yeterli. Üçlü eş zamanlılıkla çalışır, geçici
+hatalarda kendini toparlar, her kartı önce geçici dosyaya yazıp sonra taşır —
+yarım kalan bir çalıştırma mevcut galeriyi bozmaz. Başarısız kart olursa
+sonunda numaralarını ve tek satırlık yeniden deneme komutunu yazar.
+
+Bittiğinde `kartlar/onizleme.html` dosyasını açın: 14'ü yan yana görürsünüz.
+
+> **Not:** fal MCP sunucusu claude.ai ve Claude Desktop'a bağlanamıyor (bearer
+> token istiyor, bu yüzeyler OAuth şart koşuyor — fal'ın kendi dokümanının notu).
+> Bu yüzden betik doğrudan fal REST API'sini çağırıyor; MCP'ye gerek yok.
+> Betiğin çalıştığı yerin fal.ai'a ağ erişimi olmalı — kendi Terminal'inizde olur.
+
+Aşağıdaki tablo ve promptlar, betiğin `kartlar/kart-promptlari.mjs` içinde
+kullandığı metinlerin aynısı. Elle fal arayüzünde üretmek isterseniz de burada.
 
 ## Ayarlar
 
