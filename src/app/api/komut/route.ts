@@ -1,4 +1,4 @@
-import { durumuOku, durumuYaz, katilimcilariTemizle } from "@/lib/depo";
+import { durumuOku, durumuYaz, katilimcilariTemizle, katilimciyiAt } from "@/lib/depo";
 import { yoneticiMi } from "@/lib/anahtar";
 import { slaytSayisi } from "@/icerik";
 import type { Durum } from "@/lib/durum";
@@ -13,6 +13,7 @@ type Komut =
   | { komut: "perde" }
   | { komut: "sifirla" }
   | { komut: "katilimcilari-temizle" }
+  | { komut: "at"; id: string }
   | { komut: "kilitle" };
 
 const sinirla = (n: number, enAz: number, enCok: number) => Math.min(Math.max(n, enAz), enCok);
@@ -68,6 +69,15 @@ export async function POST(istek: Request) {
     case "katilimcilari-temizle":
       await katilimcilariTemizle();
       return Response.json({ durum: onceki }, { headers: { "cache-control": "no-store" } });
+    case "at": {
+      // Katılımcının oturumunu kapatır. Kaydı silmek yetmez — bir sonraki
+      // bildirimde kendini geri eklerdi; kısa süreli bir işaret bırakılıyor.
+      if (typeof govde.id !== "string" || !govde.id) {
+        return Response.json({ hata: "Kimlik eksik." }, { status: 400 });
+      }
+      await katilimciyiAt(govde.id.slice(0, 64));
+      return Response.json({ durum: onceki }, { headers: { "cache-control": "no-store" } });
+    }
     default:
       return Response.json({ hata: "Bilinmeyen komut." }, { status: 400 });
   }

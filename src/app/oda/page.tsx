@@ -29,7 +29,12 @@ export default function Oda() {
   const { durum, bagli, saglikli, yukleniyor } = useYoklama({
     id: kimlik?.id,
     ad: kimlik?.ad,
-    aralik: 1500,
+    // Sunucu bu katılımcının oturumunu kapattıysa kimlik silinip
+    // giriş ekranına dönülüyor. Kısa süreli bir kapatma; kalıcı yasak değil.
+    onAtildi: () => {
+      kimlikSil();
+      router.replace("/");
+    },
   });
 
   // Kilitli oturuma düşülmüşse takibe geri dön. Sunucu ikinci oturumu

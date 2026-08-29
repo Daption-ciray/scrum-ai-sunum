@@ -242,11 +242,20 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
               <div className={`etiket ${p.sayiEtiket}`}>Slayt</div>
             </div>
           </div>
-          {yoklama.adlar && yoklama.adlar.length > 0 && (
+          {yoklama.katilimcilar && yoklama.katilimcilar.length > 0 && (
             <div className={p.adlar}>
-              {yoklama.adlar.map((a) => (
-                <span key={a} className={p.ad}>
-                  {a}
+              {yoklama.katilimcilar.map((k) => (
+                <span key={k.id} className={p.ad}>
+                  {k.ad}
+                  <button
+                    type="button"
+                    className={p.at}
+                    onClick={() => gonder({ komut: "at", id: k.id })}
+                    title={`${k.ad} — oturumunu kapat`}
+                    aria-label={`${k.ad} oturumunu kapat`}
+                  >
+                    ✕
+                  </button>
                 </span>
               ))}
             </div>

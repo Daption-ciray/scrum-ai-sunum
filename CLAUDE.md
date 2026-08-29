@@ -11,7 +11,7 @@ adları ve arayüz Türkçe; İngilizceye çevirmeyin.
 | Eğitim | Scrum + AI farkındalık eğitimi, şirket içi |
 | Format | **Tamamen online** (Teams/Zoom), 2 oturum × 60 dk |
 | Tarihler | Salı 1 Eylül + Perşembe 3 Eylül 2026 — **kullanıcı henüz teyit etmedi** |
-| Kitle | 12–15 kişi, karma: Scrum'a yeni olanlar + ürün/yazılım ekibi + yöneticiler |
+| Kitle | ~75 kişi, karma: Scrum'a yeni olanlar + ürün/yazılım ekibi + yöneticiler |
 | Cihaz | Herkes kendi cihazında — laptop/telefon karışık, önceden bilinmiyor |
 | Ödev | Yok (kullanıcı kararı). Perşembe atölyesi hazır materyalle çalışır. |
 
@@ -84,10 +84,30 @@ cihazında akarsa bu gecikme yok olur; quiz geri sayımı adil olur, telefonda
 okunur, prompt kopyalanabilir, bağlantısı kopan anında geri döner. Ekran
 paylaşımı sadece ses/yüz ve canlı Jira demosu için.
 
-**Websocket değil yoklama.** Vercel'de kalıcı bağlantı zahmetli. 15 kişilik
-odada uyarlamalı yoklama (sekme öndeyken 1,5 sn, arkada 6 sn, hatada 10 sn'ye
-kadar üstel geri çekilme) fazlasıyla yeterli ve çok daha az kırılgan.
-`src/lib/yoklama.ts`.
+**Websocket değil yoklama — ama 75 kişiye göre kurgulanmış.** Vercel'de kalıcı
+bağlantı zahmetli; uyarlamalı yoklama (önde 2 sn, arkada 6 sn, hatada üstel
+geri çekilme) yeterli. 75 kişide çalışması için üç ayrım yapıldı:
+
+**1. Durum sorgusu ile "buradayım" bildirimi ayrı uçlarda.** Bildirim 10
+saniyede bir yetiyor (canlılık eşiği 20 sn), durum 2 saniyede bir isteniyor.
+Yazma trafiği altıda birine indi. `POST /api/buradayim`.
+
+**2. `/api/durum` kişiye özel hiçbir şey döndürmüyor** — bu yüzden CDN'de bir
+saniye önbelleklenebiliyor (`s-maxage=1, stale-while-revalidate=4`). 75 kişinin
+isteği kenardan karşılanıyor, fonksiyon saniyede bir kez çalışıyor.
+**Bu uca kişiye özel bir alan eklerseniz önbelleği kaldırın**, yoksa bir
+katılımcının verisi başkasına servis edilir. İsim listesi bu yüzden ayrı uçta:
+`/api/panel`, yalnızca sunucu anahtarıyla, `no-store`.
+
+**3. Katılımcılar HASH değil ZSET.** Üye `id\u0001ad`, skor son görülme anı.
+Sayı `ZCOUNT` ile tek komut ve birkaç bayt; eskiden her yoklamada tüm liste
+(`HGETALL`) istemciye kadar gidiyordu — 75 kişide saatte ~1,2 GB Redis
+trafiği demekti. Tam liste yalnızca panele gidiyor.
+
+**Sunucu bir katılımcının oturumunu kapatabiliyor** (`at` komutu). Kaydı
+silmek yetmiyor; kişi bir sonraki bildirimde kendini geri eklerdi. 60 saniyelik
+bir işaret bırakılıyor: istemci `acik: false` görüp kimliği siliyor ve giriş
+ekranına dönüyor. Kalıcı yasak değil, "şimdi çık" demek.
 
 **Depo iki modlu.** Upstash Redis REST varsa onu, yoksa bellek yedeğini
 kullanır (`src/lib/depo.ts`). Bellek modu yerelde sorunsuz ama Vercel'de her

@@ -14,7 +14,19 @@ import { BASLANGIC, CANLI_ESIGI, type Durum, type Katilimci } from "./durum";
    ============================================================================= */
 
 const DURUM_ANAHTARI = "sunum:durum";
+/* DİKKAT — bu anahtarın tipi değişti: eskiden HASH, şimdi ZSET.
+   Eski sürümün çalıştığı bir Redis'e bağlanırsanız ilk okumada
+   "WRONGTYPE" alırsınız. Çözüm: anahtarı bir kez silin
+   (sunucu panelinden "Katılımcıları temizle" bunu yapıyor). */
 const KATILIMCI_ANAHTARI = "sunum:katilimcilar";
+const ATILAN_ANAHTARI = "sunum:atilan";
+
+/** Atılan kimlik bu süre boyunca geri giremez. Kalıcı yasak değil —
+ *  istemcinin durumu görüp çıkış yapmasına yetecek kadar. */
+const ATILMA_SURESI = 60;
+
+/** ZSET üyesi `id` ve `ad`ı birlikte taşıyor; isimlerde geçmeyecek bir ayraç. */
+const AYRAC = "\u0001";
 
 /* İki isimlendirme birden destekleniyor.
    Vercel Marketplace üzerinden kurulan Upstash, eski @vercel/kv adlarını
@@ -46,6 +58,8 @@ async function redis<T = unknown>(komut: (string | number)[]): Promise<T> {
 type Bellek = {
   durum: Durum;
   katilimcilar: Map<string, Katilimci>;
+  /** id → atılmanın biteceği zaman damgası. */
+  atilan: Map<string, number>;
 };
 const g = globalThis as unknown as { __sunumBellek?: Partial<Bellek> };
 /**
@@ -58,13 +72,8 @@ function bellek(): Bellek {
   const b = (g.__sunumBellek ??= {});
   b.durum ??= { ...BASLANGIC };
   b.katilimcilar ??= new Map();
+  b.atilan ??= new Map();
   return b as Bellek;
-}
-
-/** HGETALL yanıtı Upstash'te kimi zaman düz dizi, kimi zaman nesne geliyor. */
-function hashCoz(duz: string[] | Record<string, string> | null): string[] {
-  if (!duz) return [];
-  return Array.isArray(duz) ? duz.filter((_, i) => i % 2 === 1) : Object.values(duz);
 }
 
 /* --- durum ---------------------------------------------------------------- */
@@ -90,42 +99,98 @@ export async function durumuYaz(yeni: Durum): Promise<Durum> {
   return kayit;
 }
 
-/* --- katılımcılar --------------------------------------------------------- */
+/* --- katılımcılar ---------------------------------------------------------
+   HASH değil sıralı küme (ZSET): üye = `id\u0001ad`, skor = son görülme anı.
 
-export async function katilimciBildir(id: string, ad: string): Promise<void> {
-  const kayit: Katilimci = { id, ad, son: Date.now() };
-  if (!paylasimliDepo) {
-    bellek().katilimcilar.set(id, kayit);
-    return;
-  }
-  await redis(["HSET", KATILIMCI_ANAHTARI, id, JSON.stringify(kayit)]);
+   Neden: eskiden her yoklamada `HGETALL` çekiliyor ve 75 kişilik listenin
+   tamamı istemciye kadar gidiyordu — sadece bir sayı göstermek için. 75
+   kişide saatte ~1,2 GB Redis trafiği demekti. ZSET'te sayı `ZCOUNT` ile
+   tek komut ve birkaç bayt; tam liste yalnızca sunucu paneline gidiyor.
+
+   İsim ZSET üyesinin içinde: ayrı bir hash tutmak yazma başına ikinci bir
+   komut demekti. Bedeli, birinin adını değiştirmesi hâlinde eski kaydın
+   canlılık penceresi dolana kadar (20 sn) sayımda kalması. Kabul edilebilir.
+   ============================================================================ */
+
+function uyeCoz(uye: string): { id: string; ad: string } | null {
+  const i = uye.indexOf(AYRAC);
+  if (i < 0) return null;
+  return { id: uye.slice(0, i), ad: uye.slice(i + 1) };
 }
 
-export async function katilimcilariOku(): Promise<Katilimci[]> {
+/** Katılımcı "buradayım" der. Atılmışsa kaydedilmez ve `false` döner. */
+export async function katilimciBildir(id: string, ad: string): Promise<boolean> {
   const simdi = Date.now();
-  const canli = (k: Katilimci) => simdi - k.son < CANLI_ESIGI;
 
   if (!paylasimliDepo) {
-    return [...bellek().katilimcilar.values()].filter(canli);
+    const b = bellek();
+    if ((b.atilan.get(id) ?? 0) > simdi) return false;
+    b.katilimcilar.set(id, { id, ad, son: simdi });
+    return true;
   }
-  const duz = await redis<string[] | Record<string, string> | null>([
-    "HGETALL",
-    KATILIMCI_ANAHTARI,
+
+  const atildi = await redis<number>(["EXISTS", `${ATILAN_ANAHTARI}:${id}`]);
+  if (atildi === 1) return false;
+  await redis(["ZADD", KATILIMCI_ANAHTARI, simdi, id + AYRAC + ad]);
+  return true;
+}
+
+/** Yalnızca sayı. Katılımcı yoklamasının kullandığı yol — yanıt birkaç bayt. */
+export async function katilimciSay(): Promise<number> {
+  const esik = Date.now() - CANLI_ESIGI;
+  if (!paylasimliDepo) {
+    return [...bellek().katilimcilar.values()].filter((k) => k.son >= esik).length;
+  }
+  return await redis<number>(["ZCOUNT", KATILIMCI_ANAHTARI, esik, "+inf"]);
+}
+
+/** Tam liste. Yalnızca sunucu paneli çağırıyor; katılımcıya asla gitmiyor. */
+export async function katilimcilariOku(): Promise<Katilimci[]> {
+  const simdi = Date.now();
+  const esik = simdi - CANLI_ESIGI;
+
+  if (!paylasimliDepo) {
+    return [...bellek().katilimcilar.values()].filter((k) => k.son >= esik);
+  }
+
+  // Süresi geçmişleri aynı çağrıda temizliyoruz: yalnızca sunucu paneli
+  // buraya geldiği için maliyeti oturum başına birkaç yüz komut.
+  await redis(["ZREMRANGEBYSCORE", KATILIMCI_ANAHTARI, "-inf", `(${esik}`]).catch(() => {});
+
+  const uyeler = await redis<string[] | null>([
+    "ZRANGEBYSCORE", KATILIMCI_ANAHTARI, esik, "+inf", "WITHSCORES",
   ]);
+  if (!uyeler) return [];
+
   const liste: Katilimci[] = [];
-  for (const d of hashCoz(duz)) {
-    try {
-      liste.push(JSON.parse(d) as Katilimci);
-    } catch {
-      /* bozuk kayıt: yok say */
-    }
+  for (let i = 0; i < uyeler.length; i += 2) {
+    const c = uyeCoz(uyeler[i]);
+    if (c) liste.push({ ...c, son: Number(uyeler[i + 1]) || simdi });
   }
-  return liste.filter(canli);
+  return liste;
+}
+
+/** Bir katılımcının oturumunu kapatır: kaydı silinir, kısa süre geri giremez. */
+export async function katilimciyiAt(id: string): Promise<void> {
+  if (!paylasimliDepo) {
+    const b = bellek();
+    b.katilimcilar.delete(id);
+    b.atilan.set(id, Date.now() + ATILMA_SURESI * 1000);
+    return;
+  }
+  const uyeler = await redis<string[] | null>(["ZRANGE", KATILIMCI_ANAHTARI, 0, -1]);
+  const silinecek = (uyeler ?? []).filter((u) => uyeCoz(u)?.id === id);
+  if (silinecek.length > 0) {
+    await redis(["ZREM", KATILIMCI_ANAHTARI, ...silinecek]);
+  }
+  await redis(["SET", `${ATILAN_ANAHTARI}:${id}`, "1", "EX", ATILMA_SURESI]);
 }
 
 export async function katilimcilariTemizle(): Promise<void> {
   if (!paylasimliDepo) {
-    bellek().katilimcilar.clear();
+    const b = bellek();
+    b.katilimcilar.clear();
+    b.atilan.clear();
     return;
   }
   await redis(["DEL", KATILIMCI_ANAHTARI]);

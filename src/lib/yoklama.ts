@@ -3,11 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { BASLANGIC, type Durum } from "./durum";
 
+export type Katilan = { id: string; ad: string };
+
 export type YoklamaSonucu = {
   durum: Durum;
   bagli: number;
   paylasimli: boolean;
-  adlar?: string[];
+  /** Yalnızca sunucu panelinde dolu. */
+  katilimcilar?: Katilan[];
   /** Son istek başarılı mı? Kullanıcıya "bağlantı koptu" demek için. */
   saglikli: boolean;
   /** İlk yanıt gelene kadar true. */
@@ -17,21 +20,36 @@ export type YoklamaSonucu = {
 type Ayar = {
   id?: string;
   ad?: string;
-  /** Sunucu paneli için: yanıta katılımcı adları da eklenir. */
+  /** Doluysa sunucu paneli modunda çalışır: /api/panel sorulur. */
   anahtar?: string;
   /** Sekme öndeyken yoklama aralığı (ms). */
   aralik?: number;
+  /** Sunucu bu katılımcının oturumunu kapattı. */
+  onAtildi?: () => void;
 };
+
+/** Katılımcı "buradayım" bildirimi kaç ms'de bir. Canlılık eşiği 20 sn. */
+const BILDIRIM_ARALIGI = 10_000;
 
 /**
  * Uyarlamalı yoklama.
- * - Sekme öndeyken varsayılan 1.5 sn.
+ * - Sekme öndeyken varsayılan 2 sn.
  * - Sekme arkaya düşünce 6 sn'ye seyrelir; öne gelince anında bir kez sorar.
- * - Hata halinde 1.5 → 3 → 6 → 10 sn'ye kadar geri çekilir, düzelince toparlar.
- * Vercel'de kalıcı websocket zahmetli; 15 kişilik odada bu fazlasıyla yeter.
+ * - Hata halinde üstel geri çekilme, 10 sn'ye kadar.
+ *
+ * 75 kişilik oda için iki ayrım yapıldı:
+ *
+ * 1) Durum sorgusu ile "buradayım" bildirimi ayrıldı. Bildirim 10 saniyede
+ *    bir yetiyor (eşik 20 sn), durum ise 2 saniyede bir isteniyor. Yazma
+ *    trafiği altıda birine indi.
+ * 2) Durum sorgusu artık kişiye özel hiçbir şey taşımıyor, bu yüzden
+ *    CDN'de bir saniye önbelleklenebiliyor — 75 kişinin isteği kenardan
+ *    karşılanıyor, fonksiyon saniyede bir kez çalışıyor.
+ *
+ * Sunucu paneli ayrı uçtan (/api/panel) besleniyor; orası önbelleklenmiyor.
  */
 export function useYoklama(ayar: Ayar = {}): YoklamaSonucu {
-  const { id, ad, anahtar, aralik = 1500 } = ayar;
+  const { id, ad, anahtar, aralik = 2000, onAtildi } = ayar;
 
   const [sonuc, setSonuc] = useState<YoklamaSonucu>({
     durum: BASLANGIC,
@@ -44,7 +62,10 @@ export function useYoklama(ayar: Ayar = {}): YoklamaSonucu {
   const zamanlayici = useRef<ReturnType<typeof setTimeout> | null>(null);
   const durduruldu = useRef(false);
   const hataSayisi = useRef(0);
+  const atildiCb = useRef(onAtildi);
+  atildiCb.current = onAtildi;
 
+  /* ---- durum yoklaması ---- */
   useEffect(() => {
     durduruldu.current = false;
     let iptal: AbortController | null = null;
@@ -62,12 +83,7 @@ export function useYoklama(ayar: Ayar = {}): YoklamaSonucu {
       iptal = new AbortController();
 
       try {
-        const q = new URLSearchParams();
-        if (id && ad) {
-          q.set("id", id);
-          q.set("ad", ad);
-        }
-        const yanit = await fetch(`/api/durum?${q.toString()}`, {
+        const yanit = await fetch(anahtar ? "/api/panel" : "/api/durum", {
           signal: iptal.signal,
           cache: "no-store",
           headers: anahtar ? { "x-sunucu-anahtari": anahtar } : undefined,
@@ -75,9 +91,7 @@ export function useYoklama(ayar: Ayar = {}): YoklamaSonucu {
         if (!yanit.ok) throw new Error(String(yanit.status));
         const veri = (await yanit.json()) as Omit<YoklamaSonucu, "saglikli" | "yukleniyor">;
         hataSayisi.current = 0;
-        if (!durduruldu.current) {
-          setSonuc({ ...veri, saglikli: true, yukleniyor: false });
-        }
+        if (!durduruldu.current) setSonuc({ ...veri, saglikli: true, yukleniyor: false });
       } catch (e) {
         if ((e as Error)?.name === "AbortError") return;
         hataSayisi.current = Math.min(hataSayisi.current + 1, 3);
@@ -107,9 +121,54 @@ export function useYoklama(ayar: Ayar = {}): YoklamaSonucu {
       if (zamanlayici.current) clearTimeout(zamanlayici.current);
       iptal?.abort();
     };
-  }, [id, ad, anahtar, aralik]);
+  }, [anahtar, aralik]);
+
+  /* ---- "buradayım" bildirimi — ayrı ve seyrek ---- */
+  useEffect(() => {
+    if (!id || !ad) return;
+    let durdu = false;
+
+    const bildir = async () => {
+      try {
+        const yanit = await fetch("/api/buradayim", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ id, ad }),
+        });
+        if (!yanit.ok) return;
+        const veri = (await yanit.json()) as { acik?: boolean };
+        if (veri.acik === false && !durdu) atildiCb.current?.();
+      } catch {
+        /* bildirim kaçtıysa sorun değil: eşik 20 sn, sonraki tur yetişir */
+      }
+    };
+
+    void bildir();
+    const sayac = setInterval(bildir, BILDIRIM_ARALIGI);
+    return () => {
+      durdu = true;
+      clearInterval(sayac);
+    };
+  }, [id, ad]);
 
   return sonuc;
+}
+
+/**
+ * Anahtarı yan etkisiz doğrular.
+ * `/api/panel` yalnızca yöneticiye 200 döndüğü için durum kodu tek başına
+ * yeterli kanıt; sunumu değiştiren bir komut göndermeye gerek yok.
+ */
+export async function anahtarDogrula(anahtar: string): Promise<boolean> {
+  try {
+    const yanit = await fetch("/api/panel", {
+      headers: { "x-sunucu-anahtari": anahtar },
+      cache: "no-store",
+    });
+    return yanit.ok;
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -133,26 +192,5 @@ export async function komutGonder(
     return { ok: false, hata: veri.hata || `Sunucu ${yanit.status} döndü.` };
   } catch {
     return { ok: false, hata: "Sunucuya ulaşılamadı." };
-  }
-}
-
-/**
- * Anahtarı yan etkisiz doğrular.
- * Eskiden bunun için `git 0` komutu gönderiliyordu — o komut sunumu ilk
- * slayda atıyordu. Oturum ortasında paneli yeniden açan sunucu kendini
- * başa dönmüş buluyordu. `adlar` alanı yalnızca yöneticiye döndüğü için
- * varlığı tek başına yeterli kanıt.
- */
-export async function anahtarDogrula(anahtar: string): Promise<boolean> {
-  try {
-    const yanit = await fetch("/api/durum", {
-      headers: { "x-sunucu-anahtari": anahtar },
-      cache: "no-store",
-    });
-    if (!yanit.ok) return false;
-    const veri = (await yanit.json()) as { adlar?: string[] };
-    return Array.isArray(veri.adlar);
-  } catch {
-    return false;
   }
 }

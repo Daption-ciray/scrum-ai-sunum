@@ -1,39 +1,30 @@
-import {
-  durumuOku,
-  katilimciBildir,
-  katilimcilariOku,
-  paylasimliDepo,
-} from "@/lib/depo";
-import { yoneticiMi } from "@/lib/anahtar";
+import { durumuOku, katilimciSay, paylasimliDepo } from "@/lib/depo";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Tek uçtan iki iş: katılımcı "buradayım" der ve güncel durumu alır.
- * Yoklama başına iki istek yerine bir istek — 15 kişilik odada fark ediyor.
+ * Katılımcı yoklamasının tek uğrak yeri: slayt durumu ve bağlı sayısı.
+ *
+ * Burada kişiye özel HİÇBİR ŞEY dönmüyor — isim listesi yok, kimlik yok.
+ * Bu bilinçli: yanıt herkes için birebir aynı olduğu için CDN'de bir saniye
+ * önbelleklenebiliyor. 75 kişi iki saniyede bir sorduğunda isteklerin
+ * neredeyse tamamı kenardan karşılanıyor, fonksiyon saniyede bir kez
+ * çalışıyor. Yanıta kişiye özel bir alan eklerseniz bu önbelleği kaldırın,
+ * yoksa bir katılımcının verisi başkasına servis edilir.
+ *
+ * "Buradayım" bildirimi ayrı uçta (/api/buradayim) — o önbelleklenemez.
  */
-export async function GET(istek: Request) {
-  const q = new URL(istek.url).searchParams;
-  const id = q.get("id");
-  const ad = q.get("ad");
-
-  if (id && ad) {
-    // Bildirim başarısız olsa da durum dönmeli; oturum bunun için durmaz.
-    await katilimciBildir(id.slice(0, 64), ad.slice(0, 40)).catch(() => {});
-  }
-
-  const [durum, katilimcilar] = await Promise.all([durumuOku(), katilimcilariOku()]);
-  const yonetici = yoneticiMi(istek);
+export async function GET() {
+  const [durum, bagli] = await Promise.all([durumuOku(), katilimciSay()]);
 
   return Response.json(
+    { durum, bagli, paylasimli: paylasimliDepo },
     {
-      durum,
-      bagli: katilimcilar.length,
-      paylasimli: paylasimliDepo,
-      ...(yonetici
-        ? { adlar: katilimcilar.map((k) => k.ad).sort((a, b) => a.localeCompare(b, "tr")) }
-        : {}),
+      headers: {
+        // 1 sn taze, 4 sn bayat servis edilirken arkada tazeleniyor.
+        // Slayt senkronu zaten saniyeler mertebesinde; bu gecikme fark etmiyor.
+        "cache-control": "public, s-maxage=1, stale-while-revalidate=4",
+      },
     },
-    { headers: { "cache-control": "no-store" } },
   );
 }

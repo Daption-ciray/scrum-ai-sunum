@@ -15,7 +15,7 @@ export default function Giris() {
   const [hata, setHata] = useState("");
   const [hazir, setHazir] = useState(false);
 
-  // Sunucu girişi kapalı başlıyor: katılımcı 15 kişi, sunucu bir kişi.
+  // Sunucu girişi kapalı başlıyor: katılımcılar çok, sunucu bir kişi.
   const [sunucuAcik, setSunucuAcik] = useState(false);
   const [anahtar, setAnahtar] = useState("");
   const [deniyor, setDeniyor] = useState(false);
