@@ -1,118 +1,154 @@
-.kabuk { min-height: 100dvh; display: flex; flex-direction: column; background: var(--zemin); }
+/* Slayt kabuğu — şerit yok, köşe göstergesi var.
+   Katılımcı slayta baksın; çerçeve mümkün olduğunca kaybolsun. */
 
-.ust {
+.kabuk {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--zemin);
+}
+
+/* --- köşe göstergeleri --------------------------------------------------- */
+
+.kose {
+  position: fixed;
+  z-index: 5;
   display: flex;
   align-items: center;
-  gap: clamp(.7rem, 2vw, 1.4rem);
-  padding: .75rem clamp(1rem, 3vw, 2rem);
-  border-bottom: 1px solid var(--cizgi);
-  background: var(--zemin);
-  flex-wrap: wrap;
+  gap: .45rem;
+  pointer-events: none;
+}
+.solUst { top: clamp(.7rem, 2vw, 1.2rem); left: clamp(.7rem, 2vw, 1.2rem); pointer-events: auto; }
+.sagUst { top: clamp(.7rem, 2vw, 1.2rem); right: clamp(.7rem, 2vw, 1.2rem); }
+.solAlt { bottom: clamp(.7rem, 2vw, 1.2rem); left: clamp(.7rem, 2vw, 1.2rem); }
+
+.sayac {
+  color: var(--metin-3);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .1em;
 }
 
-.oturumRozet {
+.baglıNokta {
+  width: 8px;
+  height: 8px;
+  background: var(--sunucu);
+  border-radius: 0;
+}
+.kopuk .baglıNokta {
+  background: var(--metin-3);
+  animation: yanip 1.2s steps(2, jump-none) infinite;
+}
+@keyframes yanip { 50% { opacity: .2; } }
+
+.bagliSayi { color: var(--metin-3); font-variant-numeric: tabular-nums; }
+
+/* --- galeri düğmesi ------------------------------------------------------ */
+
+.galeriDugme {
   display: inline-flex;
   align-items: center;
-  gap: .5em;
-  color: var(--vurgu);
-  border: 1px solid var(--vurgu-koyu);
-  background: var(--vurgu-sis);
-  border-radius: 999px;
-  padding: .3em .75em;
-  white-space: nowrap;
+  gap: .4rem;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  color: var(--metin);
+  font-family: var(--yazi-piksel), monospace;
+  font-size: calc(var(--ol-etiket) * 1.15);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .35em .7em;
+  cursor: pointer;
+  transition: transform var(--gecis), box-shadow var(--gecis);
+}
+.galeriDugme:hover,
+.galeriDugme:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 0 var(--cizgi-2);
+}
+.galeriDugme:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--cizgi-2);
 }
 
-.blok {
-  font-size: var(--ol-kucuk);
-  color: var(--metin-2);
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+/* --- serbest gezinme uyarısı --------------------------------------------
+   Şerit değil, alt köşede küçük bir kutu. Katılımcı sunucudan ayrıldığında
+   bunu görmezse kaybolduğunu anlamıyor; o yüzden kalıyor ama küçüldü. */
 
-.sag { margin-left: auto; display: flex; align-items: center; gap: clamp(.6rem, 1.6vw, 1.1rem); }
-
-.sayac { color: var(--metin-3); white-space: nowrap; }
-
-.durumNoktasi {
-  display: inline-flex; align-items: center; gap: .45em;
-  color: var(--metin-3); white-space: nowrap;
-}
-.durumNoktasi::before {
-  content: ""; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--dogru);
-}
-.kopuk { color: var(--uyari); }
-.kopuk::before { background: var(--uyari); }
-
-/* ilerleme: blok blok. Katılımcı nerede olduğunu görüyor. */
-.ilerleme { display: flex; gap: 2px; height: 3px; background: var(--zemin); }
-.dilim { flex: 1; background: var(--cizgi); transition: background var(--gecis); }
-.dilimGecti { background: var(--vurgu-koyu); }
-.dilimAktif { background: var(--vurgu); }
-
-.uyariSerit {
-  padding: .55rem clamp(1rem, 3vw, 2rem);
-  background: var(--vurgu-sis);
-  border-bottom: 1px solid var(--cizgi);
-  color: var(--uyari);
-  font-size: var(--ol-kucuk);
-}
-
-/* ---------------- galeri düğmesi ---------------- */
-.galeriDugme {
-  display: flex; align-items: center; gap: 8px;
-  background: transparent;
-  border: 1px solid var(--cizgi-2);
-  border-radius: var(--kose);
-  color: var(--metin-2);
-  font-family: var(--yazi-mono), monospace;
-  font-size: var(--ol-etiket);
-  font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
-  padding: 7px 12px; min-height: 34px; cursor: pointer;
-  white-space: nowrap;
-  transition: color var(--gecis), border-color var(--gecis);
-}
-.galeriDugme:hover { color: var(--metin); border-color: var(--vurgu); }
-
-/* ---------------- sunucudan ayrılma şeridi ----------------
-   Serbest gezinme seçildi; bu şerit engellemiyor, sadece nerede
-   olduğunuzu ve sunucunun nerede olduğunu söylüyor. */
 .kaydiSerit {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px clamp(12px, 3vw, 32px);
-  background: var(--oturum2-sis);
-  border-bottom: 1px solid var(--oturum2-koyu);
+  position: fixed;
+  z-index: 6;
+  right: clamp(.7rem, 2vw, 1.2rem);
+  bottom: clamp(.7rem, 2vw, 1.2rem);
+  max-width: min(30rem, calc(100vw - 2rem));
+  display: flex;
+  align-items: center;
+  gap: .7rem;
   flex-wrap: wrap;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  box-shadow: 4px 4px 0 0 var(--cizgi-2);
+  padding: .6rem .75rem;
 }
-.kaydiMetin { font-size: var(--ol-kucuk); color: var(--oturum2); }
-.kaydiMetin b { font-weight: 600; }
-.kaydiDugme {
-  margin-left: auto;
-  background: var(--oturum2); border: 0; border-radius: var(--kose);
-  color: var(--zemin);
-  font-weight: 600; font-size: var(--ol-kucuk);
-  padding: 8px 14px; min-height: 36px; cursor: pointer;
-  white-space: nowrap;
-  transition: filter var(--gecis);
-}
-.kaydiDugme:hover { filter: brightness(1.1); }
-
-/* ---------------- serbest gezinme okları ---------------- */
-.gezOk {
-  position: fixed; top: 50%; transform: translateY(-50%);
-  display: flex; align-items: center; justify-content: center;
-  width: 44px; height: 64px;
-  background: color-mix(in srgb, var(--zemin) 74%, transparent);
-  border: 1px solid var(--cizgi);
-  border-radius: var(--kose);
+.kaydiMetin {
+  font-size: var(--ol-kucuk);
   color: var(--metin-2);
-  cursor: pointer; z-index: 20;
-  transition: color var(--gecis), border-color var(--gecis), opacity var(--gecis);
+  line-height: 1.35;
 }
-.gezOk:hover { color: var(--vurgu); border-color: var(--vurgu); }
-.gezOk:disabled { opacity: .25; cursor: not-allowed; }
-.gezSol { left: 10px; }
-.gezSag { right: 10px; }
-@media (max-width: 640px) { .gezOk { width: 38px; height: 54px; } }
+.kaydiMetin b { color: var(--metin); font-weight: 700; }
+
+.kaydiDugme {
+  flex: 0 0 auto;
+  background: var(--metin);
+  color: var(--yuzey);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--yazi-piksel), monospace;
+  font-size: calc(var(--ol-etiket) * 1.15);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .45em .8em;
+  cursor: pointer;
+}
+.kaydiDugme:hover { background: var(--sunucu); color: var(--metin); }
+
+/* --- gezinme okları ------------------------------------------------------ */
+
+.gezOk {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  color: var(--metin);
+  cursor: pointer;
+  transition: transform var(--gecis), box-shadow var(--gecis), opacity var(--gecis);
+}
+.gezSol { left: clamp(.5rem, 1.5vw, 1rem); }
+.gezSag { right: clamp(.5rem, 1.5vw, 1rem); }
+.gezOk:hover:not(:disabled) {
+  transform: translateY(-50%) translate(-2px, -2px);
+  box-shadow: 5px 5px 0 0 var(--cizgi-2);
+}
+.gezOk:disabled { opacity: .25; cursor: not-allowed; box-shadow: none; }
+
+@media (max-width: 680px) {
+  .gezOk { width: 2rem; height: 2rem; }
+  .kaydiSerit { left: clamp(.7rem, 2vw, 1.2rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galeriDugme, .gezOk, .kart { transition: none; }
+  .kopuk .baglıNokta { animation: none; }
+}

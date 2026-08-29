@@ -32,6 +32,12 @@ export default function Oda() {
     aralik: 1500,
   });
 
+  // Kilitli oturuma düşülmüşse takibe geri dön. Sunucu ikinci oturumu
+  // tekrar kilitlerse orada gezinen katılımcı boşlukta kalmasın.
+  useEffect(() => {
+    if (yerel && yerel.oturum > durum.acilan) setYerel(null);
+  }, [durum.acilan, yerel]);
+
   // Sunucu katılımcının durduğu slayda gelirse takip kendiliğinden yeniden başlar.
   useEffect(() => {
     if (yerel && yerel.oturum === durum.oturum && yerel.slayt === durum.slayt) {
@@ -87,6 +93,7 @@ export default function Oda() {
         bagli={bagli}
         ad={kimlik.ad}
         onAc={(o, s) => {
+          if (o > durum.acilan) return; // kilitli oturum: girilmez
           // Sunucunun bulunduğu bloğa girildiyse takip modunda kal.
           const sunucudaMi = o === durum.oturum && blokBul(o, s) === blokBul(durum.oturum, durum.slayt);
           setYerel(sunucudaMi ? null : { oturum: o, slayt: s });
@@ -100,33 +107,16 @@ export default function Oda() {
   return (
     <>
       <Kabuk
-        oturum={gosterilen.oturum}
-        oturumAdi={oturum.ad}
-        blok={yukleniyor ? "Bağlanıyor…" : slayt.blok}
         slayt={indeks}
         toplam={toplam}
+        bagli={bagli}
         saglikli={saglikli}
-        sol={
-          <button className={k.galeriDugme} onClick={() => setGorunum("galeri")}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-            Galeri
-          </button>
-        }
-        sag={<span className="etiket">{kimlik.ad}</span>}
+        galeriyeDon={() => setGorunum("galeri")}
         uyari={
           kaydi ? (
             <div className={k.kaydiSerit}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--oturum2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 8v4l2.5 2.5" />
-              </svg>
               <span className={k.kaydiMetin}>
-                Kendi başınıza geziyorsunuz. Sunucu şu an{" "}
+                Kendi başınıza geziyorsunuz. Eğitmen şu an{" "}
                 <b>
                   {String(sunucuBlok.no).padStart(2, "0")} · {sunucuBlok.ad}
                 </b>{" "}

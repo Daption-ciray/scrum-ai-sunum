@@ -47,3 +47,27 @@
 
 .hata { color: var(--yanlis); font-size: var(--ol-kucuk); }
 .dipnot { color: var(--metin-3); font-size: var(--ol-kucuk); max-width: 40ch; }
+
+/* Sunucu girişi — katılımcı akışının altında, kapalı duruyor.
+   Odada 15 katılımcı bir sunucu var; sunucu alanı ana formu bastırmamalı. */
+.sunucuAlan {
+  border-top: 1px solid var(--cizgi);
+  padding-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+.sunucuAc {
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--metin-3);
+  font: inherit;
+  font-size: var(--ol-kucuk);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--gecis);
+}
+.sunucuAc:hover { color: var(--vurgu); }

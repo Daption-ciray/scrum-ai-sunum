@@ -1,57 +1,74 @@
 /* =========================================================================
    TEMA — tek dosya.
    Sunumun bütün renkleri, yazı ölçeği ve köşe/kenar değerleri burada.
-   Kurumsal kimliğe geçmek istediğinizde SADECE bu dosyayı değiştirin;
-   başka hiçbir dosyada renk kodu (#xxxxxx) geçmiyor.
+   Kurumsal kimliğe geçmek istediğinizde SADECE bu dosyayı değiştirin.
+
+   YÖN: 8-bit · siyah-beyaz.
+   Tek renk yeşil ve tek bir iş yapıyor: "sunucu burada". Başka hiçbir yerde
+   renk yok — vurgu, kenarlık, işaret, hepsi siyahın tonları. Renk kıt
+   tutulduğu için bilgi taşıyor; her yere serpilseydi dekorasyon olurdu.
+
+   Piksel his fontta ve geometride: sıfır yuvarlatma, sert kenar, adımlı
+   animasyon. Gövde metni piksel font DEĞİL — 41 slaytlık metin piksel fontla
+   telefonda okunmuyor. Piksel font yalnızca etiket ve arayüzde.
    ========================================================================= */
 
 :root {
-  /* --- zeminler ------------------------------------------------------- */
-  --zemin:        #0A0C0F;   /* sayfa zemini */
-  --zemin-2:      #101319;   /* hafif yükseltilmiş alan */
-  --yuzey:        #161A21;   /* kart, panel */
-  --yuzey-2:      #1D222B;   /* kart içi vurgulu alan */
+  /* --- zeminler -------------------------------------------------------
+     Kart beyaz, sayfa gri: kartın kendisi öne çıksın diye.               */
+  --zemin:        #E6E7E6;   /* sayfa zemini */
+  --zemin-2:      #D8DAD8;   /* çökertilmiş alan */
+  --yuzey:        #FFFFFF;   /* kart, panel */
+  --yuzey-2:      #F0F1F0;   /* kart içi vurgulu alan */
 
-  /* --- çizgiler ------------------------------------------------------- */
-  --cizgi:        #232932;
-  --cizgi-2:      #303743;
+  /* --- çizgiler --------------------------------------------------------
+     8-bit görünüm keskin kenardan geliyor: çizgiler soluk gri değil, koyu. */
+  --cizgi:        #2A2C2A;
+  --cizgi-2:      #0B0C0B;
 
   /* --- metin ---------------------------------------------------------- */
-  --metin:        #F0F3F7;
-  --metin-2:      #98A2B1;
-  --metin-3:      #626B79;
+  --metin:        #0B0C0B;
+  --metin-2:      #454845;
+  --metin-3:      #7C807C;
 
   /* --- oturum renkleri ------------------------------------------------
-     Oturum 1 ve 2 farklı vurgu rengiyle akıyor. Katılımcı hangi oturumda
-     olduğunu renkten anlıyor; bu dekorasyon değil, bilgi.                */
-  --oturum1:      #4FE3D4;
-  --oturum1-koyu: #103C39;
-  --oturum1-sis:  #0D2523;
+     Oturumlar artık renkle ayrılmıyor — ikinci oturum sunucu açana kadar
+     KİLİTLİ duruyor, ayrımı kilit taşıyor. İkisi de aynı; token'lar
+     bileşenler bozulmasın diye duruyor.                                   */
+  --oturum1:      #0B0C0B;
+  --oturum1-koyu: #6E726E;
+  --oturum1-sis:  #DCDEDC;
 
-  --oturum2:      #FF9152;
-  --oturum2-koyu: #46281A;
-  --oturum2-sis:  #2A1911;
+  --oturum2:      #0B0C0B;
+  --oturum2-koyu: #6E726E;
+  --oturum2-sis:  #DCDEDC;
 
-  /* Aktif vurgu — <body data-oturum="1|2"> ile değişir.
-     Bileşenler daima bu üçünü kullanır, oturum renklerini doğrudan değil. */
+  /* Aktif vurgu — <body data-oturum="1|2"> ile değişir. */
   --vurgu:        var(--oturum1);
   --vurgu-koyu:   var(--oturum1-koyu);
   --vurgu-sis:    var(--oturum1-sis);
 
-  /* --- durum renkleri ------------------------------------------------- */
-  --dogru:        #4ECE92;
-  --yanlis:       #FF6B7D;
-  --uyari:        #E9B949;
+  /* --- tek renk: sunucu ------------------------------------------------
+     Sayfadaki yegâne renk. Yalnızca "sunucu şu an burada" der.
+     Başka hiçbir amaçla kullanmayın; kullanıldığı an anlamını kaybeder.   */
+  --sunucu:       #1F9D4D;
+  --sunucu-zemin: #A9E4B8;
+
+  /* --- durum renkleri --------------------------------------------------
+     Sistemde tek hue var; olumlu durum sunucu yeşilini paylaşıyor.
+     Olumsuz ve uyarı renkle değil, ağırlık ve desenle ayrılıyor.          */
+  --dogru:        var(--sunucu);
+  --yanlis:       #0B0C0B;
+  --uyari:        #454845;
 
   /* --- yazı tipleri ---------------------------------------------------
-     Dosyalar npm paketlerinden geliyor, layout.tsx içinde import ediliyor.
-     Başka bir aileye geçmek için: paketi kurun, layout.tsx'te import edin,
-     aşağıdaki iki satırı değiştirin.                                       */
-  --yazi-govde:   "Archivo Variable", "Helvetica Neue", Arial, sans-serif;
+     Üçlü: piksel (etiket ve arayüz), gövde (okunur metin), mono (sayı).
+     Pixelify Sans latin-ext taşıyor — Türkçe aksanlı harfler eksiksiz.    */
+  --yazi-piksel:  "Pixelify Sans Variable", "Courier New", monospace;
+  --yazi-govde:   "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
   --yazi-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* --- yazı ölçeği ----------------------------------------------------
-     vw tabanlı: aynı slayt hem projeksiyonda hem telefonda okunur.       */
+  /* --- yazı ölçeği ---------------------------------------------------- */
   --ol-dev:       clamp(2.4rem, 6.2vw, 5.6rem);
   --ol-buyuk:     clamp(1.9rem, 4.4vw, 3.9rem);
   --ol-baslik:    clamp(1.45rem, 3.0vw, 2.6rem);
@@ -60,13 +77,25 @@
   --ol-kucuk:     clamp(0.82rem, 1.05vw, 0.95rem);
   --ol-etiket:    clamp(0.66rem, 0.82vw, 0.78rem);
 
-  /* --- geometri ------------------------------------------------------- */
-  --kose:         4px;
-  --kose-2:       10px;
+  /* --- geometri --------------------------------------------------------
+     Sıfır yuvarlatma bilinçli. Piksel estetiğinin tamamı burada.          */
+  --kose:         0px;
+  --kose-2:       0px;
   --bosluk:       clamp(1.5rem, 4vw, 4rem);
+  /* Kartların kalın çerçevesi. */
+  --kenar:        2px;
 
-  /* --- hareket -------------------------------------------------------- */
-  --gecis:        260ms cubic-bezier(.22,.61,.36,1);
+  /* --- hareket ---------------------------------------------------------
+     Adımlı geçiş: akıcı değil kademeli. 8-bit his büyük ölçüde bundan.    */
+  --gecis:        160ms steps(4, end);
+  --gecis-yumusak: 220ms steps(6, end);
+  /* Yalnızca eğri — süre yok.
+     `--gecis` süre ve eğriyi birlikte taşıyor; `transition:` için doğru ama
+     `animation:` kısayolunda süre zaten verildiğinden içindeki süre gecikmeye
+     kayıyor, ayrıca bir gecikme daha yazılırsa üç zaman değeri olup bildirimin
+     tamamı geçersiz oluyor. `animation:` içinde daima bunu kullanın. */
+  --egri:         steps(4, end);
+  --egri-yumusak: steps(6, end);
 }
 
 body[data-oturum="2"] {

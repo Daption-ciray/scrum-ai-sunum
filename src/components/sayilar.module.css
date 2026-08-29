@@ -1,0 +1,84 @@
+/* Büyük rakam slaytı. Renk kodu yok, hepsi tema.css. */
+
+.sarma { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+
+.baslik {
+  font-size: var(--ol-baslik);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+.giris {
+  color: var(--metin-2);
+  font-size: var(--ol-govde);
+  max-width: 58ch;
+  line-height: 1.45;
+}
+
+.izgara {
+  display: grid;
+  gap: clamp(.8rem, 2vw, 1.4rem);
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  margin-top: .4rem;
+}
+/* Tek rakam varsa ekranı kaplasın — asıl vurucu kullanım bu. */
+.izgara[data-adet="1"] { grid-template-columns: 1fr; }
+
+.kutu {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 0 var(--cizgi-2);
+
+  opacity: 0;
+  transform: translateY(8px);
+  animation: bel .4s var(--egri) forwards;
+  animation-delay: var(--g, 0s);
+}
+@keyframes bel { to { opacity: 1; transform: none; } }
+
+.deger {
+  display: flex;
+  align-items: baseline;
+  gap: .25em;
+  /* Rakam mono: piksel fontun 2/5/8'i büyük puntoda bile riskli ve burada
+     rakam bilginin ta kendisi. */
+  font-family: var(--yazi-mono), monospace;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  font-weight: 600;
+  line-height: .9;
+  letter-spacing: -.04em;
+  color: var(--metin);
+  font-variant-numeric: tabular-nums;
+}
+.izgara[data-adet="1"] .deger { font-size: clamp(3.4rem, 12vw, 8rem); }
+
+.birim {
+  font-size: .3em;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: var(--metin-3);
+}
+
+.aciklama {
+  color: var(--metin-2);
+  font-size: var(--ol-govde);
+  line-height: 1.35;
+  max-width: 34ch;
+}
+
+.kaynak {
+  margin-top: .2rem;
+  color: var(--metin-3);
+  font-size: var(--ol-etiket);
+  font-family: var(--yazi-mono), monospace;
+  letter-spacing: .04em;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kutu { animation: none; opacity: 1; transform: none; }
+}

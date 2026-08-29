@@ -16,8 +16,89 @@ export type SlaytGovde =
   | { tip: "katman"; baslik: string; giris?: string; katmanlar: { ad: string; aciklama: string }[] }
   /** Tablo. Beş Scrum olayının AI karşılıkları gibi ızgara içerik için. */
   | { tip: "tablo"; baslik: string; sutunlar: string[]; satirlar: string[][] }
+  /** Sıralı adımlar. Süreç anlatan içerik tabloya sıkıştırılmasın. */
+  | {
+      tip: "adim";
+      baslik: string;
+      giris?: string;
+      adimlar: { ad: string; aciklama: string; ornek?: string }[];
+      kaynak?: string;
+    }
+  /** Tek eksen üzerinde iki uç. `ikili`den farkı: karşılaştırma değil, terazi. */
+  | {
+      tip: "terazi";
+      baslik: string;
+      giris?: string;
+      solEtiket: string;
+      sagEtiket: string;
+      ogeler: { metin: string; taraf: "sol" | "sag" }[];
+      kaynak?: string;
+    }
+  /** Kart dizisi. Sözlük ve referans içeriği tablodan daha okunur oluyor. */
+  | {
+      tip: "kartlar";
+      baslik: string;
+      giris?: string;
+      kartlar: { ust: string; ana: string; alt?: string }[];
+      kaynak?: string;
+    }
+  /** Doğrudan alıntı. Otorite cümleleri notta gömülü kalmasın. */
+  | { tip: "alinti"; metin: string; kisi: string; kaynak?: string }
+  /** Büyük rakam. Metin duvarları arasında nefes ve tokat — sayı konuşsun. */
+  | {
+      tip: "sayi";
+      baslik?: string;
+      giris?: string;
+      sayilar: { deger: string; birim?: string; aciklama: string }[];
+      kaynak?: string;
+    }
+  /** Rol birleşme akışı. Sahnelenerek açılıyor; bağlanmayan kutu asıl mesaj. */
+  | {
+      tip: "roller";
+      baslik: string;
+      giris?: string;
+      sutunlar: [string, string, string];
+      gruplar: RolGrubu[];
+      /**
+       * Hiçbir kutuya bağlanmayan unvan. Slaytın can alıcı noktası.
+       * Akışın DIŞINDA değil, İÇİNDE duruyor: listede herkesle aynı sırada
+       * ama hiçbir ayraca bağlanmıyor. Mesajın tamamı bu — dışarı alınırsa
+       * "zaten ayrı bir şey" gibi görünüp etkisini kaybediyor.
+       * `sonraGrup`: kaçıncı gruptan sonra araya girsin (0 tabanlı).
+       */
+      yalniz: { ad: string; not: string; sonraGrup: number };
+      kaynak?: string;
+    }
+  /** Olgunluk eğrisi. Eğri kendini çizer, noktalar sonra oluşur. */
+  | {
+      tip: "olgunluk";
+      baslik: string;
+      giris?: string;
+      /** Eğri üzerindeki aşama adları, soldan sağa. */
+      asamalar: [string, string, string, string, string];
+      noktalar: OlgunlukNoktasi[];
+      kaynak?: string;
+    }
   /** Henüz içeriği yazılmamış blok. Sunum akışını bozmadan iskelette durur. */
   | { tip: "taslak"; baslik: string; not: string; beklenen?: string[] };
+
+export type RolGrubu = {
+  /** Sağdaki tek kutu — birleşmenin son hâli. */
+  son: string;
+  /** Ortadaki ara kutular ve onları besleyen bugünkü unvanlar. */
+  dallar: { ara: string; kaynaklar: string[] }[];
+};
+
+/** Bir teknolojinin eğri üzerindeki yeri ve olgunlaşma ufku. */
+export type OlgunlukNoktasi = {
+  ad: string;
+  /** 0–100 arası yatay konum. 0 = tetikleyici, ~30 = zirve, 100 = plato. */
+  x: number;
+  /** Platoya kalan süre. Nokta biçimi bundan geliyor. */
+  ufuk: "yakin" | "orta" | "uzak";
+  /** Bu satırı öne çıkar — eğitimin argümanını taşıyanlar için. */
+  one?: boolean;
+};
 
 export type SutunIcerik = {
   baslik: string;
@@ -27,7 +108,7 @@ export type SutunIcerik = {
 };
 
 export type Slayt = {
-  /** Kararlı kimlik. Sıralama değişse de sunucu notları ve quiz eşleşmesi bozulmaz. */
+  /** Kararlı kimlik. Sıralama değişse de sunucu notlarının eşleşmesi bozulmaz. */
   id: string;
   /** Plandaki blok adı — sunucu panelinde ve ilerleme çubuğunda görünür. */
   blok: string;

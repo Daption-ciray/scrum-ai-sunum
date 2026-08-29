@@ -2,7 +2,10 @@ import type { Metadata, Viewport } from "next";
 
 /* Yazı tipleri npm'den self-host ediliyor (Google Fonts'a build-time bağımlılık yok).
    Aileler tema.css içinde --yazi-govde / --yazi-mono olarak atanıyor. */
-import "@fontsource-variable/archivo/wght.css";
+import "@fontsource-variable/pixelify-sans/wght.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-sans/700.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/ibm-plex-mono/600.css";
@@ -15,7 +18,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A0C0F",
+  // Mobil tarayıcı çubuğunun rengi. CSS değişkeni okunamadığı tek yer burası —
+  // tema.css'teki --zemin ile aynı kalmalı, tema değiştirirken bunu da güncelleyin.
+  themeColor: "#E6E7E6",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,

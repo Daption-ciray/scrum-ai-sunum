@@ -8,16 +8,34 @@
  * motifler tek ve büyük. Kalabalık kompozisyon o boyutta lekeye dönüşüyor.
  */
 
-export const OTURUM1 = "#4FE3D4"; // turkuaz — Salı
-export const OTURUM2 = "#FF9152"; // turuncu — Perşembe
+export const OTURUM1 = "#3A3FD1"; // indigo — Salı
+export const OTURUM2 = "#D6295E"; // koyu pembe — Perşembe
 
-/** Serinin tamamını bir arada tutan ortak stil. Her prompta ekleniyor. */
+/**
+ * Görsel modelleri hex kodunu yok sayıyor — ilk denemede 14 kartın 14'ü de
+ * gri çıktı (doygunluk ~0.01). Renk adına uyuyorlar. Hex yukarıda tema.css
+ * ile aynı kaldığını göstermek için duruyor, prompta aşağıdaki adlar giriyor.
+ */
+const VURGU_ADI = { 1: "vivid indigo blue", 2: "vivid crimson pink" };
+
+/** Serinin tamamını bir arada tutan ortak stil. Her prompta ekleniyor.
+ *
+ *  "Akış" yönüne geçerken bu blok baştan yazıldı. Eski seri karanlık boşlukta
+ *  parlayan çizgilerdi; açık zeminli temada o kartlar ekranda kara kutu gibi
+ *  duruyordu. Yeni dil kâğıt üzerine mürekkep: düz vektör, eşit kalınlık,
+ *  gölge yok, parıltı yok.
+ *
+ *  Model olumsuz komutları zayıf tutuyor ("no glow" tek başına yetmiyor), bu
+ *  yüzden asıl yükü olumlu ifadeler taşıyor: "on off-white paper", "flat
+ *  vector ink". Zemin birkaç kez tekrar ediliyor, kasıtlı.                  */
 export const ORTAK_STIL = [
-  "Abstract minimal geometric composition on a near-black background.",
-  "Thin luminous wireframe lines, subtle volumetric haze, fine film grain,",
-  "high contrast, generous negative space, centered composition,",
-  "editorial technology aesthetic.",
+  "Abstract minimal diagram printed on plain off-white paper.",
+  "Flat vector ink lines of even weight, solid filled dots as nodes,",
+  "generous white space, centered composition, editorial technical-diagram",
+  "aesthetic.",
   "No text, no letters, no numbers, no logos, no people, no faces.",
+  "No dark background, no glow, no neon, no light emission, no gradient,",
+  "no shading, no drop shadow, no 3D render, no perspective, no reflection.",
 ].join(" ");
 
 /** Motifler — sırayla blok 01…14. */
@@ -27,35 +45,35 @@ export const KARTLAR = [
     ad: "Bağlan ve ısın",
     oturum: 1,
     motif:
-      "Many thin luminous threads converging from all edges of the frame into a single bright node at the center.",
+      "Many thin threads converging from all edges of the frame into a single solid filled dot at the center.",
   },
   {
     no: 2,
     ad: "Nabız yoklaması",
     oturum: 1,
     motif:
-      "A field of scattered glowing points gradually organizing itself into three rising vertical bars, like a live poll result forming.",
+      "A field of scattered small solid dots gradually organizing itself into three rising vertical bars, like a live poll result forming.",
   },
   {
     no: 3,
     ad: "Scrum'ı 12 dakikada",
     oturum: 1,
     motif:
-      "A single closed circular loop built from three separate luminous arcs that flow into one another endlessly, each arc ending in a small arrowhead.",
+      "A single closed circular loop built from three separate arcs that flow into one another endlessly, each arc ending in a small arrowhead.",
   },
   {
     no: 4,
     ad: "AI aslında ne",
     oturum: 1,
     motif:
-      "Four concentric rings nested one inside another, each inner ring brighter than the one surrounding it, suggesting layers within layers.",
+      "Four concentric rings nested one inside another, each inner ring drawn with a thicker stroke than the one surrounding it, suggesting layers within layers.",
   },
   {
     no: 5,
     ad: "İlk yarış",
     oturum: 1,
     motif:
-      "Four parallel horizontal light trails racing to the right at different speeds, one clearly ahead of the others, motion streaks fading behind each.",
+      "Four separate horizontal ruled strokes stacked one above the other with clear empty gaps between them, each stroke ending in a solid dot at its right tip; the second stroke from the top reaches much further right than the other three.",
   },
   {
     no: 6,
@@ -69,66 +87,70 @@ export const KARTLAR = [
     ad: "Canlı demo",
     oturum: 1,
     motif:
-      "A single bright beam entering from the left, passing through a triangular prism, and splitting into several ordered parallel lines on the right.",
+      "One horizontal line enters from the left edge and meets a hollow triangle outline standing at the center; from the right side of the triangle a fan of five thin lines spreads outward and apart, like a spectrum. The triangle is an outline only, never filled.",
   },
   {
     no: 8,
     ad: "Salı'dan ne kaldı",
     oturum: 2,
     motif:
-      "Scattered tilted square fragments drifting inward from the edges and snapping into a clean aligned ring at the center.",
+      "Scattered tilted square outlines drifting inward from the edges and snapping into a clean aligned ring at the center.",
   },
   {
     no: 9,
     ad: "Atölye 1 — Kabul kriteri",
     oturum: 2,
     motif:
-      "One bright origin point on the left from which two paths diverge: an upper path that is broken, dashed and erratic, and a lower path that is smooth, bright and evenly punctuated by nodes.",
+      "One solid origin dot on the left from which two paths diverge: an upper path that is broken, dashed and erratic, and a lower path that is smooth, continuous and evenly punctuated by solid dots.",
   },
   {
     no: 10,
     ad: "Atölye 2 — Retro teması",
     oturum: 2,
     motif:
-      "Loose particles gathering into three distinct circular clusters, with one single bright particle deliberately left outside all of them.",
+      "Three tight round clusters of tiny solid dots arranged in a triangle formation, seen flat and straight on, and one lone solid dot far away in the upper right corner, clearly outside all three clusters. Flat graphic composition with no ground plane and no perspective.",
   },
   {
     no: 11,
     ad: "Neyi asla yapıştırma",
     oturum: 2,
     motif:
-      "A firm dashed horizontal boundary line across the frame; particles descending from above stop dead at the line and never cross it, the region below faintly filled.",
+      "One thick dashed horizontal line straight across the middle of the frame. Above the line, small solid dots fall downward and pile up against it. Below the line the paper is completely empty.",
   },
   {
     no: 12,
     ad: "AI çalışma anlaşması",
     oturum: 2,
     motif:
-      "Five overlapping rings arranged in a circle so that each one interlocks with its neighbours, a single bright point at the shared center.",
+      "Five overlapping ring outlines arranged in a circle so that each one interlocks with its neighbours, a single solid dot at the shared center.",
   },
   {
     no: 13,
     ad: "Final",
     oturum: 2,
     motif:
-      "Three podium blocks of different heights seen head-on, the middle one tallest and brightest, a single glowing point with two halo rings floating above it.",
+      "Three vertical bars of different heights standing side by side on one shared horizontal baseline, drawn as plain flat rectangles in outline, the middle bar clearly the tallest; directly above the middle bar sits one solid dot ringed by two concentric circles. Strictly two-dimensional, drawn like a bar chart on paper, seen perfectly straight on, with no thickness and no side faces.",
   },
   {
     no: 14,
     ad: "Taahhüt",
     oturum: 2,
     motif:
-      "One bright seed point at the center with six concentric rings radiating outward, fading as they expand.",
+      "One solid seed dot at the center with six concentric rings radiating outward, each ring drawn thinner than the one inside it.",
   },
 ];
 
 /** Bir kartın tam promptunu kurar. */
 export function promptKur(kart) {
-  const vurgu = kart.oturum === 1 ? OTURUM1 : OTURUM2;
+  const renk = VURGU_ADI[kart.oturum];
   return [
+    // Renk ve zemin cümlesi başta: model ilk sözcüklere daha çok ağırlık veriyor.
+    `Flat vector line diagram drawn in ${renk} ink on plain off-white paper.`,
     kart.motif,
     ORTAK_STIL,
-    `Monochrome except for a single accent color ${vurgu}; the background stays near-black #0A0C0F.`,
+    `Every line, dot and mark is ${renk} — nothing is any other hue.`,
+    `The background is plain off-white paper, almost white, evenly lit,`,
+    `with no texture and no vignette.`,
   ].join(" ");
 }
 

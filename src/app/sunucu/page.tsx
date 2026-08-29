@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Perde, Slayt } from "@/components/Slayt";
 import { OTURUMLAR, bloklar } from "@/icerik";
 import type { Durum } from "@/lib/durum";
-import { komutGonder, useYoklama } from "@/lib/yoklama";
+import { anahtarDogrula, komutGonder, useYoklama } from "@/lib/yoklama";
 import p from "./sunucu.module.css";
 
 const ANAHTAR_DEPO = "sunum.sunucu.anahtar";
@@ -38,11 +38,10 @@ function Kilit({ onAc }: { onAc: (a: string) => void }) {
     e.preventDefault();
     setDeniyor(true);
     setHata("");
-    // Zararsız bir komutla anahtarı doğrula: durumu değiştirmeyen "git".
-    const sonuc = await komutGonder(deger, { komut: "git", deger: 0 });
+    const gecerli = await anahtarDogrula(deger);
     setDeniyor(false);
-    if (!sonuc.ok) {
-      setHata(sonuc.hata || "Anahtar kabul edilmedi.");
+    if (!gecerli) {
+      setHata("Anahtar kabul edilmedi.");
       return;
     }
     try {
@@ -204,9 +203,29 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
           <button
             className={`${p.dugme} ${durum.oturum === 2 ? p.aktif : ""}`}
             onClick={() => gonder({ komut: "oturum", deger: 2 })}
+            title={durum.acilan < 2 ? "İkinci oturumu açar ve katılımcılara kilidini kaldırır" : undefined}
           >
             Oturum 2
           </button>
+        </div>
+
+        {/* Kilit — ikinci oturum katılımcıda kapalı mı? Provadan sonra geri
+            kilitlemek için; oturum 2'ye geçmek zaten kilidi açıyor. */}
+        <div className={p.satir}>
+          <span className={`etiket ${p.kilitDurum}`}>
+            {durum.acilan < 2
+              ? "Oturum 2 katılımcıda kilitli"
+              : "Oturum 2 katılımcıya açık"}
+          </span>
+          {durum.acilan >= 2 && (
+            <button
+              className={p.dugme}
+              style={{ flex: "0 0 auto" }}
+              onClick={() => gonder({ komut: "kilitle" })}
+            >
+              Geri kilitle
+            </button>
+          )}
         </div>
 
         <div className={p.kart}>

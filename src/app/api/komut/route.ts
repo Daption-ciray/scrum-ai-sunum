@@ -12,7 +12,8 @@ type Komut =
   | { komut: "oturum"; deger: 1 | 2 }
   | { komut: "perde" }
   | { komut: "sifirla" }
-  | { komut: "katilimcilari-temizle" };
+  | { komut: "katilimcilari-temizle" }
+  | { komut: "kilitle" };
 
 const sinirla = (n: number, enAz: number, enCok: number) => Math.min(Math.max(n, enAz), enCok);
 
@@ -50,13 +51,19 @@ export async function POST(istek: Request) {
       yeni.oturum = hedef;
       yeni.slayt = 0;
       yeni.perde = false;
+      // Bir kez açılan kilitli kalmaz: sunucu birinciye dönse de açık kalır.
+      if (hedef > onceki.acilan) yeni.acilan = hedef;
       break;
     }
+    case "kilitle":
+      // Provadan sonra ikinci oturumu tekrar kilitlemek için.
+      yeni.acilan = 1;
+      break;
     case "perde":
       yeni.perde = !onceki.perde;
       break;
     case "sifirla":
-      yeni = { ...onceki, slayt: 0, perde: false };
+      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1 };
       break;
     case "katilimcilari-temizle":
       await katilimcilariTemizle();

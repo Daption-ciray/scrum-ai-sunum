@@ -135,3 +135,24 @@ export async function komutGonder(
     return { ok: false, hata: "Sunucuya ulaşılamadı." };
   }
 }
+
+/**
+ * Anahtarı yan etkisiz doğrular.
+ * Eskiden bunun için `git 0` komutu gönderiliyordu — o komut sunumu ilk
+ * slayda atıyordu. Oturum ortasında paneli yeniden açan sunucu kendini
+ * başa dönmüş buluyordu. `adlar` alanı yalnızca yöneticiye döndüğü için
+ * varlığı tek başına yeterli kanıt.
+ */
+export async function anahtarDogrula(anahtar: string): Promise<boolean> {
+  try {
+    const yanit = await fetch("/api/durum", {
+      headers: { "x-sunucu-anahtari": anahtar },
+      cache: "no-store",
+    });
+    if (!yanit.ok) return false;
+    const veri = (await yanit.json()) as { adlar?: string[] };
+    return Array.isArray(veri.adlar);
+  } catch {
+    return false;
+  }
+}

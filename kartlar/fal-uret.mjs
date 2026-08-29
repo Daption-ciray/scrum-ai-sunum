@@ -2,20 +2,24 @@
 /**
  * Kart görsellerini fal.ai ile üretir.
  *
- *   FAL_KEY=... node kartlar/fal-uret.mjs
- *   FAL_KEY=... node kartlar/fal-uret.mjs --only 3,9,14
- *   FAL_KEY=... node kartlar/fal-uret.mjs --model fal-ai/flux/schnell
+ *   node kartlar/fal-uret.mjs
+ *   node kartlar/fal-uret.mjs --only 3,9,14
+ *   node kartlar/fal-uret.mjs --model fal-ai/flux/schnell
  *   node kartlar/fal-uret.mjs --dry-run
  *
- * Anahtarı https://fal.ai/dashboard/keys adresinden alın. Komut geçmişinde
- * kalmasın diye başına boşluk koyarak çalıştırabilir veya .env.local'a
- * FAL_KEY=... yazıp `set -a; source .env.local; set +a` diyebilirsiniz.
+ * Anahtar: proje kökündeki .env.local dosyasına FAL_KEY=... yazın. Betik onu
+ * kendi okuyor. (.env.local git tarafından yok sayılıyor — anahtar depoya
+ * girmez.) İsterseniz komut satırından da geçebilirsiniz:
+ *   FAL_KEY=xxx node kartlar/fal-uret.mjs
+ * Komut satırı .env.local'ın önüne geçer.
+ *
+ * Anahtarı https://fal.ai/dashboard/keys adresinden alırsınız.
  *
  * Yalnızca üretim betiği — siteye dahil değil, Vercel'e gitmiyor.
  * Bağımlılığı yok, Node 18+ yeterli.
  */
 
-import { mkdirSync, writeFileSync, renameSync, statSync, existsSync } from "node:fs";
+import { mkdirSync, writeFileSync, renameSync, statSync, existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { KARTLAR, promptKur, dosyaAdi } from "./kart-promptlari.mjs";
@@ -58,13 +62,52 @@ if (sadece && (!SECILEN || SECILEN.length === 0)) {
 
 const ISLENECEK = SECILEN ? KARTLAR.filter((k) => SECILEN.includes(k.no)) : KARTLAR;
 
+/**
+ * .env.local, sonra .env okunur. Zaten tanımlı bir değişkenin üzerine
+ * yazılmaz — komut satırından verilen değer her zaman öncelikli.
+ * Bağımlılık istemiyoruz, o yüzden ufak bir okuyucu.
+ */
+function ortamiYukle() {
+  for (const ad of [".env.local", ".env"]) {
+    const yol = resolve(KOK, ad);
+    if (!existsSync(yol)) continue;
+    let icerik;
+    try {
+      icerik = readFileSync(yol, "utf8");
+    } catch {
+      continue;
+    }
+    for (const satir of icerik.split(/\r?\n/)) {
+      const t = satir.trim();
+      if (!t || t.startsWith("#")) continue;
+      const esit = t.indexOf("=");
+      if (esit === -1) continue;
+      const anahtar = t.slice(0, esit).trim().replace(/^export\s+/, "");
+      if (!anahtar || process.env[anahtar] !== undefined) continue;
+      let deger = t.slice(esit + 1).trim();
+      const tirnak = deger[0];
+      if ((tirnak === '"' || tirnak === "'") && deger.endsWith(tirnak)) {
+        deger = deger.slice(1, -1);
+      }
+      // Boş atama yok sayılır: şablondan kopyalanan "FAL_KEY=" satırı,
+      // aşağıda gerçekten doldurulmuş bir satırı gölgelemesin.
+      if (deger === "") continue;
+      process.env[anahtar] = deger;
+    }
+  }
+}
+ortamiYukle();
+
 const ANAHTAR = process.env.FAL_KEY || process.env.FAL_API_KEY || "";
 if (!ANAHTAR && !KURU) {
   cik(
-    "FAL_KEY tanımlı değil.\n" +
-      "  https://fal.ai/dashboard/keys adresinden alıp şöyle çalıştırın:\n" +
-      "    FAL_KEY=xxxxx node kartlar/fal-uret.mjs\n" +
-      "  Önce ne üretileceğini görmek için: node kartlar/fal-uret.mjs --dry-run",
+    "FAL_KEY bulunamadı.\n\n" +
+      "  Proje kökündeki .env.local dosyasına şu satırı ekleyin:\n" +
+      "    FAL_KEY=buraya-anahtariniz\n\n" +
+      "  Anahtar: https://fal.ai/dashboard/keys\n" +
+      "  (.env.local git'e girmez, anahtar depoda kalmaz.)\n\n" +
+      "  Önce ne üretileceğini görmek için anahtara gerek yok:\n" +
+      "    node kartlar/fal-uret.mjs --dry-run",
   );
 }
 
@@ -95,8 +138,20 @@ async function falIstek(url, secenekler = {}, deneme = 1) {
   if (yanit.ok) return yanit.json();
 
   const govde = await yanit.text().catch(() => "");
+
+  // 403 her zaman "anahtar yanlış" demek değil: kurumsal ağlar ve sanal
+  // ortamlar fal.ai'ı engellediğinde de 403 döner. İkisini karıştırmayalım,
+  // yoksa insan saatlerce doğru anahtarı yanlış sanır.
+  if (/allowlist|egress|not in allow|blocked|proxy/i.test(govde)) {
+    cik(
+      `fal.ai'a ağ erişimi engellenmiş (HTTP ${yanit.status}).\n` +
+        `  ${govde.slice(0, 200)}\n\n` +
+        `  Bu bir anahtar sorunu değil. Betiği fal.ai'a çıkabilen bir yerden\n` +
+        `  çalıştırın — kendi Terminal'iniz iş görür.`,
+    );
+  }
   if (yanit.status === 401 || yanit.status === 403) {
-    cik(`fal anahtarı kabul edilmedi (${yanit.status}). FAL_KEY doğru mu?\n${govde.slice(0, 300)}`);
+    cik(`fal anahtarı kabul edilmedi (HTTP ${yanit.status}). FAL_KEY doğru mu?\n  ${govde.slice(0, 300)}`);
   }
   if (gecici(yanit.status) && deneme < DENEME) {
     const geri = 1500 * 2 ** (deneme - 1);

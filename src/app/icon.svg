@@ -1,6 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#0A0C0F"/>
-  <rect x="6" y="9" width="20" height="2.6" rx="1.3" fill="#4FE3D4"/>
-  <rect x="6" y="14.7" width="13" height="2.6" rx="1.3" fill="#4FE3D4" opacity=".55"/>
-  <rect x="6" y="20.4" width="8" height="2.6" rx="1.3" fill="#4FE3D4" opacity=".3"/>
+  <!-- Akış: düğüm ve bağ. Renkler tema.css'teki --oturum1 ve --yuzey ile aynı;
+       SVG değişken okuyamadığı için tema değişince bu dosya da elle güncellenir. -->
+  <rect width="32" height="32" rx="7" fill="#3A3FD1"/>
+  <path d="M10 9v14" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2.4 3.2" opacity=".55"/>
+  <circle cx="10" cy="9" r="3" fill="#FFFFFF"/>
+  <circle cx="10" cy="16" r="3" fill="#FFFFFF" opacity=".72"/>
+  <circle cx="10" cy="23" r="3" fill="#FFFFFF" opacity=".45"/>
+  <path d="M15 9h9M15 16h6M15 23h4" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>
 </svg>

@@ -53,10 +53,21 @@
 /* ---------------- madde listesi ---------------- */
 .maddeler { display: flex; flex-direction: column; gap: clamp(.7rem, 1.5vw, 1.15rem); }
 .madde {
+  position: relative;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0 clamp(.8rem, 1.6vw, 1.3rem);
   align-items: baseline;
+}
+/* Düğümleri birbirine bağlayan kesikli çizgi. Maddeler ayrı ayrı duran
+   kurşunlar değil, bir akışın durakları — "Akış" yönünün imzası bu. */
+.madde:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(.25em - .5px);
+  top: 1.15em;
+  bottom: calc(-1 * clamp(.7rem, 1.5vw, 1.15rem));
+  border-left: 1px dashed var(--vurgu-koyu);
 }
 .maddeIsaret {
   width: .5em; height: .5em;

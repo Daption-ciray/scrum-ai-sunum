@@ -11,7 +11,7 @@ bağımlılık yok — bu, tam online formatta quiz'in adil çalışmasını sa�
 | Senkron slayt motoru | ✅ Çalışıyor |
 | **CircularGallery ana sayfa** (WebGL, 14 kart) | ✅ Çalışıyor |
 | Serbest gezinme + "sunucudan ayrıldınız" şeridi | ✅ Çalışıyor |
-| Kart görselleri (14 adet, jeneratif) | ✅ Üretildi |
+| Kart görselleri (14 adet, fal.ai) | ✅ Üretildi |
 | Sunucu paneli (notlar, blok atlama, klavye) | ✅ Çalışıyor |
 | Katılımcı ekranı, mobil + masaüstü | ✅ Çalışıyor |
 | Perde (ara) modu | ✅ Çalışıyor |
@@ -40,13 +40,23 @@ Ayarlar `src/components/Galeri.tsx` içinde: `bend` (yayın bükülmesi),
 
 ## Kart görselleri
 
-`public/kartlar/blok-01…14.jpg` — Canvas ile üretiliyor, stok görsel değil.
-Her blok kendi motifini taşıyor (döngü, iç içe halkalar, yarış izleri, sınır…),
-oturum 1 turkuaz / oturum 2 turuncu. Toplam ~1,4 MB.
+`public/kartlar/blok-01…14.jpg` — fal.ai (flux/dev) ile üretiliyor, stok görsel
+değil. Her blok kendi motifini taşıyor (döngü, iç içe halkalar, yarış izleri,
+sınır…), oturum 1 turkuaz / oturum 2 turuncu. Toplam ~1,2 MB.
 
-Yeniden üretmek veya renk değiştirmek için `kartlar/uret.html` içindeki
-motifleri düzenleyip `node kartlar/calistir.mjs` çalıştırın (bu iki dosya
-sunum paketinin dışında, ayrıca gönderildi).
+Yeniden üretmek veya motif değiştirmek için `kartlar/kart-promptlari.mjs`
+içindeki metinleri düzenleyip:
+
+```bash
+node kartlar/fal-uret.mjs --dry-run     # ne üretileceğini gösterir
+node kartlar/fal-uret.mjs               # .env.local'daki FAL_KEY ile üretir
+node kartlar/fal-uret.mjs --only 5,7    # sadece belirli kartları yeniler
+sips -s formatOptions 78 -s format jpeg public/kartlar/*.jpg --out public/kartlar
+```
+
+Son adım küçültme: fal ~300 KB'lik kartlar döndürüyor, galeri 14'ünü birden
+yüklüyor. `kartlar/uret.html` + `calistir.mjs` fal'sız jeneratif alternatif
+olarak duruyor.
 
 Quiz ve atölye blokları slaytlarda **"Yapım aşamasında"** rozetiyle duruyor;
 akış şimdiden baştan sona provası yapılabilir durumda.

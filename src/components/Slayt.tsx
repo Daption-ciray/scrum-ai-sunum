@@ -1,5 +1,12 @@
 import type { CSSProperties } from "react";
 import type { Slayt as SlaytTipi, SutunIcerik } from "@/icerik/tipler";
+import { RollerAkisi } from "./RollerAkisi";
+import { Sayilar } from "./Sayilar";
+import { Adimlar } from "./Adimlar";
+import { Terazi } from "./Terazi";
+import { Kartlar } from "./Kartlar";
+import { Alinti } from "./Alinti";
+import { OlgunlukEgrisi } from "./OlgunlukEgrisi";
 import s from "./slayt.module.css";
 
 export function Perde() {
@@ -137,6 +144,27 @@ function Govde({ slayt }: { slayt: SlaytTipi }) {
           </div>
         </div>
       );
+
+    case "adim":
+      return <Adimlar slayt={slayt} />;
+
+    case "terazi":
+      return <Terazi slayt={slayt} />;
+
+    case "kartlar":
+      return <Kartlar slayt={slayt} />;
+
+    case "alinti":
+      return <Alinti slayt={slayt} />;
+
+    case "sayi":
+      return <Sayilar slayt={slayt} />;
+
+    case "roller":
+      return <RollerAkisi slayt={slayt} />;
+
+    case "olgunluk":
+      return <OlgunlukEgrisi slayt={slayt} />;
 
     case "taslak":
       return (

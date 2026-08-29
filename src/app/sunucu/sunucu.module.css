@@ -150,3 +150,11 @@
   padding: .8em 1em;
 }
 .girdi:focus { border-color: var(--vurgu); outline: none; }
+
+/* Kilit durumu satırı — ikinci oturum katılımcıda açık mı kapalı mı. */
+.kilitDurum {
+  flex: 1;
+  align-self: center;
+  color: var(--metin-2);
+  line-height: 1.3;
+}

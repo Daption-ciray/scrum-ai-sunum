@@ -1,4 +1,9 @@
-import { durumuOku, katilimciBildir, katilimcilariOku, paylasimliDepo } from "@/lib/depo";
+import {
+  durumuOku,
+  katilimciBildir,
+  katilimcilariOku,
+  paylasimliDepo,
+} from "@/lib/depo";
 import { yoneticiMi } from "@/lib/anahtar";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +30,9 @@ export async function GET(istek: Request) {
       durum,
       bagli: katilimcilar.length,
       paylasimli: paylasimliDepo,
-      ...(yonetici ? { adlar: katilimcilar.map((k) => k.ad).sort((a, b) => a.localeCompare(b, "tr")) } : {}),
+      ...(yonetici
+        ? { adlar: katilimcilar.map((k) => k.ad).sort((a, b) => a.localeCompare(b, "tr")) }
+        : {}),
     },
     { headers: { "cache-control": "no-store" } },
   );

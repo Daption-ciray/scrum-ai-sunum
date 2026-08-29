@@ -1,0 +1,244 @@
+/* Rol birleşme akışı.
+   Sahne zamanlaması tek yerden: aşağıdaki dört süre değişkeni.
+   Renk kodu yok, hepsi tema.css. */
+
+.sarma {
+  --s1: 0s;      /* bugünkü unvanlar */
+  --s2: .95s;    /* bağlantılar ve ara kutular */
+  --s3: 1.75s;   /* son kutular */
+  --s4: 2.6s;    /* soluklaşma ve odak */
+
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  width: 100%;
+}
+
+.baslik {
+  font-size: var(--ol-baslik);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+.giris {
+  color: var(--metin-2);
+  font-size: var(--ol-govde);
+  max-width: 56ch;
+  line-height: 1.45;
+}
+
+/* --- sütun başlıkları --------------------------------------------------- */
+
+.sutunBasliklari {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: .8rem;
+  align-items: baseline;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--cizgi);
+}
+.sutunBaslik { color: var(--metin-3); }
+.sutunBaslik:nth-child(2) { text-align: center; }
+.sutunBaslik:nth-child(3) { text-align: right; }
+
+/* --- akış --------------------------------------------------------------- */
+
+.akis { display: flex; flex-direction: column; gap: .8rem; }
+
+.grup {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .7rem;
+  align-items: center;
+}
+.dallar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .5rem;
+  position: relative;
+  padding-right: 1.1rem;
+}
+.dal {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .6rem;
+  align-items: center;
+}
+.kaynaklar {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  position: relative;
+  padding-right: .9rem;
+}
+
+/* --- kutular ------------------------------------------------------------ */
+
+.kutu {
+  display: block;
+  background: var(--yuzey);
+  border: 1px solid var(--cizgi);
+  border-radius: var(--kose);
+  padding: .42em .8em;
+  font-size: var(--ol-kucuk);
+  line-height: 1.25;
+  color: var(--metin-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  opacity: 0;
+  transform: translateX(-6px);
+  animation: gir .45s var(--egri) forwards;
+  animation-delay: calc(var(--s1) + var(--g, 0s));
+}
+
+.ara {
+  color: var(--metin);
+  font-weight: 600;
+  border-color: var(--cizgi-2);
+  transform: translateX(-10px);
+  animation-delay: var(--s2);
+}
+.son {
+  color: var(--metin);
+  font-weight: 600;
+  background: var(--vurgu-sis);
+  border-color: var(--vurgu-koyu);
+  transform: translateX(-10px);
+  animation-delay: var(--s3);
+}
+
+@keyframes gir {
+  to { opacity: 1; transform: none; }
+}
+
+/* --- parantezler --------------------------------------------------------
+   Kaynakları ara kutuya, ara kutuları son kutuya bağlayan köşeli ayraç.
+   Sağa doğru açılıyor; soldan sağa çizilsin diye transform-origin sol. */
+
+.parantez {
+  position: absolute;
+  right: 0;
+  top: .55em;
+  bottom: .55em;
+  width: .8rem;
+  border: 1px solid var(--cizgi-2);
+  border-left: 0;
+  border-radius: 0 var(--kose) var(--kose) 0;
+
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: ciz .5s var(--egri) forwards;
+  animation-delay: var(--s2);
+}
+/* Ayracın ucundan ara kutuya giden kısa yatay çizgi. */
+.parantez::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: .6rem;
+  border-top: 1px solid var(--cizgi-2);
+}
+
+.parantezBuyuk {
+  right: 0;
+  top: 1.4rem;
+  bottom: 1.4rem;
+  width: 1rem;
+  animation-delay: var(--s3);
+}
+
+@keyframes ciz {
+  to { opacity: 1; transform: none; }
+}
+
+/* --- sahne 4: gruplar soluklaşır, bağlanmayan satır parlak kalır --------
+   Soluklaşma `.akis`'e değil tek tek gruplara veriliyor; yalnız satır da
+   akışın içinde olduğu için ona uygulanırsa asıl mesaj da sönerdi. */
+
+.grup:not(.yalnizSatir) {
+  animation: solukla .8s var(--egri) forwards;
+  animation-delay: var(--s4);
+}
+@keyframes solukla {
+  to { opacity: .3; }
+}
+
+/* Yalnız satır: sol sütunda kutu, geri kalan boş.
+   O boşluk slaytın söylediği şeyin ta kendisi. */
+.yalnizSatir .kaynaklar { padding-right: .9rem; }
+.yalnizSatir .dal { grid-template-columns: 1fr; }
+
+.yalniz {
+  --g: 0s;
+  color: var(--metin);
+  font-weight: 700;
+  border: 2px solid var(--cizgi-2);
+  /* Önce diğerleriyle birlikte gelir, sahne 4'te işaretlenir. */
+  animation:
+    gir .45s var(--egri) forwards,
+    isaretle .6s var(--egri) forwards var(--s4);
+}
+@keyframes isaretle {
+  to {
+    border-color: var(--vurgu);
+    box-shadow: 0 0 0 4px var(--vurgu-sis);
+  }
+}
+
+.yalnizNot {
+  align-self: center;
+  color: var(--metin);
+  font-size: var(--ol-govde);
+  font-weight: 600;
+  line-height: 1.35;
+  max-width: 34ch;
+  opacity: 0;
+  animation: gir .6s var(--egri) forwards;
+  animation-delay: calc(var(--s4) + .25s);
+}
+
+.kaynak {
+  margin-top: .3rem;
+  color: var(--metin-3);
+  font-size: var(--ol-etiket);
+  font-family: var(--yazi-mono), monospace;
+  letter-spacing: .04em;
+  line-height: 1.5;
+}
+
+/* --- dar ekran ----------------------------------------------------------
+   Telefonda üç sütun sığmıyor. Akış dikey listeye düşüyor; parantezler
+   kalkıyor, birleşme "→" ile anlatılıyor. Kesilen sütun görülmemiş sütundur. */
+@media (max-width: 680px) {
+  .sutunBasliklari { display: none; }
+  .grup { grid-template-columns: 1fr; gap: .4rem; }
+  .dallar { padding-right: 0; gap: .55rem; }
+  .dal { grid-template-columns: 1fr; gap: .35rem; }
+  .kaynaklar { padding-right: 0; }
+  .parantez { display: none; }
+  .kutu { white-space: normal; }
+
+  .yalnizSatir .kaynaklar { padding-right: 0; }
+
+  .ara::before,
+  .son::before {
+    content: "→ ";
+    color: var(--vurgu);
+    font-weight: 700;
+  }
+  .son { margin-top: .15rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kutu, .parantez, .yalnizNot, .grup {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  /* Hareket kapalıyken de asıl mesaj görünsün. */
+  .grup:not(.yalnizSatir) { opacity: .45; }
+  .yalniz { border-color: var(--vurgu); box-shadow: 0 0 0 4px var(--vurgu-sis); }
+}

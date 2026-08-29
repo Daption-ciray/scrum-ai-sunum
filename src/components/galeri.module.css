@@ -1,153 +1,252 @@
+/* Blok galerisi — 3B kart yığını, 8-bit çerçeve.
+   Renk kodu yok, hepsi tema.css. Tek renk yeşil ve tek iş yapıyor. */
+
+.sayfa {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 2.2rem);
+  background: var(--zemin);
+  overflow: hidden;
+}
+
+/* --- üst satır: minik göstergeler, şerit değil --------------------------- */
+
+.ustSatir { display: flex; align-items: center; gap: .9rem; }
+.marka { color: var(--metin); letter-spacing: .18em; }
+.kimlik { margin-left: auto; color: var(--metin-3); }
+
+.bagli {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--metin-2);
+}
+.baglıNokta {
+  width: 8px; height: 8px;
+  background: var(--sunucu);
+  border-radius: 0; /* piksel dünyasında daire yok */
+}
+
+/* --- sahne --------------------------------------------------------------
+   Yığının döndüğü alan. perspective 3B derinliği veriyor; yığın merkezde. */
+
 .sahne {
-  position: relative;
   flex: 1;
-  min-height: 0;
-  width: 100%;
-  outline: none;
-  cursor: grab;
-  touch-action: pan-y;
-}
-.sahne:active { cursor: grabbing; }
-.sahne:focus-visible { box-shadow: inset 0 0 0 2px var(--vurgu); }
-
-.tuval { display: block; width: 100%; height: 100%; }
-
-/* WebGL yoksa: gerçek düğmelerden oluşan sade ızgara. Oturum yine yürür. */
-.yedek {
-  position: absolute; inset: 0;
-  overflow-y: auto;
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 12px;
-  padding: 16px;
+  place-items: center;
+  perspective: 1100px;
+  touch-action: pan-y;
+  min-height: 320px;
 }
-.yedekKart {
-  display: flex; flex-direction: column; gap: 8px;
+
+.yigin {
+  position: relative;
+  width: min(420px, 78vw);
+  height: min(300px, 46vh);
+  transform-style: preserve-3d;
+}
+
+/* --- kart ---------------------------------------------------------------- */
+
+.kart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  text-align: left;
+  padding: 1.1rem 1.2rem;
+
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  border-radius: 0;
+  color: var(--metin);
+  font: inherit;
+  cursor: pointer;
+
+  /* Bulanıksız katı gölge — 8-bit kabartma. */
+  box-shadow: 6px 6px 0 0 var(--cizgi-2);
+
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.no {
+  color: var(--metin-3);
+  /* Tam sayı px — piksel font kesirli boyutta bulanıklaşıyor. */
+  font-size: 28px;
+  letter-spacing: .04em;
+  line-height: 1;
+}
+
+.ad {
+  flex: 1;
+  font-family: var(--yazi-govde), sans-serif;
+  font-size: clamp(1.3rem, 3.4vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.alt { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.sure { color: var(--metin-3); }
+
+/* --- eğitmenin bulunduğu kart: sayfadaki tek renk ------------------------ */
+
+.burada { background: var(--sunucu-zemin); }
+.burada .no, .burada .sure { color: var(--metin-2); }
+.buradaEtiket {
+  margin-left: auto;
+  color: var(--metin);
+  background: var(--sunucu);
+  padding: .25em .6em;
+  letter-spacing: .06em;
+}
+
+/* --- kilitli kart -------------------------------------------------------- */
+
+.kilitli {
+  cursor: not-allowed;
+  color: var(--metin-3);
+  border-style: dashed;
+  border-color: var(--metin-3);
+  box-shadow: none;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--zemin-2) 0 7px,
+    var(--zemin) 7px 14px
+  );
+}
+.kilitli .ad { font-weight: 600; }
+.kilitEtiket {
+  margin-left: auto;
+  color: var(--metin-2);
+  border: 1px solid var(--metin-3);
+  padding: .25em .6em;
+}
+/* Piksel asma kilit, sağ üst köşede. */
+.kilitli::after {
+  content: "";
+  position: absolute;
+  top: 1.1rem; right: 1.2rem;
+  width: 13px; height: 11px;
+  background: var(--metin-3);
+  box-shadow:
+    0 -6px 0 -4px var(--metin-3),
+    -4px -5px 0 -4px var(--metin-3),
+    4px -5px 0 -4px var(--metin-3);
+}
+
+/* --- çevirme okları ------------------------------------------------------ */
+
+.ok {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  width: 2.4rem; height: 2.4rem;
+  display: grid; place-items: center;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  color: var(--metin);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform var(--gecis), box-shadow var(--gecis);
+}
+.okSol { left: clamp(.2rem, 3vw, 3rem); }
+.okSag { right: clamp(.2rem, 3vw, 3rem); }
+.ok:hover {
+  transform: translateY(-50%) translate(-2px, -2px);
+  box-shadow: 5px 5px 0 0 var(--cizgi-2);
+}
+.ok:active {
+  transform: translateY(-50%) translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--cizgi-2);
+}
+
+/* --- alt satır: mini dizin ----------------------------------------------- */
+
+.altSatir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.dizin {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  gap: 5px;
+}
+.dizinKare {
+  display: block;
+  width: 16px; height: 16px;
+  padding: 0;
   background: var(--yuzey);
   border: 1px solid var(--cizgi);
-  border-radius: var(--kose);
-  padding: 10px;
-  text-align: left;
+  border-radius: 0;
   cursor: pointer;
-  font-size: var(--ol-govde);
+  transition: transform var(--gecis);
 }
-.yedekKart img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 3px; }
-.yedekSure { font-family: var(--yazi-mono), monospace; font-size: var(--ol-etiket); color: var(--metin-3); }
-
-/* ---------------- galeri çerçevesi ---------------- */
-
-.kap { display: flex; flex-direction: column; min-height: 100dvh; background: var(--zemin); }
-
-.atmosfer {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background-image:
-    radial-gradient(52% 40% at 22% 42%, color-mix(in srgb, var(--oturum1) 9%, transparent), transparent 70%),
-    radial-gradient(52% 40% at 80% 58%, color-mix(in srgb, var(--oturum2) 8%, transparent), transparent 70%);
+.dizinKare:hover { transform: translateY(-2px); }
+/* İki sinyal çakışmasın diye ayrı özellikler kullanıyor:
+   seçili = dış halka, eğitmenin yeri = dolgu. Böylece kilitli bir kare
+   seçildiğinde de seçim görünüyor — dolgu taranmış olsa bile halka duruyor. */
+.dizinAktif {
+  outline: 2px solid var(--metin);
+  outline-offset: 2px;
+}
+.dizinSunucu { background: var(--sunucu); border-color: var(--sunucu); }
+.dizinKilitli {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--zemin-2) 0 3px,
+    var(--zemin) 3px 6px
+  );
+  border-style: dashed;
+  border-color: var(--metin-3);
 }
 
-.ust {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; gap: 14px;
-  padding: 16px clamp(16px, 3vw, 40px);
-  border-bottom: 1px solid var(--cizgi);
-  flex-wrap: wrap;
+.sunucuyaGit {
+  background: var(--metin);
+  color: var(--yuzey);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--yazi-piksel), monospace;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  -webkit-font-smoothing: none;
+  padding: .45em .8em;
+  cursor: pointer;
 }
-.marka { color: var(--vurgu); letter-spacing: .2em; }
-.ayrac { width: 1px; height: 14px; background: var(--cizgi-2); }
-.ustBilgi { font-size: var(--ol-kucuk); color: var(--metin-2); }
-.ustSag { margin-left: auto; display: flex; align-items: center; gap: clamp(10px, 2vw, 20px); }
+.sunucuyaGit:hover { background: var(--sunucu); color: var(--metin); }
 
-.geriDon {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--vurgu-sis);
-  border: 1px solid var(--vurgu-koyu);
-  border-radius: var(--kose);
-  color: var(--vurgu);
-  font-family: var(--yazi-mono), monospace;
-  font-size: var(--ol-etiket);
-  font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
-  padding: 8px 13px; min-height: 36px; cursor: pointer;
-  transition: filter var(--gecis);
+.dipnot { color: var(--metin-3); text-align: center; }
+
+@media (max-width: 680px) {
+  .yigin { width: min(320px, 82vw); height: min(240px, 40vh); }
+  .no { font-size: 22px; }
+  .ok { width: 2rem; height: 2rem; }
+  .dizinKare { width: 13px; height: 13px; }
+  .sunucuyaGit { font-size: 12px; }
 }
-.geriDon:hover { filter: brightness(1.25); }
 
-.canli { display: flex; align-items: center; gap: 7px; color: var(--metin-3); white-space: nowrap; }
-.canli::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--dogru); }
-
-.baslikAlan {
-  position: relative; z-index: 1;
-  padding: clamp(20px, 3vw, 36px) clamp(16px, 3vw, 40px) 0;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.baslik {
-  font-size: clamp(24px, 3.4vw, 40px);
-  font-weight: 700; letter-spacing: -.032em; line-height: 1.05;
-}
-.altBaslik { font-size: var(--ol-govde); color: var(--metin-2); max-width: 58ch; }
-
-/* odaktaki kartın bilgisi — galerinin altında sabit satır */
-.odakSatir {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; gap: 14px;
-  padding: 4px clamp(16px, 3vw, 40px) 0;
-  min-height: 44px;
-  flex-wrap: wrap;
-}
-.odakSatirIc { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-
-.rozet {
-  display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid var(--vurgu); border-radius: 999px;
-  padding: 5px 11px;
-  font-family: var(--yazi-mono), monospace;
-  font-size: var(--ol-etiket); font-weight: 600;
-  letter-spacing: .13em; text-transform: uppercase;
-  color: var(--vurgu);
-}
-.rozet::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--vurgu); }
-.sure { display: flex; align-items: center; gap: 9px; }
-.sureCizgi { height: 2px; background: var(--vurgu); border-radius: 2px; opacity: .8; }
-.sureMetin { font-family: var(--yazi-mono), monospace; font-size: var(--ol-etiket); letter-spacing: .1em; color: var(--metin-3); }
-
-.ac {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 9px;
-  background: var(--vurgu); border: 0; border-radius: var(--kose);
-  color: var(--zemin);
-  font-weight: 600; font-size: var(--ol-govde);
-  padding: 11px 18px; min-height: 44px; cursor: pointer;
-  transition: filter var(--gecis);
-}
-.ac:hover { filter: brightness(1.12); }
-
-.alt {
-  position: relative; z-index: 1;
-  display: flex; align-items: center; gap: clamp(12px, 2vw, 26px);
-  padding: 16px clamp(16px, 3vw, 40px) 22px;
-  border-top: 1px solid var(--cizgi);
-  flex-wrap: wrap;
-}
-.oturumEtiket { display: flex; align-items: center; gap: 8px; color: var(--metin-2); }
-.oturumCizgi { width: 22px; height: 2px; border-radius: 2px; }
-.ipucu { margin-left: auto; display: flex; align-items: center; gap: 12px; color: var(--metin-3); }
-.ipucuAyrac { color: var(--cizgi-2); }
-
-@media (max-width: 640px) {
-  .ipucu { display: none; }
-  /* Telefonda dikey alan galeriye lazım: alt başlık düşer, üst başlık küçülür. */
-  .altBaslik { display: none; }
-  .baslikAlan { padding-top: 14px; gap: 4px; }
-  .baslik { font-size: 22px; }
-  .ustBilgi { display: none; }
-
-  /* Alt satır sarmak yerine iki kata ayrılıyor, düğme tam genişlik. */
-  .odakSatir {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 10px 16px 0;
-  }
-  .odakSatirIc { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .ac { margin-left: 0; width: 100%; justify-content: center; }
-  .alt { padding: 12px 16px 18px; gap: 14px; }
+@media (prefers-reduced-motion: reduce) {
+  .ok, .dizinKare { transition: none; }
+  .ok:hover, .dizinKare:hover { transform: translateY(-50%); }
 }

@@ -1,0 +1,32 @@
+/* Kart dizisi. Renk kodu yok, hepsi tema.css. */
+.sarma { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+.baslik { font-size: var(--ol-baslik); line-height: 1.1; letter-spacing: -.02em; }
+.giris { color: var(--metin-2); font-size: var(--ol-govde); max-width: 58ch; line-height: 1.45; }
+
+.izgara {
+  display: grid;
+  gap: clamp(.6rem, 1.5vw, .9rem);
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+}
+
+.kart {
+  display: flex; flex-direction: column; gap: .3rem;
+  padding: .8rem .9rem;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  opacity: 0; transform: translateY(6px);
+  animation: ac .35s var(--egri) forwards;
+  animation-delay: var(--g, 0s);
+}
+@keyframes ac { to { opacity: 1; transform: none; } }
+
+.ust { color: var(--metin-3); }
+.ana { font-size: var(--ol-govde); font-weight: 700; line-height: 1.2; }
+.alt { color: var(--metin-2); font-size: var(--ol-kucuk); line-height: 1.35; }
+
+.kaynak {
+  color: var(--metin-3); font-size: var(--ol-etiket);
+  font-family: var(--yazi-mono), monospace; letter-spacing: .04em;
+}
+@media (prefers-reduced-motion: reduce) { .kart { animation: none; opacity: 1; transform: none; } }

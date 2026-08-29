@@ -1,0 +1,42 @@
+/* Alıntı slaytı. Renk kodu yok, hepsi tema.css. */
+
+.sarma {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin: 0;
+  max-width: 54ch;
+}
+
+/* Tırnak karakteri yerine blok işaret: piksel fontta " ve " glifleri
+   birbirine karışıyordu, çizilen blok hem net hem dile uygun. */
+.tirnak {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+.tirnak span {
+  width: 10px;
+  height: 22px;
+  background: var(--cizgi-2);
+}
+
+.metin {
+  margin: 0;
+  /* Alıntı uzun olabiliyor; --ol-buyuk ekrandan taşıyordu. */
+  font-size: clamp(1.3rem, 2.9vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+.kunye {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  border-top: var(--kenar) solid var(--cizgi-2);
+  padding-top: .7rem;
+}
+.kisi { font-size: var(--ol-govde); font-weight: 600; }
+.kaynak { color: var(--metin-3); }

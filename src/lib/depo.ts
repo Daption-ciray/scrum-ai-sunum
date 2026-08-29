@@ -37,13 +37,28 @@ async function redis<T = unknown>(komut: (string | number)[]): Promise<T> {
 }
 
 /* --- bellek modu: HMR'de sıfırlanmasın diye globalThis üzerinde ------------ */
-type Bellek = { durum: Durum; katilimcilar: Map<string, Katilimci> };
-const g = globalThis as unknown as { __sunumBellek?: Bellek };
+type Bellek = {
+  durum: Durum;
+  katilimcilar: Map<string, Katilimci>;
+};
+const g = globalThis as unknown as { __sunumBellek?: Partial<Bellek> };
+/**
+ * Alanlar tek tek tamamlanıyor, nesnenin tamamı bir kerede kurulmuyor.
+ * HMR'de eski şekliyle kalmış bir nesne globalThis üzerinde duruyor olabilir;
+ * yeni bir alan eklendiğinde o nesne `undefined` alanla hayatta kalır ve
+ * ilk kullanımda çöker. Yerelde provanın ortasında yaşanacak en gereksiz hata.
+ */
 function bellek(): Bellek {
-  if (!g.__sunumBellek) {
-    g.__sunumBellek = { durum: { ...BASLANGIC }, katilimcilar: new Map() };
-  }
-  return g.__sunumBellek;
+  const b = (g.__sunumBellek ??= {});
+  b.durum ??= { ...BASLANGIC };
+  b.katilimcilar ??= new Map();
+  return b as Bellek;
+}
+
+/** HGETALL yanıtı Upstash'te kimi zaman düz dizi, kimi zaman nesne geliyor. */
+function hashCoz(duz: string[] | Record<string, string> | null): string[] {
+  if (!duz) return [];
+  return Array.isArray(duz) ? duz.filter((_, i) => i % 2 === 1) : Object.values(duz);
 }
 
 /* --- durum ---------------------------------------------------------------- */
@@ -91,12 +106,8 @@ export async function katilimcilariOku(): Promise<Katilimci[]> {
     "HGETALL",
     KATILIMCI_ANAHTARI,
   ]);
-  if (!duz) return [];
-  const degerler = Array.isArray(duz)
-    ? duz.filter((_, i) => i % 2 === 1)
-    : Object.values(duz);
   const liste: Katilimci[] = [];
-  for (const d of degerler) {
+  for (const d of hashCoz(duz)) {
     try {
       liste.push(JSON.parse(d) as Katilimci);
     } catch {

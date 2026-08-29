@@ -19,7 +19,7 @@ body {
   overscroll-behavior: none;
 }
 
-h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -.025em; text-wrap: balance; }
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
 p { margin: 0; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 button { font: inherit; color: inherit; }
@@ -31,9 +31,9 @@ a { color: var(--vurgu); }
 }
 
 :focus-visible {
-  outline: 2px solid var(--vurgu);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline: var(--kenar) solid var(--vurgu);
+  outline-offset: 2px;
+  border-radius: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -43,14 +43,37 @@ a { color: var(--vurgu); }
   }
 }
 
-/* ---- etiket: her yerde kullanılan küçük mono başlık ---- */
+/* ---- etiket: her yerde kullanılan küçük başlık ----
+   8-bit his büyük ölçüde burada taşınıyor: etiketler piksel fontta, gövde
+   metni okunur fontta kalıyor. Piksel font küçük punto ve büyük harfte
+   en iyi çalışıyor; zaten etiketin kullanıldığı yer tam olarak orası. */
 .etiket {
+  font-family: var(--yazi-piksel), monospace;
+  /* TAM PİKSEL BOYUT — clamp() değil.
+     Piksel fontlar kesirli punto boyutunda yumuşatılıp bulanıklaşıyor ve
+     glifler birbirine karışıyor: 5 → S, 2 → 8, C → O. Sabit tam sayı px
+     ve yumuşatmanın kapatılması bunu çözüyor. Bu boyutu değiştirecekseniz
+     yine tam sayı verin. */
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--metin-3);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+@media (max-width: 520px) { .etiket { font-size: 12px; } }
+
+/* Rakamlar piksel fontta değil, mono'da.
+   Piksel fontun 2/5/8'i küçük puntoda ayırt edilemiyordu; süre ve sayaç
+   bilgi taşıyor, tahmin edilecek şey değil. Harf piksel, rakam mono. */
+.sayi {
   font-family: var(--yazi-mono), monospace;
   font-size: var(--ol-etiket);
   font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--metin-3);
+  letter-spacing: .1em;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ---- ekran ---- */

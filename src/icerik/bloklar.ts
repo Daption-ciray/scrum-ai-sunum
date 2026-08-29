@@ -1,7 +1,7 @@
 import { bloklar } from "./index";
 
 export type BlokOzeti = {
-  /** 1..14 — galeri kart görselinin numarası da bu. */
+  /** 1..14 — galeride kartın üstünde görünen numara. */
   no: number;
   ad: string;
   /** Plandaki dakika. Galeride çizginin uzunluğu buradan geliyor. */
@@ -10,33 +10,37 @@ export type BlokOzeti = {
   /** Bloğun ilk slaytının, kendi oturumu içindeki indeksi. */
   slayt: number;
   adet: number;
-  gorsel: string;
 };
 
-/** Blok süreleri akış planından. Slayt sayısıyla değil, gerçek dakikayla. */
+/** Blok süreleri eğitim planından.
+ *  Yoruma alınmış satırlar: o bloğun slaytları `beklemede.ts` içinde park
+ *  edildi, blok akışta görünmüyor. Geri koyunca yorumu kaldırın. Slayt sayısıyla değil, gerçek dakikayla.
+ *  Anahtarlar `oturum1.ts` / `oturum2.ts` içindeki `blok` alanlarıyla birebir
+ *  aynı olmalı; eşleşmeyen blok sessizce 5 dakikaya düşer. */
 const SURELER: Record<string, number> = {
-  "Bağlan ve ısın": 4,
-  "Nabız yoklaması": 4,
-  "Scrum'ı 12 dakikada": 12,
-  "AI aslında ne": 14,
-  "İlk yarış": 5,
-  "Beş olayda AI": 15,
-  "Canlı demo": 6,
-  "Salı'dan ne kaldı": 5,
-  "Atölye 1": 18,
-  "Atölye 2": 12,
-  "Neyi asla yapıştırmayacaksın": 10,
-  "Ekip AI çalışma anlaşması": 7,
-  Final: 6,
-  Taahhüt: 2,
+  // Oturum 1 — toplam 60 dk
+  "Açılış ve kurulum": 4,
+  // park edildi: "Roller değişiyor": 4,
+  "Scrum çerçevesi": 12,
+  "AI temelleri ve sınırları": 14,
+  // park edildi: "Bilgi kontrolü 1": 5,
+  "Scrum olaylarında AI": 15,
+  "Özet ve kapanış": 6,
+  // Oturum 2 — toplam 60 dk
+  "İkinci oturum açılışı": 5,
+  "Etkili istem yazımı": 18,
+  "AI çıktısını değerlendirme": 12,
+  "Sorumlu kullanım: güvenlik ve etik": 16,
+  // park edildi: "Ekip çalışma anlaşması": 7,
+  // park edildi: "Kapanış değerlendirmesi": 6,
+  "Eylem planı": 2,
 };
 
-/** Galeride görünen kısa ad — slayt başlığı uzun olduğunda kartta taşmasın. */
+/** Galeride görünen kısa ad — blok adı uzun olduğunda kartta taşmasın. */
 const KISA_AD: Record<string, string> = {
-  "Neyi asla yapıştırmayacaksın": "Neyi asla yapıştırma",
-  "Ekip AI çalışma anlaşması": "AI çalışma anlaşması",
-  "Atölye 1": "Atölye 1 — Kabul kriteri",
-  "Atölye 2": "Atölye 2 — Retro teması",
+  "AI temelleri ve sınırları": "AI temelleri",
+  "Sorumlu kullanım: güvenlik ve etik": "Güvenlik ve etik",
+  "AI çıktısını değerlendirme": "Çıktıyı değerlendirme",
 };
 
 let onbellek: BlokOzeti[] | null = null;
@@ -55,7 +59,6 @@ export function tumBloklar(): BlokOzeti[] {
         oturum: o,
         slayt: b.baslangic,
         adet: b.adet,
-        gorsel: `/kartlar/blok-${String(no).padStart(2, "0")}.jpg`,
       });
     });
   });
