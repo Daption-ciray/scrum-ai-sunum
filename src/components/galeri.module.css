@@ -17,6 +17,29 @@
 .marka { color: var(--metin); letter-spacing: .18em; }
 .kimlik { margin-left: auto; color: var(--metin-3); }
 
+/* Çıkış — adın hemen yanında, küçük. Yanlışlıkla basılmasın diye ad
+   tıklanabilir değil, ayrı düğme. */
+.cikis {
+  background: none;
+  border: 1px solid var(--cizgi);
+  border-radius: 0;
+  color: var(--metin-3);
+  font-family: var(--yazi-piksel), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  -webkit-font-smoothing: none;
+  padding: .3em .6em;
+  cursor: pointer;
+  transition: background var(--gecis), color var(--gecis), border-color var(--gecis);
+}
+.cikis:hover {
+  background: var(--metin);
+  border-color: var(--metin);
+  color: var(--yuzey);
+}
+
 .bagli {
   display: inline-flex;
   align-items: center;

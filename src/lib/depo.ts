@@ -16,8 +16,14 @@ import { BASLANGIC, CANLI_ESIGI, type Durum, type Katilimci } from "./durum";
 const DURUM_ANAHTARI = "sunum:durum";
 const KATILIMCI_ANAHTARI = "sunum:katilimcilar";
 
-const URL_ = process.env.UPSTASH_REDIS_REST_URL;
-const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+/* İki isimlendirme birden destekleniyor.
+   Vercel Marketplace üzerinden kurulan Upstash, eski @vercel/kv adlarını
+   veriyor: KV_REST_API_URL / KV_REST_API_TOKEN. Upstash'i doğrudan kendi
+   panelinden kurarsanız UPSTASH_REDIS_REST_* adlarını alırsınız. Hangisi
+   doluysa o kullanılıyor; boş string tanımlıysa yok sayılıyor. */
+const dolu = (d?: string) => (d && d.trim() ? d.trim() : undefined);
+const URL_ = dolu(process.env.KV_REST_API_URL) ?? dolu(process.env.UPSTASH_REDIS_REST_URL);
+const TOKEN = dolu(process.env.KV_REST_API_TOKEN) ?? dolu(process.env.UPSTASH_REDIS_REST_TOKEN);
 
 export const paylasimliDepo = Boolean(URL_ && TOKEN);
 

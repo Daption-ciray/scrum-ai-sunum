@@ -7,7 +7,7 @@ import { Galeri } from "@/components/Galeri";
 import { Perde, Slayt } from "@/components/Slayt";
 import { OTURUMLAR } from "@/icerik";
 import { blokBul, tumBloklar } from "@/icerik/bloklar";
-import { kimlikAl } from "@/lib/kimlik";
+import { kimlikAl, kimlikSil } from "@/lib/kimlik";
 import { useYoklama } from "@/lib/yoklama";
 import k from "@/components/kabuk.module.css";
 
@@ -92,6 +92,12 @@ export default function Oda() {
         durum={durum}
         bagli={bagli}
         ad={kimlik.ad}
+        onCik={() => {
+          // Yalnızca ad siliniyor; katılımcı kimliği localStorage'da kalıyor,
+          // aynı cihazdan tekrar girildiğinde aynı kişi olarak dönülüyor.
+          kimlikSil();
+          router.replace("/");
+        }}
         onAc={(o, s) => {
           if (o > durum.acilan) return; // kilitli oturum: girilmez
           // Sunucunun bulunduğu bloğa girildiyse takip modunda kal.

@@ -42,11 +42,14 @@ export function Galeri({
   bagli,
   ad,
   onAc,
+  onCik,
 }: {
   durum: Durum;
   bagli: number;
   ad: string;
   onAc: (oturum: 1 | 2, slayt: number) => void;
+  /** Katılımcı adını bırakıp giriş ekranına döner. */
+  onCik: () => void;
 }) {
   const bloklar = useMemo(() => tumBloklar(), []);
   const sunucuBlok = blokBul(durum.oturum, durum.slayt);
@@ -137,6 +140,9 @@ export function Galeri({
       <div className={g.ustSatir}>
         <span className={`etiket ${g.marka}`}>Scrum + AI</span>
         <span className={`etiket ${g.kimlik}`}>{ad}</span>
+        <button type="button" className={g.cikis} onClick={onCik}>
+          Çıkış
+        </button>
         <span className={`sayi ${g.bagli}`}>
           <span className={g.baglıNokta} aria-hidden />
           {bagli}

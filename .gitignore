@@ -1,8 +1,13 @@
 node_modules
 .next
 out
-.env
-.env*.local
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
+.vercel
+
+# Ortam değişkenleri — örnek dosya hariç hepsi dışarıda.
+# `vercel link` buraya geniş bir `.env*` eklemişti; o desen .env.example'ı da
+# kapsıyordu. Örnek dosya depoda durmalı, kurulum talimatı orada.
+.env*
+!.env.example
