@@ -70,8 +70,8 @@ type Bellek = {
   istemler: Map<string, Map<string, Istem>>;
   /** slaytId → sunucunun işaretleri. */
   secimler: Map<string, Secim>;
-  /** slaytId → (katılımcı id → quiz gönderimi). */
-  quizler: Map<string, Map<string, QuizGonderimi>>;
+  /** slaytId → (`id\u0001soru` → cevap). */
+  quizler: Map<string, Map<string, QuizCevabi>>;
 };
 const g = globalThis as unknown as { __sunumBellek?: Partial<Bellek> };
 /**
@@ -298,43 +298,45 @@ export async function atolyeSifirla(slaytId: string): Promise<void> {
 }
 
 
-/* --- quiz gönderimleri -----------------------------------------------------
-   Atölyeyle aynı kurgu: ayrı anahtar, `HSETNX` ile tek gönderim.
+/* --- quiz cevapları -------------------------------------------------------
+   Sorular tek tek geliyor, cevaplar da soru bazında saklanıyor.
 
-   `sure` gönderim anındaki zaman damgası. Puan hesabında kullanılmıyor —
-   yalnızca eşitlik bozucu. Ortak bir geri sayım yerine bu tercih edildi
-   çünkü ağı yavaş olan katılımcıyı sistematik olarak kaybettirmek bu sitenin
-   çözmeye çalıştığı sorunun ta kendisi. */
+   Tek hash, bileşik alan: `<katılımcıId>\u0001<soruIndeksi>`. Soru başına ayrı
+   anahtar da olabilirdi ama sıfırlama o zaman N tane DEL istiyor; tek hash
+   tek DEL ile temizleniyor.
 
-export type QuizGonderimi = { id: string; ad: string; cevaplar: number[]; zaman: number };
+   `HSETNX` — ilk cevap geçerli. Şık değiştirip puan yükseltmek yok. */
 
-export async function quizYaz(
+export type QuizCevabi = { id: string; ad: string; soru: number; sik: number; zaman: number };
+
+export async function quizCevapYaz(
   slaytId: string,
-  kayit: QuizGonderimi,
+  kayit: QuizCevabi,
 ): Promise<boolean> {
+  const alan = `${kayit.id}${AYRAC}${kayit.soru}`;
   if (!paylasimliDepo) {
-    const harita = bellek().quizler.get(slaytId) ?? new Map<string, QuizGonderimi>();
+    const harita = bellek().quizler.get(slaytId) ?? new Map<string, QuizCevabi>();
     bellek().quizler.set(slaytId, harita);
-    if (harita.has(kayit.id)) return false;
-    harita.set(kayit.id, kayit);
+    if (harita.has(alan)) return false;
+    harita.set(alan, kayit);
     return true;
   }
   const sonuc = await redis<number>([
-    "HSETNX", `${QUIZ_ANAHTARI}:${slaytId}`, kayit.id, JSON.stringify(kayit),
+    "HSETNX", `${QUIZ_ANAHTARI}:${slaytId}`, alan, JSON.stringify(kayit),
   ]);
   return sonuc === 1;
 }
 
-export async function quizleriOku(slaytId: string): Promise<QuizGonderimi[]> {
+export async function quizCevaplariOku(slaytId: string): Promise<QuizCevabi[]> {
   if (!paylasimliDepo) return [...(bellek().quizler.get(slaytId)?.values() ?? [])];
   const ham = await redis<Record<string, string> | null>([
     "HGETALL", `${QUIZ_ANAHTARI}:${slaytId}`,
   ]);
   if (!ham) return [];
-  const liste: QuizGonderimi[] = [];
+  const liste: QuizCevabi[] = [];
   for (const deger of Object.values(ham)) {
     try {
-      liste.push(JSON.parse(deger) as QuizGonderimi);
+      liste.push(JSON.parse(deger) as QuizCevabi);
     } catch {
       /* bozuk kayıt atlanır */
     }

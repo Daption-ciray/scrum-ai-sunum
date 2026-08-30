@@ -3,7 +3,7 @@ import {
   istemleriOku,
   katilimcilariOku,
   paylasimliDepo,
-  quizleriOku,
+  quizCevaplariOku,
   secimOku,
 } from "@/lib/depo";
 import { yoneticiMi } from "@/lib/anahtar";
@@ -63,20 +63,25 @@ export async function GET(istek: Request) {
      katılımcı hiçbirini görmüyor, bu uç zaten sunucuya özel. */
   let quiz: {
     slaytId: string;
-    gonderen: number;
+    soruSayisi: number;
+    /** Aktif sorudaki cevap sayısı. */
+    cevaplayan: number;
+    /** Bütün sorulardaki doğru şık indeksleri. */
     dogru: number[];
+    /** dagilim[soru][sik] = o şıkkı seçen kişi sayısı. */
     dagilim: number[][];
   } | null = null;
 
   if (slayt?.tip === "quiz") {
-    const gonderimler = await quizleriOku(slayt.id);
+    const cevaplar = await quizCevaplariOku(slayt.id);
     quiz = {
       slaytId: slayt.id,
-      gonderen: gonderimler.length,
+      soruSayisi: slayt.sorular.length,
+      cevaplayan: cevaplar.filter((c) => c.soru === durum.quizSoru).length,
       dogru: CEVAPLAR[slayt.id] ?? [],
       dagilim: slayt.sorular.map((s, si) =>
         s.secenekler.map(
-          (_, ki) => gonderimler.filter((g) => g.cevaplar[si] === ki).length,
+          (_, ki) => cevaplar.filter((c) => c.soru === si && c.sik === ki).length,
         ),
       ),
     };

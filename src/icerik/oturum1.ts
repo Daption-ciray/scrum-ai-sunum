@@ -432,8 +432,57 @@ export const oturum1: Oturum = {
       blok: "AI temelleri ve sınırları",
       tip: "quiz",
       baslik: "Bilgi kontrolü",
-      giris: "Dört soru. Bu bloğun tamamı bu dördünün içinde. Puanınız oturum sonundaki sıralamaya giriyor.",
+      giris: "On soru, tek tek geliyor. Buraya kadar konuştuğumuz her şey içinde. Şıkka tıkladığınız an kaydediliyor — değiştirilemiyor. Puanınız oturum sonundaki sıralamaya giriyor.",
       sorular: [
+        {
+          soru: "Agile Manifesto'nun ilk değeri neyi neyin önüne koyar?",
+          secenekler: [
+            "Süreçleri ve araçları, bireylerin önüne",
+            "Bireyleri ve etkileşimleri, süreç ve araçların önüne",
+            "Dokümantasyonu, çalışan yazılımın önüne",
+            "Planı takip etmeyi, değişime yanıt vermenin önüne",
+          ],
+        },
+        {
+          soru: "Scrum'ın dayandığı ampirizm hangi üç ayağa oturur?",
+          secenekler: [
+            "Planlama, uygulama, raporlama",
+            "Şeffaflık, gözden geçirme, uyarlama",
+            "Hız, kalite, maliyet",
+            "Analiz, tasarım, test",
+          ],
+        },
+        {
+          soru: "Sprint Backlog'un sahibi kimdir?",
+          secenekler: [
+            "Product Owner",
+            "Scrum Master",
+            "Geliştiriciler",
+            "Paydaşlar",
+          ],
+        },
+        {
+          soru: "Gartner'ın öngörüsüne göre 2029'da kuruluşların yüzde kaçı küçük yazılım ekiplerine geçmiş olacak?",
+          secenekler: ["%15", "%30", "%60", "%90"],
+        },
+        {
+          soru: "AI katmanlarında üretken AI nerede durur?",
+          secenekler: [
+            "Makine öğrenmesinin tamamen dışında, ayrı bir alanda",
+            "Derin öğrenmenin içinde ve agentic AI'ı kapsayan katmanda",
+            "Makine öğrenmesinden önce gelen katmanda",
+            "Agentic AI'ın dışında, onunla ilgisiz bir katmanda",
+          ],
+        },
+        {
+          soru: "\"Bağlam penceresi\" ne demektir?",
+          secenekler: [
+            "Modelin aynı anda görebildiği toplam metin",
+            "Modelin eğitildiği veri miktarı",
+            "Yanıtın en fazla kaç kelime olabileceği",
+            "Modelin internete bağlı kaldığı süre",
+          ],
+        },
         {
           soru: "Bir dil modeli neden \"halüsinasyon\" görür?",
           secenekler: [
@@ -453,15 +502,6 @@ export const oturum1: Oturum = {
           ],
         },
         {
-          soru: "Ekibinizin son üç Sprint'te aldığı kararları model neden bilmez?",
-          secenekler: [
-            "Kurumsal verinize erişimi yok; siz vermedikçe bağlamında bulunmaz",
-            "Türkçe veriyle yeterince eğitilmediği için",
-            "Jira'nın API'si kapalı olduğu için",
-            "Modeller yalnızca kod öğrenebildiği için",
-          ],
-        },
-        {
           soru: "Hype Cycle'ın dikey ekseni neyi ölçer?",
           secenekler: [
             "Teknolojinin yeteneğini",
@@ -470,8 +510,17 @@ export const oturum1: Oturum = {
             "Yatırım miktarını",
           ],
         },
+        {
+          soru: "Dört aşamalı yetkinlik çerçevesinde \"muhakeme\" hangi soruya karşılık gelir?",
+          secenekler: [
+            "Bu iş gerçekten devredilebilir mi?",
+            "Model bu işi yapmak için neyi bilmiyor?",
+            "Bu çıktı neyi kaçırmış olabilir?",
+            "Bu çıktıyı imzalayabilir miyim?",
+          ],
+        },
       ],
-      not: "Panelden \"Cevaplamayı aç\" de, iki dakika ver, kapat. Dağılım YALNIZCA senin ekranında — çoğunluğu gören katılımcı ona uyar, bilgi kontrolü ankete döner. Kapattıktan sonra dağılıma bak ve odanın takıldığı yeri seç, onu tekrar anlat. Dördüncü soru bilerek eğri hakkında: dikey eksen yanlış okunuyorsa burada görürsün. Doğru cevaplar sunucuda, `src/icerik/cevaplar.ts` — katılımcının tarayıcısına inmiyor.",
+      not: "Panelden \"Başlat\", sonra her soruda: 20-30 saniye ver, \"Cevaplamayı kapat\"a bas, dağılıma bak, bir cümleyle doğruyu söyle, \"Sonraki soru\". On soru ~7 dakika — hızlı git, tartışma açma. DAĞILIM YALNIZCA SENİN EKRANINDA: çoğunluğu gören katılımcı ona uyar, bilgi kontrolü ankete döner. Panelde bütün sorular listeleniyor, aktif olan vurgulu — geriye bakıp \"burada takıldınız\" diyebilirsin. En çok yanlış gelen soruyu quiz bittikten sonra tekrar anlat; genellikle 5, 9 ve 10 zorlanılan sorular. Doğru cevaplar sunucuda, `src/icerik/cevaplar.ts` — katılımcının tarayıcısına inmiyor.",
     },
 
     /* ---- 00:41 · Etkili istem yazımı ---- */

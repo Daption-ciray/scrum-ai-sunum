@@ -8,7 +8,7 @@
  * Anahtar slayt id'si, değer her sorunun doğru şık indeksi (0 tabanlı).
  */
 export const CEVAPLAR: Record<string, number[]> = {
-  "s1-quiz-temeller": [1, 1, 0, 1],
+  "s1-quiz-temeller": [1, 1, 2, 2, 1, 0, 1, 1, 1, 2],
 };
 
 /**

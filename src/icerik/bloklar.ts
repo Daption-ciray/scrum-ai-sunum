@@ -21,12 +21,12 @@ export type BlokOzeti = {
  *  ve Daily Scrum'ın üç aşaması, kapanışta güvenlik ve ortak anlaşma. */
 const SURELER: Record<string, number> = {
   // Oturum 1 — toplam 60 dk
-  "Açılış ve kurulum": 4,
+  "Açılış ve kurulum": 3,
   "Roller değişiyor": 3,
-  "Scrum çerçevesi": 9,
-  "AI temelleri ve sınırları": 17,
-  "Etkili istem yazımı": 19,
-  "Özet ve kapanış": 8,
+  "Scrum çerçevesi": 8,
+  "AI temelleri ve sınırları": 21,
+  "Etkili istem yazımı": 18,
+  "Özet ve kapanış": 7,
   // Oturum 2 — toplam 60 dk
   "İkinci oturum açılışı": 2,
   "Sprint Planning'de AI": 14,

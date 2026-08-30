@@ -21,7 +21,12 @@ export type Durum = {
    * olduğunda basıyor.
    */
   istemAcik: boolean;
-  /** Quiz slaytında cevaplama açık mı. Atölyedeki ile aynı mantık. */
+  /**
+   * Quizde aktif soru indeksi. -1 = henüz başlamadı, soru sayısına eşit veya
+   * büyük = bitti. Sorular tek tek geliyor; katılımcı yalnızca bunu görüyor.
+   */
+  quizSoru: number;
+  /** Aktif soru cevaplanabilir mi. Sunucu açar, sunucu kapatır. */
   quizAcik: boolean;
   /** Her değişiklikte artar. İstemci bunu karşılaştırıp gereksiz render etmez. */
   surum: number;
@@ -34,6 +39,7 @@ export const BASLANGIC: Durum = {
   perde: false,
   acilan: 1,
   istemAcik: false,
+  quizSoru: -1,
   quizAcik: false,
   surum: 0,
   zaman: 0,

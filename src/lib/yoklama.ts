@@ -17,7 +17,9 @@ export type AtolyeIstem = {
 
 export type QuizVerisi = {
   slaytId: string;
-  gonderen: number;
+  soruSayisi: number;
+  /** Aktif soruyu kaç kişi cevapladı. */
+  cevaplayan: number;
   /** Doğru şık indeksleri. Yalnızca sunucu panelinde. */
   dogru: number[];
   /** dagilim[soru][sik] = o şıkkı seçen kişi sayısı. */

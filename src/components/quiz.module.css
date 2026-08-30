@@ -4,32 +4,43 @@
 .baslik { font-size: var(--ol-baslik); line-height: 1.1; letter-spacing: -.02em; }
 .giris { color: var(--metin-2); font-size: var(--ol-govde); max-width: 62ch; line-height: 1.45; }
 
-.sorular {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* On soruluk turda nerede olunduğunu gösteren nokta şeridi. Cevaplanan soru
+   dolu, aktif soru çerçeveli — geri sayım yok, çünkü ortak sayaç ağı yavaş
+   olanı sistematik olarak kaybettiriyordu. */
+.ilerleme { display: flex; gap: .3rem; }
+.nokta {
+  width: 10px;
+  height: 10px;
+  border: var(--kenar) solid var(--cizgi-2);
+  background: var(--yuzey);
 }
+.noktaDolu { background: var(--metin-3); }
+.noktaAktif { outline: 2px solid var(--cizgi-2); outline-offset: 2px; }
 
-.soru { display: flex; flex-direction: column; gap: .5rem; }
 .soruMetin {
   display: flex;
   align-items: baseline;
-  gap: .6rem;
-  font-size: var(--ol-alt);
+  gap: .7rem;
+  font-size: var(--ol-baslik);
+  font-weight: 700;
   color: var(--metin);
-  line-height: 1.35;
+  line-height: 1.25;
+  text-wrap: balance;
+  max-width: 46ch;
 }
-.soruNo { color: var(--metin-3); font-variant-numeric: tabular-nums; }
+.soruNo {
+  flex: 0 0 auto;
+  color: var(--metin-3);
+  font-size: var(--ol-alt);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
 
 /* Şıklar ızgarada: uzun şıkkın kısa şıkkı yamultmaması için. */
 .sikler {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: .4rem;
-  padding-left: 1.6rem;
+  gap: .5rem;
 }
 
 .sik {
@@ -40,9 +51,9 @@
   box-shadow: 3px 3px 0 0 var(--cizgi-2);
   color: var(--metin);
   font: inherit;
-  font-size: var(--ol-kucuk);
+  font-size: var(--ol-alt);
   line-height: 1.35;
-  padding: .55rem .7rem;
+  padding: .8rem .9rem;
   cursor: pointer;
   transition: transform var(--gecis), box-shadow var(--gecis), background-color var(--gecis);
 }
@@ -58,25 +69,6 @@
   box-shadow: 1px 1px 0 0 var(--cizgi-2);
 }
 .secili:hover:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 var(--cizgi-2); }
-
-.alt { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-
-.dugme {
-  background: var(--metin);
-  color: var(--yuzey);
-  border: 0;
-  border-radius: 0;
-  font-family: var(--yazi-piksel), monospace;
-  font-size: calc(var(--ol-etiket) * 1.25);
-  font-weight: 600;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  padding: .6em 1.2em;
-  cursor: pointer;
-}
-.dugme:hover:not(:disabled) { background: var(--sunucu); color: var(--metin); }
-.dugme:active:not(:disabled) { transform: translate(2px, 2px); }
-.dugme:disabled { background: var(--metin-3); cursor: not-allowed; }
 
 .bitti {
   display: flex;
@@ -99,6 +91,6 @@
 }
 
 @media (max-width: 680px) {
-  .sikler { grid-template-columns: 1fr; padding-left: 0; }
+  .sikler { grid-template-columns: 1fr; }
   .sik { box-shadow: 2px 2px 0 0 var(--cizgi-2); }
 }

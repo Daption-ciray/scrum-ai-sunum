@@ -78,12 +78,12 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
 
 | # | Blok | dk | Oturum |
 |---|---|---|---|
-| 1 | Açılış ve kurulum | 4 | 1 |
+| 1 | Açılış ve kurulum | 3 | 1 |
 | 2 | Roller değişiyor | 3 | 1 |
-| 3 | Scrum çerçevesi | 9 | 1 |
-| 4 | AI temelleri ve sınırları | 17 | 1 | ← quiz
-| 5 | Etkili istem yazımı | 19 | 1 | ← atölye
-| 6 | Özet ve kapanış | 8 | 1 | ← sıralama
+| 3 | Scrum çerçevesi | 8 | 1 |
+| 4 | AI temelleri ve sınırları | 21 | 1 | ← quiz (10 soru)
+| 5 | Etkili istem yazımı | 18 | 1 | ← atölye
+| 6 | Özet ve kapanış | 7 | 1 | ← sıralama
 | 7 | İkinci oturum açılışı | 2 | 2 |
 | 8 | Sprint Planning'de AI | 14 | 2 |
 | 9 | Daily Scrum'da AI | 10 | 2 |
@@ -250,14 +250,20 @@ slaydın mesajı.
 **Ajan değil agent.** İçerikte "ajan" geçmiyor; jargon olarak `agent` /
 `agentic AI` kullanılıyor (kullanıcı kararı). Yeni slaytta da böyle yazın.
 
-**Quiz eskisi gibi soru soru DEĞİL, tek gönderim.** Eski motor her soru için
-ayrı başlat/kapat/sonraki turu ve cihaz başına geri sayım tutuyordu. Yeni
-kurgu atölyeyle aynı: bütün sorular tek ekranda, tek `HSETNX` gönderimi,
-sunucu açar-kapatır. Gerekçe: 75 kişilik odada soru başına tur hem sunucuyu
-meşgul ediyor hem bağlantısı kopanı tek soruya mahkûm ediyordu. Hız puana
-GİRMİYOR, yalnızca eşitlik bozuyor — ortak geri sayım ağı yavaş olanı
-sistematik olarak kaybettirirdi ve bu site zaten o gecikmeyi kaldırmak için
-yazıldı.
+**Quiz on soru, tek tek geliyor.** Aktif soruyu `Durum.quizSoru` taşıyor
+(-1 başlamadı, soru sayısı = bitti), cevaplanabilirliği `Durum.quizAcik`.
+Panel: Başlat → (her soruda) Cevaplamayı kapat · Sonraki soru → … → Bitir.
+Cevaplar tek hash'te, bileşik alanla: `<katılımcıId>\u0001<soruIndeksi>`;
+soru başına ayrı anahtar sıfırlamada N tane DEL isterdi.
+
+Şıkka tıklamak DOĞRUDAN gönderiyor, ayrı düğme yok — on soruluk turda soru
+başına iki tıklama akışı yavaşlatıyordu. `HSETNX` ilk tıklamayı geçerli
+kılıyor ve ekranda bu yazıyor.
+
+**Geri sayım YOK.** Puan yalnızca doğru oranı; hız sadece eşitlik bozuyor.
+Ortak sayaç ağı yavaş olanı sistematik olarak kaybettirirdi ve bu site zaten
+o gecikmeyi kaldırmak için yazıldı. Payda her zaman TOPLAM soru sayısı —
+sorusu kaçan katılımcı boş bırakmış sayılıyor.
 
 **Doğru cevaplar `src/icerik/cevaplar.ts` içinde ve sunucuda kalır.** Bu dosyayı
 hiçbir istemci bileşeninden import etmeyin. `dogrula()` kontrolü bir ara
@@ -374,6 +380,13 @@ Figürler `Kisi` yardımcısıyla çiziliyor: baş daire, gövde hap, **yüz yok
 figürün "herkes" olması bundan. Görseller bölüm `numara` alanına göre
 eşleşiyor; yeni bölüm eklerseniz oraya bir `case` ekleyin, yoksa görsel
 sessizce boş kalır. **Hex yazmayın**, hepsi token.
+
+**Panel yüksekliği `height`, `min-height` değil.** Sağ sütun uzun içerik
+aldığında (on soruluk quiz dağılımı) sayfa büyüyor, grid yüzünden sol sütun
+da onunla uzuyor ve önizlemedeki slayt — dikeyde ortalandığı için — 2000 px'lik
+bir kutunun ortasına, ekranın çok altına düşüyordu. Panel ekrana sabitlenip
+kaydırma `.sag`'a bırakıldı. Dar ekranda (900 px altı) iki sütun alt alta
+geldiği için orada `height: auto`.
 
 **Sunucu notları istemci paketinde.** `not` alanı görsel olarak yalnızca
 /sunucu'da görünüyor ama slayt tanımlarıyla birlikte tarayıcıya iniyor;

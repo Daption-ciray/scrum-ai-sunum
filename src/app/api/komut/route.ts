@@ -25,7 +25,7 @@ type Komut =
   | { komut: "at"; id: string }
   | { komut: "kilitle" }
   | { komut: "istem"; eylem: "ac" | "kapat" | "iyi" | "kotu" | "sifirla"; deger?: string }
-  | { komut: "quiz"; eylem: "ac" | "kapat" | "sifirla" };
+  | { komut: "quiz"; eylem: "basla" | "kapat" | "ac" | "sonraki" | "bitir" | "sifirla" };
 
 const sinirla = (n: number, enAz: number, enCok: number) => Math.min(Math.max(n, enAz), enCok);
 
@@ -75,7 +75,7 @@ export async function POST(istek: Request) {
       yeni.perde = !onceki.perde;
       break;
     case "sifirla":
-      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false, quizAcik: false };
+      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false, quizAcik: false, quizSoru: -1 };
       break;
     case "istem": {
       // Hangi atölye olduğu slayttan çıkarılıyor; panel id göndermiyor.
@@ -115,12 +115,34 @@ export async function POST(istek: Request) {
       if (slayt?.tip !== "quiz") {
         return Response.json({ hata: "Bu slaytta quiz yok." }, { status: 409 });
       }
-      if (govde.eylem === "sifirla") {
-        await quizSifirla(slayt.id);
-        yeni.quizAcik = false;
-        break;
+      const sonSoru = slayt.sorular.length - 1;
+      switch (govde.eylem) {
+        case "basla":
+          yeni.quizSoru = 0;
+          yeni.quizAcik = true;
+          break;
+        case "kapat":
+          // Soru ekranda kalır, cevaplama durur — dağılımı konuşurken gerek.
+          yeni.quizAcik = false;
+          break;
+        case "ac":
+          yeni.quizAcik = true;
+          break;
+        case "sonraki":
+          yeni.quizSoru = Math.min(onceki.quizSoru + 1, sonSoru);
+          yeni.quizAcik = true;
+          break;
+        case "bitir":
+          // Soru sayısına eşitlemek "bitti" demek; katılımcı kapanış görüyor.
+          yeni.quizSoru = slayt.sorular.length;
+          yeni.quizAcik = false;
+          break;
+        case "sifirla":
+          await quizSifirla(slayt.id);
+          yeni.quizSoru = -1;
+          yeni.quizAcik = false;
+          break;
       }
-      yeni.quizAcik = govde.eylem === "ac";
       break;
     }
     case "katilimcilari-temizle":

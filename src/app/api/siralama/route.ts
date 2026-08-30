@@ -1,4 +1,4 @@
-import { istemleriOku, quizleriOku } from "@/lib/depo";
+import { istemleriOku, quizCevaplariOku } from "@/lib/depo";
 import { siralamaHesapla } from "@/lib/siralama";
 
 export const dynamic = "force-dynamic";
@@ -19,13 +19,13 @@ export async function GET(istek: Request) {
     return Response.json({ hata: "Slaytlar belirtilmedi." }, { status: 400 });
   }
 
-  const [quizler, istemler] = await Promise.all([
-    quizleriOku(quizSlayt),
+  const [cevaplar, istemler] = await Promise.all([
+    quizCevaplariOku(quizSlayt),
     istemleriOku(atolyeSlayt),
   ]);
 
   return Response.json(
-    { satirlar: siralamaHesapla(quizSlayt, quizler, istemler) },
+    { satirlar: siralamaHesapla(quizSlayt, cevaplar, istemler) },
     { headers: { "cache-control": "public, s-maxage=3, stale-while-revalidate=8" } },
   );
 }

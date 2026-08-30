@@ -271,7 +271,7 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
         {yoklama.quiz && (
           <QuizKarti
             veri={yoklama.quiz}
-            acik={durum.quizAcik}
+            durum={durum}
             slayt={slayt}
             gonder={gonder}
           />
@@ -339,62 +339,115 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
  */
 function QuizKarti({
   veri,
-  acik,
+  durum,
   slayt,
   gonder,
 }: {
   veri: QuizVerisi;
-  acik: boolean;
+  durum: Durum;
   slayt: { tip: string } & Record<string, unknown>;
   gonder: (govde: Record<string, unknown>) => void;
 }) {
   const sorular = (slayt.sorular ?? []) as { soru: string; secenekler: string[] }[];
+  const aktif = durum.quizSoru;
+  const basladi = aktif >= 0;
+  const bitti = aktif >= sorular.length;
+  const sonSoru = aktif >= sorular.length - 1;
+
   return (
     <div className={p.kart}>
-      <span className={`etiket ${p.kartBaslik}`}>Quiz — {veri.gonderen} gönderim</span>
+      <span className={`etiket ${p.kartBaslik}`}>
+        Quiz —{" "}
+        {!basladi
+          ? "başlamadı"
+          : bitti
+            ? "bitti"
+            : `soru ${aktif + 1}/${sorular.length} · ${veri.cevaplayan} cevap`}
+      </span>
+
       <div className={p.atolyeDugmeler}>
-        <button
-          type="button"
-          className={`${p.dugme} ${acik ? p.aktif : ""}`}
-          onClick={() => gonder({ komut: "quiz", eylem: acik ? "kapat" : "ac" })}
-        >
-          {acik ? "Cevaplamayı kapat" : "Cevaplamayı aç"}
-        </button>
+        {!basladi && (
+          <button
+            type="button"
+            className={`${p.dugme} ${p.birincil}`}
+            onClick={() => gonder({ komut: "quiz", eylem: "basla" })}
+          >
+            Başlat
+          </button>
+        )}
+        {basladi && !bitti && (
+          <>
+            <button
+              type="button"
+              className={`${p.dugme} ${durum.quizAcik ? p.aktif : ""}`}
+              onClick={() =>
+                gonder({ komut: "quiz", eylem: durum.quizAcik ? "kapat" : "ac" })
+              }
+            >
+              {durum.quizAcik ? "Cevaplamayı kapat" : "Cevaplamayı aç"}
+            </button>
+            {!sonSoru ? (
+              <button
+                type="button"
+                className={`${p.dugme} ${p.birincil}`}
+                onClick={() => gonder({ komut: "quiz", eylem: "sonraki" })}
+              >
+                Sonraki soru →
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={`${p.dugme} ${p.birincil}`}
+                onClick={() => gonder({ komut: "quiz", eylem: "bitir" })}
+              >
+                Bitir
+              </button>
+            )}
+          </>
+        )}
         <button
           type="button"
           className={p.dugme}
           onClick={() => gonder({ komut: "quiz", eylem: "sifirla" })}
-          title="Bütün cevapları siler"
+          title="Bütün cevapları siler ve başa alır"
         >
           Sıfırla
         </button>
       </div>
 
+      {/* Dağılım bütün sorular için görünüyor; aktif soru vurgulu.
+          Sunucu geriye bakıp "burada takıldınız" diyebilsin diye. */}
       <div className={p.quizDagilim}>
-        {sorular.map((s, si) => (
-          <div key={s.soru} className={p.quizSoru}>
-            <span className={p.quizSoruMetin}>
-              <span className="mono">{si + 1}</span> {s.soru}
-            </span>
-            {s.secenekler.map((sik, ki) => {
-              const say = veri.dagilim[si]?.[ki] ?? 0;
-              const oran = veri.gonderen > 0 ? (say / veri.gonderen) * 100 : 0;
-              return (
-                <div
-                  key={sik}
-                  className={`${p.quizSik} ${veri.dogru[si] === ki ? p.quizDogru : ""}`}
-                >
-                  <span className={p.quizCubuk} style={{ width: `${oran}%` }} aria-hidden />
-                  <span className={p.quizSikMetin}>
-                    {veri.dogru[si] === ki ? "✓ " : ""}
-                    {sik}
-                  </span>
-                  <span className={`mono ${p.quizSay}`}>{say}</span>
-                </div>
-              );
-            })}
-          </div>
-        ))}
+        {sorular.map((s, si) => {
+          const toplam = (veri.dagilim[si] ?? []).reduce((a, b) => a + b, 0);
+          return (
+            <div
+              key={s.soru}
+              className={`${p.quizSoru} ${si === aktif ? p.quizAktif : ""}`}
+            >
+              <span className={p.quizSoruMetin}>
+                <span className="mono">{si + 1}</span> {s.soru}
+              </span>
+              {s.secenekler.map((sik, ki) => {
+                const say = veri.dagilim[si]?.[ki] ?? 0;
+                const oran = toplam > 0 ? (say / toplam) * 100 : 0;
+                return (
+                  <div
+                    key={sik}
+                    className={`${p.quizSik} ${veri.dogru[si] === ki ? p.quizDogru : ""}`}
+                  >
+                    <span className={p.quizCubuk} style={{ width: `${oran}%` }} aria-hidden />
+                    <span className={p.quizSikMetin}>
+                      {veri.dogru[si] === ki ? "✓ " : ""}
+                      {sik}
+                    </span>
+                    <span className={`mono ${p.quizSay}`}>{say}</span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
