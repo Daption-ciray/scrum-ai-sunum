@@ -289,3 +289,51 @@
   background: var(--yuzey-2);
   padding: .5rem .6rem;
 }
+
+
+/* --- quiz kartı ----------------------------------------------------------
+   Dağılım çubuğu yüzde, sayı adet. Doğru şık kalın; sunucu bir bakışta
+   odanın nerede takıldığını görüyor. */
+
+.quizDagilim { display: flex; flex-direction: column; gap: .7rem; }
+.quizSoru { display: flex; flex-direction: column; gap: 2px; }
+.quizSoruMetin {
+  font-size: var(--ol-kucuk);
+  color: var(--metin);
+  line-height: 1.35;
+  margin-bottom: .2rem;
+}
+.quizSoruMetin .mono { color: var(--metin-3); }
+
+.quizSik {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .25rem .4rem;
+  overflow: hidden;
+}
+.quizCubuk {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--vurgu-sis);
+  z-index: 0;
+}
+.quizDogru .quizCubuk { background: var(--sunucu-zemin); }
+.quizSikMetin {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--ol-etiket);
+  color: var(--metin-2);
+  line-height: 1.35;
+}
+.quizDogru .quizSikMetin { color: var(--metin); font-weight: 700; }
+.quizSay {
+  position: relative;
+  z-index: 1;
+  font-size: var(--ol-etiket);
+  color: var(--metin-2);
+  font-variant-numeric: tabular-nums;
+}

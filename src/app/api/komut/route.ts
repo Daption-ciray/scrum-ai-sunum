@@ -4,6 +4,7 @@ import {
   durumuYaz,
   katilimcilariTemizle,
   katilimciyiAt,
+  quizSifirla,
   secimOku,
   secimYaz,
 } from "@/lib/depo";
@@ -23,7 +24,8 @@ type Komut =
   | { komut: "katilimcilari-temizle" }
   | { komut: "at"; id: string }
   | { komut: "kilitle" }
-  | { komut: "istem"; eylem: "ac" | "kapat" | "iyi" | "kotu" | "sifirla"; deger?: string };
+  | { komut: "istem"; eylem: "ac" | "kapat" | "iyi" | "kotu" | "sifirla"; deger?: string }
+  | { komut: "quiz"; eylem: "ac" | "kapat" | "sifirla" };
 
 const sinirla = (n: number, enAz: number, enCok: number) => Math.min(Math.max(n, enAz), enCok);
 
@@ -73,7 +75,7 @@ export async function POST(istek: Request) {
       yeni.perde = !onceki.perde;
       break;
     case "sifirla":
-      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false };
+      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false, quizAcik: false };
       break;
     case "istem": {
       // Hangi atölye olduğu slayttan çıkarılıyor; panel id göndermiyor.
@@ -107,6 +109,19 @@ export async function POST(istek: Request) {
         [anahtar]: mevcut[anahtar] === secilen ? undefined : secilen,
       });
       return Response.json({ durum: onceki }, { headers: { "cache-control": "no-store" } });
+    }
+    case "quiz": {
+      const slayt = slaytAl(onceki.oturum, onceki.slayt);
+      if (slayt?.tip !== "quiz") {
+        return Response.json({ hata: "Bu slaytta quiz yok." }, { status: 409 });
+      }
+      if (govde.eylem === "sifirla") {
+        await quizSifirla(slayt.id);
+        yeni.quizAcik = false;
+        break;
+      }
+      yeni.quizAcik = govde.eylem === "ac";
+      break;
     }
     case "katilimcilari-temizle":
       await katilimcilariTemizle();

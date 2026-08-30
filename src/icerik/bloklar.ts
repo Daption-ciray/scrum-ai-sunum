@@ -22,17 +22,17 @@ export type BlokOzeti = {
 const SURELER: Record<string, number> = {
   // Oturum 1 — toplam 60 dk
   "Açılış ve kurulum": 4,
-  "Roller değişiyor": 4,
-  "Scrum çerçevesi": 10,
-  "AI temelleri ve sınırları": 14,
-  "Etkili istem yazımı": 22,
-  "Özet ve kapanış": 6,
+  "Roller değişiyor": 3,
+  "Scrum çerçevesi": 9,
+  "AI temelleri ve sınırları": 17,
+  "Etkili istem yazımı": 19,
+  "Özet ve kapanış": 8,
   // Oturum 2 — toplam 60 dk
-  "İkinci oturum açılışı": 3,
-  "Sprint Planning'de AI": 15,
-  "Daily Scrum'da AI": 11,
-  "AI çıktısını değerlendirme": 9,
-  "Sorumlu kullanım: güvenlik ve etik": 15,
+  "İkinci oturum açılışı": 2,
+  "Sprint Planning'de AI": 14,
+  "Daily Scrum'da AI": 10,
+  "AI çıktısını değerlendirme": 8,
+  "Sorumlu kullanım: güvenlik ve etik": 19,
   "Ekip çalışma anlaşması": 5,
   "Eylem planı": 2,
 };

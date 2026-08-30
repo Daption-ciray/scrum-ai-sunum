@@ -427,6 +427,52 @@ export const oturum1: Oturum = {
       ],
       not: "Kaynak: Scrum.org, \"Setup an AI-Powered Scrum Team (A Quick-Start Guide)\". ÖNEMLİ: bu liste örnek, tavsiye değil — kurumun onaylı araç listesi neyse o geçerli. Bu cümleyi mutlaka söyle, ikinci oturumdaki kuralla çelişmesin. Araç adlarını tek tek okuma; \"her satırda birkaç örnek var\" deyip geç.",
     },
+    {
+      id: "s1-quiz-temeller",
+      blok: "AI temelleri ve sınırları",
+      tip: "quiz",
+      baslik: "Bilgi kontrolü",
+      giris: "Dört soru. Bu bloğun tamamı bu dördünün içinde. Puanınız oturum sonundaki sıralamaya giriyor.",
+      sorular: [
+        {
+          soru: "Bir dil modeli neden \"halüsinasyon\" görür?",
+          secenekler: [
+            "Eğitim verisinde o bilgi bulunmadığı için",
+            "Amacı doğruluk değil, en olası devamı üretmek olduğu için",
+            "Soru yeterince açık sorulmadığı için",
+            "İnternete bağlı olmadığı için",
+          ],
+        },
+        {
+          soru: "Aşağıdakilerden hangisi modelin GÜVENİLİR olduğu iştir?",
+          secenekler: [
+            "Geçen çeyreğin satış rakamlarını hatırlamak",
+            "Dağınık toplantı notunu yapılandırılmış özete çevirmek",
+            "Sprint hedefini taahhüt etmek",
+            "Bir işin \"bitti\" olduğunu onaylamak",
+          ],
+        },
+        {
+          soru: "Ekibinizin son üç Sprint'te aldığı kararları model neden bilmez?",
+          secenekler: [
+            "Kurumsal verinize erişimi yok; siz vermedikçe bağlamında bulunmaz",
+            "Türkçe veriyle yeterince eğitilmediği için",
+            "Jira'nın API'si kapalı olduğu için",
+            "Modeller yalnızca kod öğrenebildiği için",
+          ],
+        },
+        {
+          soru: "Hype Cycle'ın dikey ekseni neyi ölçer?",
+          secenekler: [
+            "Teknolojinin yeteneğini",
+            "Beklentiyi ve ilgiyi",
+            "Benimseme oranını",
+            "Yatırım miktarını",
+          ],
+        },
+      ],
+      not: "Panelden \"Cevaplamayı aç\" de, iki dakika ver, kapat. Dağılım YALNIZCA senin ekranında — çoğunluğu gören katılımcı ona uyar, bilgi kontrolü ankete döner. Kapattıktan sonra dağılıma bak ve odanın takıldığı yeri seç, onu tekrar anlat. Dördüncü soru bilerek eğri hakkında: dikey eksen yanlış okunuyorsa burada görürsün. Doğru cevaplar sunucuda, `src/icerik/cevaplar.ts` — katılımcının tarayıcısına inmiyor.",
+    },
 
     /* ---- 00:41 · Etkili istem yazımı ---- */
 
@@ -604,6 +650,16 @@ Varsayım yaptığın yeri [VARSAYIM] diye işaretle.`,
         { ana: "Yetkinlik dört aşamalıdır", alt: "Delegasyon, tarif, muhakeme, sahiplenme. İkinci oturumda dördünü de uygulayacağız." },
       ],
       not: "Üç maddeyi tek tek oku. Katılımcılar ikinci oturuma bu üçüyle gelmeli.",
+    },
+    {
+      id: "s1-siralama",
+      blok: "Özet ve kapanış",
+      tip: "siralama",
+      baslik: "Oturum sıralaması",
+      giris: "Bilgi kontrolü ve atölye puanları birlikte. İlk on herkeste görünüyor; listede değilseniz kendi satırınız altta.",
+      quizSlayt: "s1-quiz-temeller",
+      atolyeSlayt: "s1-atolye-istem",
+      not: "Eğlence, ölçme değil — bunu söyleyerek aç. İSTEM puanı kalıp puanı: beş parçadan kaçının bulunduğuna bakıyor, isteminizin iyi olup olmadığına değil. Bunu açıkça söyle, yoksa düşük puan alan kişi kendini yanlış değerlendirilmiş hisseder. İlk üçü oku, bir alkış iste, geç. Uzatma — asıl mesaj sıralama değil, iki oturumun birbirine bağlanması.",
     },
     {
       id: "s1-veri-uyarisi",

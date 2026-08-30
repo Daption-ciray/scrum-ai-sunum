@@ -406,6 +406,66 @@ export const oturum2: Oturum = {
       not: "Bu slayt eğitimin en çok işe yarayan pratik çıktısı. Yasak listesi kimseyi durdurmuyor; alternatif yöntem durduruyor. Sağ sütunu yavaş oku.",
     },
     {
+      id: "s2-maskeleme",
+      blok: "Sorumlu kullanım: güvenlik ve etik",
+      tip: "kartlar",
+      baslik: "Peki o veriye gerçekten ihtiyacınız varsa",
+      giris: "Bir önceki slayt neyi yapıştırmayacağınızı söylüyor. Ama bazen iş gerçekten o veriyle ilgili. Cevap vazgeçmek değil, maskelemek: modelin işini yapması için çoğu zaman gerçek değere değil, verinin BİÇİMİNE ihtiyacı var.",
+      kartlar: [
+        {
+          ust: "REDAKSİYON",
+          ana: "Değeri tamamen çıkarıp yerine etiket koymak",
+          alt: "\"Ahmet Yılmaz aradı\" → \"[MÜŞTERİ] aradı\". En basit ve en güvenli yol. Geri dönüşü yok — hangi müşteri olduğunu sonra bilemezsiniz.",
+        },
+        {
+          ust: "TAKMA AD",
+          ana: "Tutarlı ama anlamsız bir karşılık vermek",
+          alt: "Aynı kişi metin boyunca hep \"MÜŞTERİ_7\". Model ilişkileri görebilir; eşleme tablosu sizde kalır, araca gitmez.",
+        },
+        {
+          ust: "GENELLEŞTİRME",
+          ana: "Değeri aralığa çevirmek",
+          alt: "\"34 yaşında, Kadıköy\" → \"30-39 yaş, İstanbul\". Analiz için çoğu zaman yeterli, kimliği tekilleştirmiyor.",
+        },
+        {
+          ust: "SENTETİK ÖRNEK",
+          ana: "Gerçeğe benzeyen ama uydurma veri",
+          alt: "Atölyede yaptığımız şey buydu: uydurma bir ekip, uydurma bir ürün. Taslak üretmek için gerçek veri neredeyse hiç gerekmiyor.",
+        },
+        {
+          ust: "ÖNCE SOR",
+          ana: "\"Bu iş gerçek veri olmadan yapılabilir mi?\"",
+          alt: "Çoğu zaman cevap evet. Maskeleme tekniklerinden önce sorulacak soru bu; en güvenli veri, hiç göndermediğiniz veridir.",
+        },
+      ],
+      not: "Beş kartı hızlı geç, son kartta dur. \"En güvenli veri hiç göndermediğiniz veridir\" cümlesi bu bloğun özeti. Odaya sor: geçen hafta AI'a yapıştırdığınız bir şey vardı; maskelenmiş hâliyle de aynı işi görür müydü? Cevap neredeyse her zaman evet. Dördüncü kart atölyeye geri bağlanıyor — orada kimse gerçek veri kullanmadı ve çıktılar yine iyiydi.",
+    },
+    {
+      id: "s2-guardrail",
+      blok: "Sorumlu kullanım: güvenlik ve etik",
+      tip: "adim",
+      baslik: "Guardrail — kural nerede uygulanır",
+      giris: "Guardrail, modele giden ve modelden gelen şeyi sınırlayan kontrol. Üç yerde durur ve üçü farklı işler yapar. Kurumunuz bunları kuruyorsa siz görmezsiniz; kurmuyorsa üçünün de yerini insan doldurur.",
+      adimlar: [
+        {
+          ad: "Girdide",
+          aciklama: "Modele ulaşmadan önce durdurur.",
+          ornek: "Kişisel veri tespiti ve engelleme · istem enjeksiyonu filtresi · kapsam dışı isteği reddetme",
+        },
+        {
+          ad: "Model tarafında",
+          aciklama: "Modelin hareket alanını daraltır.",
+          ornek: "Sistem talimatı · izinli araç listesi · erişebileceği belge kümesinin sınırlanması",
+        },
+        {
+          ad: "Çıktıda",
+          aciklama: "Yanıt kullanıcıya gitmeden önce denetler.",
+          ornek: "Kişisel veri sızıntısı taraması · zararlı içerik filtresi · biçim doğrulama · kaynak kontrolü",
+        },
+      ],
+      not: "Anahtar cümle: guardrail kurulu değilse üçünün de yerini İNSAN doldurur — girdide siz maskelersiniz, model tarafında istemle sınırlarsınız, çıktıda siz doğrularsınız. Beş parçalı kalıptaki \"sınır\" maddesi aslında elle kurulmuş bir model tarafı guardrail'ı; bu bağı kur. Olgunluk eğrisini hatırlat: agentic AI güvenliği ve yönetişimi henüz zirvede, yani bu araçlar iki-beş yıl uzakta. O yüzden şimdilik yük insanda ve çalışma anlaşmasında.",
+    },
+    {
       id: "s2-cerceve",
       blok: "Sorumlu kullanım: güvenlik ve etik",
       tip: "katman",

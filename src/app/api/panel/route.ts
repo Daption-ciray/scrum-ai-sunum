@@ -3,12 +3,14 @@ import {
   istemleriOku,
   katilimcilariOku,
   paylasimliDepo,
+  quizleriOku,
   secimOku,
 } from "@/lib/depo";
 import { yoneticiMi } from "@/lib/anahtar";
 import { slaytAl } from "@/icerik";
 import { PARCA_ADI, istemPuanla } from "@/lib/istemPuan";
 import { hakemVar } from "@/lib/hakem";
+import { CEVAPLAR } from "@/icerik/cevaplar";
 
 export const dynamic = "force-dynamic";
 
@@ -56,9 +58,34 @@ export async function GET(istek: Request) {
     };
   }
 
+  /* Quiz dağılımı yalnızca quiz slaytındayken okunuyor — atölyedeki gerekçe.
+     Sunucu doğru cevabı ve kaç kişinin hangi şıkka gittiğini görüyor;
+     katılımcı hiçbirini görmüyor, bu uç zaten sunucuya özel. */
+  let quiz: {
+    slaytId: string;
+    gonderen: number;
+    dogru: number[];
+    dagilim: number[][];
+  } | null = null;
+
+  if (slayt?.tip === "quiz") {
+    const gonderimler = await quizleriOku(slayt.id);
+    quiz = {
+      slaytId: slayt.id,
+      gonderen: gonderimler.length,
+      dogru: CEVAPLAR[slayt.id] ?? [],
+      dagilim: slayt.sorular.map((s, si) =>
+        s.secenekler.map(
+          (_, ki) => gonderimler.filter((g) => g.cevaplar[si] === ki).length,
+        ),
+      ),
+    };
+  }
+
   return Response.json(
     {
       durum,
+      quiz,
       bagli: katilimcilar.length,
       paylasimli: paylasimliDepo,
       atolye,

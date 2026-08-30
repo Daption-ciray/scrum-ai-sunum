@@ -11,6 +11,8 @@ import { IstemCevir } from "./IstemCevir";
 import { BolumGorseli } from "./BolumGorseli";
 import { Atolye } from "./Atolye";
 import { Karsilastirma } from "./Karsilastirma";
+import { Quiz } from "./Quiz";
+import { Siralama } from "./Siralama";
 import { OlgunlukEgrisi } from "./OlgunlukEgrisi";
 import s from "./slayt.module.css";
 
@@ -187,6 +189,12 @@ function Govde({ slayt, durum }: { slayt: SlaytTipi; durum?: Durum }) {
 
     case "karsilastirma":
       return <Karsilastirma slayt={slayt} />;
+
+    case "quiz":
+      return <Quiz slayt={slayt} durum={durum} />;
+
+    case "siralama":
+      return <Siralama slayt={slayt} />;
 
     case "taslak":
       return (

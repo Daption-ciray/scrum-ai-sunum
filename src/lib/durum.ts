@@ -21,6 +21,8 @@ export type Durum = {
    * olduğunda basıyor.
    */
   istemAcik: boolean;
+  /** Quiz slaytında cevaplama açık mı. Atölyedeki ile aynı mantık. */
+  quizAcik: boolean;
   /** Her değişiklikte artar. İstemci bunu karşılaştırıp gereksiz render etmez. */
   surum: number;
   zaman: number;
@@ -32,6 +34,7 @@ export const BASLANGIC: Durum = {
   perde: false,
   acilan: 1,
   istemAcik: false,
+  quizAcik: false,
   surum: 0,
   zaman: 0,
 };

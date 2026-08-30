@@ -15,6 +15,15 @@ export type AtolyeIstem = {
   parcalar: string[];
 };
 
+export type QuizVerisi = {
+  slaytId: string;
+  gonderen: number;
+  /** Doğru şık indeksleri. Yalnızca sunucu panelinde. */
+  dogru: number[];
+  /** dagilim[soru][sik] = o şıkkı seçen kişi sayısı. */
+  dagilim: number[][];
+};
+
 export type AtolyeVerisi = {
   slaytId: string;
   secim: { iyi?: string; kotu?: string };
@@ -32,6 +41,8 @@ export type YoklamaSonucu = {
   atolye?: AtolyeVerisi | null;
   /** Değerlendirme anahtarı tanımlı mı. Panel düğmeyi buna göre gösteriyor. */
   hakemVar?: boolean;
+  /** Yalnızca sunucu panelinde ve yalnızca quiz slaytlarında dolu. */
+  quiz?: QuizVerisi | null;
   /** Son istek başarılı mı? Kullanıcıya "bağlantı koptu" demek için. */
   saglikli: boolean;
   /** İlk yanıt gelene kadar true. */

@@ -127,6 +127,26 @@ export type SlaytGovde =
       araclar?: string[];
       kaynak?: string;
     }
+  /** Çoktan seçmeli bilgi kontrolü. Doğru cevaplar `cevaplar.ts` içinde ve
+      SUNUCUDA kalır — buraya yazmayın. */
+  | {
+      tip: "quiz";
+      baslik: string;
+      giris?: string;
+      sorular: { soru: string; secenekler: string[] }[];
+      kaynak?: string;
+    }
+  /** Oturum sonu sıralaması: quiz puanı + istem puanı. */
+  | {
+      tip: "siralama";
+      baslik: string;
+      giris?: string;
+      /** Puanı toplanacak quiz slaytı. */
+      quizSlayt: string;
+      /** Puanı toplanacak atölye slaytı. */
+      atolyeSlayt: string;
+      kaynak?: string;
+    }
   /** Henüz içeriği yazılmamış blok. Sunum akışını bozmadan iskelette durur. */
   | { tip: "taslak"; baslik: string; not: string; beklenen?: string[] };
 

@@ -4,7 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Perde, Slayt } from "@/components/Slayt";
 import { OTURUMLAR, bloklar } from "@/icerik";
 import type { Durum } from "@/lib/durum";
-import { anahtarDogrula, komutGonder, useYoklama, type AtolyeVerisi } from "@/lib/yoklama";
+import {
+  anahtarDogrula,
+  komutGonder,
+  useYoklama,
+  type AtolyeVerisi,
+  type QuizVerisi,
+} from "@/lib/yoklama";
 import p from "./sunucu.module.css";
 
 const ANAHTAR_DEPO = "sunum.sunucu.anahtar";
@@ -262,6 +268,15 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
           )}
         </div>
 
+        {yoklama.quiz && (
+          <QuizKarti
+            veri={yoklama.quiz}
+            acik={durum.quizAcik}
+            slayt={slayt}
+            gonder={gonder}
+          />
+        )}
+
         {yoklama.atolye && (
           <AtolyeKarti
             veri={yoklama.atolye}
@@ -311,6 +326,75 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
             Paneli kilitle
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Quiz kartı — sunucu dağılımı canlı görüyor, katılımcı görmüyor.
+ *
+ * Çoğunluğu görüp ona uymak bilgi kontrolünü ankete çevirirdi; o yüzden
+ * dağılım yalnızca bu panelde. Doğru şık kalın ve işaretli.
+ */
+function QuizKarti({
+  veri,
+  acik,
+  slayt,
+  gonder,
+}: {
+  veri: QuizVerisi;
+  acik: boolean;
+  slayt: { tip: string } & Record<string, unknown>;
+  gonder: (govde: Record<string, unknown>) => void;
+}) {
+  const sorular = (slayt.sorular ?? []) as { soru: string; secenekler: string[] }[];
+  return (
+    <div className={p.kart}>
+      <span className={`etiket ${p.kartBaslik}`}>Quiz — {veri.gonderen} gönderim</span>
+      <div className={p.atolyeDugmeler}>
+        <button
+          type="button"
+          className={`${p.dugme} ${acik ? p.aktif : ""}`}
+          onClick={() => gonder({ komut: "quiz", eylem: acik ? "kapat" : "ac" })}
+        >
+          {acik ? "Cevaplamayı kapat" : "Cevaplamayı aç"}
+        </button>
+        <button
+          type="button"
+          className={p.dugme}
+          onClick={() => gonder({ komut: "quiz", eylem: "sifirla" })}
+          title="Bütün cevapları siler"
+        >
+          Sıfırla
+        </button>
+      </div>
+
+      <div className={p.quizDagilim}>
+        {sorular.map((s, si) => (
+          <div key={s.soru} className={p.quizSoru}>
+            <span className={p.quizSoruMetin}>
+              <span className="mono">{si + 1}</span> {s.soru}
+            </span>
+            {s.secenekler.map((sik, ki) => {
+              const say = veri.dagilim[si]?.[ki] ?? 0;
+              const oran = veri.gonderen > 0 ? (say / veri.gonderen) * 100 : 0;
+              return (
+                <div
+                  key={sik}
+                  className={`${p.quizSik} ${veri.dogru[si] === ki ? p.quizDogru : ""}`}
+                >
+                  <span className={p.quizCubuk} style={{ width: `${oran}%` }} aria-hidden />
+                  <span className={p.quizSikMetin}>
+                    {veri.dogru[si] === ki ? "✓ " : ""}
+                    {sik}
+                  </span>
+                  <span className={`mono ${p.quizSay}`}>{say}</span>
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );

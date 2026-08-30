@@ -15,7 +15,7 @@ adları ve arayüz Türkçe; İngilizceye çevirmeyin.
 | Cihaz | Herkes kendi cihazında — laptop/telefon karışık, önceden bilinmiyor |
 | Ödev | Yok (kullanıcı kararı). Perşembe atölyesi hazır materyalle çalışır. |
 
-Akış: **13 blok, 67 slayt** — 6'sı birinci oturum (36 slayt), 7'si ikinci (31). Dakika dakika
+Akış: **13 blok, 70 slayt** — 6'sı birinci oturum (37 slayt), 7'si ikinci (33). Dakika dakika
 akış `src/icerik/` içinde slayt olarak duruyor; blok süreleri
 `src/icerik/bloklar.ts` (iki oturum da tam 60 dk'ya toplanıyor).
 
@@ -69,9 +69,9 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
   katılımcı listesi ve tek tek oturum kapatma
 - Giriş sayfasından sunucu girişi; galeride katılımcı için çıkış düğmesi
 - Galeri: 13 blok 3B kart yığını (GSAP), ikinci oturum kilitli
-- **67 slayt, 13 blok** — kurumsal eğitim dilinde, kaynakları slaytın içinde
-- 18 slayt tipi; `bolum` ayraçları, `sayi`, `adim`, `terazi`, `kartlar`,
-  `alinti`, `roller`, `olgunluk`, `cevir`, `atolye`, `karsilastirma` dahil
+- **70 slayt, 13 blok** — kurumsal eğitim dilinde, kaynakları slaytın içinde
+- 20 slayt tipi; `bolum` ayraçları, `sayi`, `adim`, `terazi`, `kartlar`,
+  `alinti`, `roller`, `olgunluk`, `cevir`, `atolye`, `karsilastirma`, `quiz`, `siralama` dahil
 - Upstash Redis bağlı, 75 kişilik yüke göre kurgulanmış
 
 **Blok sırası**
@@ -79,16 +79,16 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
 | # | Blok | dk | Oturum |
 |---|---|---|---|
 | 1 | Açılış ve kurulum | 4 | 1 |
-| 2 | Roller değişiyor | 4 | 1 |
-| 3 | Scrum çerçevesi | 10 | 1 |
-| 4 | AI temelleri ve sınırları | 14 | 1 |
-| 5 | Etkili istem yazımı | 22 | 1 | ← atölye
-| 6 | Özet ve kapanış | 6 | 1 |
-| 7 | İkinci oturum açılışı | 3 | 2 |
-| 8 | Sprint Planning'de AI | 15 | 2 |
-| 9 | Daily Scrum'da AI | 11 | 2 |
-| 10 | AI çıktısını değerlendirme | 9 | 2 |
-| 11 | Sorumlu kullanım: güvenlik ve etik | 15 | 2 |
+| 2 | Roller değişiyor | 3 | 1 |
+| 3 | Scrum çerçevesi | 9 | 1 |
+| 4 | AI temelleri ve sınırları | 17 | 1 | ← quiz
+| 5 | Etkili istem yazımı | 19 | 1 | ← atölye
+| 6 | Özet ve kapanış | 8 | 1 | ← sıralama
+| 7 | İkinci oturum açılışı | 2 | 2 |
+| 8 | Sprint Planning'de AI | 14 | 2 |
+| 9 | Daily Scrum'da AI | 10 | 2 |
+| 10 | AI çıktısını değerlendirme | 8 | 2 |
+| 11 | Sorumlu kullanım: güvenlik ve etik | 19 | 2 |
 | 12 | Ekip çalışma anlaşması | 5 | 2 |
 | 13 | Eylem planı | 2 | 2 |
 
@@ -100,8 +100,7 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
    henüz uygulanmadı. Referans: evilcharts.com (shadcn/Tailwind istiyor,
    yalnızca `echarts` kurup option reçetelerini almak yeterli).
 3. **Kalan tekdüzelik** — 62 slaydın bir kısmı hâlâ `madde`.
-4. **Quiz motoru hâlâ yok.** Atölye geri geldi ama quiz gelmedi; istenirse
-   yeniden yazılacak.
+4. **Quiz motoru geri geldi**, ama eski hâliyle değil — aşağıya bakın.
 
 **Bilinçli olarak yok (kullanıcı kararı)**
 - **Quiz motoru silindi.** Bileşen, `/api/cevap`, depo tarafı, panel kontrolü
@@ -251,6 +250,31 @@ slaydın mesajı.
 **Ajan değil agent.** İçerikte "ajan" geçmiyor; jargon olarak `agent` /
 `agentic AI` kullanılıyor (kullanıcı kararı). Yeni slaytta da böyle yazın.
 
+**Quiz eskisi gibi soru soru DEĞİL, tek gönderim.** Eski motor her soru için
+ayrı başlat/kapat/sonraki turu ve cihaz başına geri sayım tutuyordu. Yeni
+kurgu atölyeyle aynı: bütün sorular tek ekranda, tek `HSETNX` gönderimi,
+sunucu açar-kapatır. Gerekçe: 75 kişilik odada soru başına tur hem sunucuyu
+meşgul ediyor hem bağlantısı kopanı tek soruya mahkûm ediyordu. Hız puana
+GİRMİYOR, yalnızca eşitlik bozuyor — ortak geri sayım ağı yavaş olanı
+sistematik olarak kaybettirirdi ve bu site zaten o gecikmeyi kaldırmak için
+yazıldı.
+
+**Doğru cevaplar `src/icerik/cevaplar.ts` içinde ve sunucuda kalır.** Bu dosyayı
+hiçbir istemci bileşeninden import etmeyin. `dogrula()` kontrolü bir ara
+`src/icerik/index.ts` içine konuldu — orası istemci bileşenlerinden de import
+ediliyor, doğru cevaplar geliştirmede tarayıcıya inecekti. Kontrol şimdi
+`src/app/api/quiz/route.ts` modül kapsamında, yani sunucuda. Derlemede
+doğrulandı: `CEVAPLAR` istemci paketinde yok, yalnızca sorular ve şıklar var.
+
+**Dağılım yalnızca sunucu panelinde.** Çoğunluğu gören katılımcı ona uyar,
+bilgi kontrolü ankete döner.
+
+**Sıralama = quiz (0–1000) + istem (0–1000), eşit ağırlık.** İstem bileşeni
+anahtar kelime **eleğinin** puanı × 10; hakem puanı bilerek kullanılmıyor
+çünkü hakem yalnızca uçlardaki ona bakıyor, herkese uygulanmadığı için
+sıralamada adaletsiz olurdu. Slayt bu yüzden "kalıp puanı" diyor, "kalite
+puanı" demiyor — sunucu notu da bunu söylemeyi hatırlatıyor.
+
 **Atölye: istem yaz → puanla → en iyi/en kötü → canlı karşılaştır.**
 İki slayt (`s1-atolye-istem` tip `atolye`, `s1-atolye-sonuc` tip
 `karsilastirma`) ve dört karar:
@@ -350,6 +374,12 @@ Figürler `Kisi` yardımcısıyla çiziliyor: baş daire, gövde hap, **yüz yok
 figürün "herkes" olması bundan. Görseller bölüm `numara` alanına göre
 eşleşiyor; yeni bölüm eklerseniz oraya bir `case` ekleyin, yoksa görsel
 sessizce boş kalır. **Hex yazmayın**, hepsi token.
+
+**Sunucu notları istemci paketinde.** `not` alanı görsel olarak yalnızca
+/sunucu'da görünüyor ama slayt tanımlarıyla birlikte tarayıcıya iniyor;
+kaynağa bakan katılımcı okuyabilir. Bilinen ve şimdilik kabul edilen bir
+sınır — düzeltmek notları ayrı bir sunucu dosyasına taşımayı gerektirir.
+Doğru cevaplar bundan etkilenmiyor, onlar ayrı dosyada.
 
 **Gemini model adı ENV'den geliyor, sabit değil.** `gemini-2.5-flash` bir gün
 404 vermeye başladı: *"no longer available to new users, use

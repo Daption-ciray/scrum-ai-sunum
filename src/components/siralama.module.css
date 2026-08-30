@@ -1,0 +1,54 @@
+/* Oturum sonu sıralaması. */
+
+.sarma { display: flex; flex-direction: column; gap: .8rem; width: 100%; }
+.baslik { font-size: var(--ol-baslik); line-height: 1.1; letter-spacing: -.02em; }
+.giris { color: var(--metin-2); font-size: var(--ol-govde); max-width: 62ch; line-height: 1.45; }
+
+/* Dar ekranda yatay kaydırma tabloya ait, sayfaya değil. */
+.tabloSar { overflow-x: auto; }
+
+.tablo {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ol-kucuk);
+}
+.tablo th {
+  text-align: left;
+  font-family: var(--yazi-piksel), monospace;
+  font-size: 13px;
+  -webkit-font-smoothing: none;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--metin-3);
+  border-bottom: var(--kenar) solid var(--cizgi-2);
+  padding: .4rem .6rem;
+}
+.tablo td {
+  padding: .45rem .6rem;
+  border-bottom: 1px solid var(--cizgi);
+  color: var(--metin);
+  vertical-align: baseline;
+}
+.sagaDayali { text-align: right; font-variant-numeric: tabular-nums; }
+.toplam { font-weight: 700; }
+
+/* Puanın altındaki küçük doğru sayısı. */
+.alt {
+  display: block;
+  font-size: var(--ol-etiket);
+  color: var(--metin-3);
+}
+
+/* Kendi satırın — 75 kişilik listede kendini aramamak için. */
+.benim { background: var(--sunucu-zemin); }
+/* İlk onun dışındaysan satırın araya boşluk bırakılarak ekleniyor. */
+.ayrik td { border-top: var(--kenar) solid var(--cizgi-2); }
+
+.ipucu { font-size: var(--ol-kucuk); color: var(--metin-3); line-height: 1.45; max-width: 70ch; }
+.ipucu b { color: var(--metin-2); font-weight: 700; }
+.kaynak {
+  font-size: var(--ol-etiket);
+  color: var(--metin-3);
+  font-family: var(--yazi-mono), monospace;
+  letter-spacing: .04em;
+}
