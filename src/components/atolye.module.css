@@ -16,6 +16,30 @@
   max-width: 70ch;
 }
 
+/* Veri uyarısı. `ipucu` gibi soluk gri DEĞİL — bu metin atlanmamalı.
+   Renk çifti destenin kendi kırmızısı: kötü istem kartı ve atölye
+   karşılaştırmasıyla aynı aile. */
+.uyari {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem;
+  background: var(--kotu-zemin);
+  border: var(--kenar) solid var(--cizgi-2);
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  padding: .7rem .85rem;
+  font-size: var(--ol-kucuk);
+  line-height: 1.5;
+  color: var(--kotu-metin);
+  max-width: 78ch;
+}
+.uyariEtiket {
+  flex: 0 0 auto;
+  background: var(--kotu);
+  color: var(--yuzey);
+  padding: .3em .6em;
+}
+
 /* Kalıp hatırlatması. Kutunun hemen üstünde duruyor çünkü katılımcı yazarken
    beş parçayı görmek zorunda ve slayt değiştirip kalıba dönemiyor. */
 .parcalar { display: flex; flex-wrap: wrap; gap: .4rem; }
@@ -100,7 +124,31 @@
 }
 
 @media (max-width: 680px) {
-  /* Kalıp hatırlatması. Kutunun hemen üstünde duruyor çünkü katılımcı yazarken
+  /* Veri uyarısı. `ipucu` gibi soluk gri DEĞİL — bu metin atlanmamalı.
+   Renk çifti destenin kendi kırmızısı: kötü istem kartı ve atölye
+   karşılaştırmasıyla aynı aile. */
+.uyari {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem;
+  background: var(--kotu-zemin);
+  border: var(--kenar) solid var(--cizgi-2);
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  padding: .7rem .85rem;
+  font-size: var(--ol-kucuk);
+  line-height: 1.5;
+  color: var(--kotu-metin);
+  max-width: 78ch;
+}
+.uyariEtiket {
+  flex: 0 0 auto;
+  background: var(--kotu);
+  color: var(--yuzey);
+  padding: .3em .6em;
+}
+
+/* Kalıp hatırlatması. Kutunun hemen üstünde duruyor çünkü katılımcı yazarken
    beş parçayı görmek zorunda ve slayt değiştirip kalıba dönemiyor. */
 .parcalar { display: flex; flex-wrap: wrap; gap: .4rem; }
 .parca {

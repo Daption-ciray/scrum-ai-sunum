@@ -20,7 +20,7 @@ export type SlaytGovde =
       katmanlar: { ad: string; aciklama: string }[];
       kaynak?: string;
     }
-  /** Tablo. Beş Scrum olayının AI karşılıkları gibi ızgara içerik için. */
+  /** Tablo. Beş Scrum etkinliğinin AI karşılıkları gibi ızgara içerik için. */
   | { tip: "tablo"; baslik: string; sutunlar: string[]; satirlar: string[][] }
   /** Sıralı adımlar. Süreç anlatan içerik tabloya sıkıştırılmasın. */
   | {
@@ -113,6 +113,13 @@ export type SlaytGovde =
           Katılımcı yazarken slayt değiştirip kalıba geri dönemiyor. */
       parcalar?: string[];
       yerTutucu?: string;
+      /**
+       * Kutunun ÜSTÜNDEKİ uyarı bandı. `ipucu` değil, çünkü bu metin
+       * atlanamayacak bir şey söylüyor: katılımcının gerçek veri
+       * yazabileceği tek an burası ve yazdığı metin hem ekranda görünüyor
+       * hem de değerlendirme için dışarı gidiyor.
+       */
+      uyari?: string;
       ipucu?: string;
       kaynak?: string;
     }

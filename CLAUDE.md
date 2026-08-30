@@ -42,6 +42,41 @@ ilkeleri → `Scrum çerçevesi` · üretken AI mantığı ve sınırları →
 noktalar → `s2-daily-akis` orta aşaması ve `s2-daily-iletisim` terazisi ·
 güvenlik ve sorumlu kullanım → `Sorumlu kullanım: güvenlik ve etik`.
 
+**Scrum terimleri resmi Türkçe kılavuzdan.** Kaynak: Scrum Kılavuzu Kasım 2020,
+Agile Turkey çevirisi (scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-Turkish.pdf).
+Kendi çevirinizi uydurmayın, oradan bakın:
+
+| İngilizce | Kullanılan | Kullanılmayan |
+|---|---|---|
+| Artifacts | **eser** | artefakt |
+| Events | **etkinlik** | olay |
+| Empiricism | **deneysellik** | ampirizm |
+| pillars | **taşıyıcı kolonlar** | ayaklar, sütunlar |
+| Inspection | **gözlem** | gözden geçirme |
+| Adaptation | **adaptasyon** | uyarlama |
+| Accountabilities | **sorumluluk** | rol |
+| Definition of Done | **Bitti Tanımı** | DoD (tek başına) |
+| Product Goal | **Ürün Hedefi** | ürün amacı |
+| Sprint Goal | **Sprint Hedefi** | sprint hedefi (küçük) |
+| Increment | **Increment** | artış |
+
+Rol, etkinlik ve eser ADLARI İngilizce kalıyor — kılavuz da öyle yapıyor:
+Product Owner, Scrum Master, Developers, Sprint Planning, Daily Scrum,
+Sprint Review, Sprint Retrospective, Product Backlog, Sprint Backlog,
+Increment. Türkçeleşenler: Ürün Hedefi, Sprint Hedefi, Bitti Tanımı, Taahhüt.
+
+Üç istisna, hepsi bilinçli:
+1. **Sıradan Türkçe.** "gözden geçirmek" günlük dilde de var ("çıktıyı gözden
+   geçiren kim") — orada değiştirmeyin; yalnızca Scrum kolonu kastedildiğinde
+   "gözlem". Aynı şekilde "güncel olay" bir Scrum etkinliği değil.
+2. **Makale adları çevrilmez.** `AI Impacts On Your Definition of Done` bir
+   yayın başlığı; kaynakçada İngilizce kalır.
+3. **Slayt kimlikleri değişmez.** `s1-ampirizm`, `s1-olaylar` gibi id'ler
+   kararlı kimlik; içerik terimi değişse de id sabit kalıyor.
+
+Kılavuzda GEÇMEYEN terimler serbest: "kabul kriteri", "iş öğesi" (Jira/ADO
+dili), "engel". Bunlar için kılavuza bakmaya gerek yok.
+
 **Dil kurumsal eğitim dili.** Blok adları ("Bağlan ve ısın", "İlk yarış" gibi
 gündelik adlar) kurumsal eğitim terminolojisine çevrildi: Açılış ve kurulum,
 Ön değerlendirme, Bilgi kontrolü, Kapanış değerlendirmesi, Eylem planı.
@@ -520,6 +555,29 @@ yapıştırmayın" uyarısı duracak; bu kısıt değil, blok 11'in canlı örne
 düzeltildi; sırada **blok 5 (Etkili istem yazımı)**. Kullanıcı 13 bloğun 62
 slaydını tek tek konuşmak istiyor. Tasarım ve yapı işi durdu; sırada içeriğin kendisi var.
 Baştan başlayın, blok blok ilerleyin.
+
+## Ölçülen kapasite
+
+100 kişilik oturum için production'da yük testi yapıldı (gerçek istek deseni,
+20 sn): **1118 istek, 50,3 istek/sn, %0 hata**, hepsi HTTP 200. 50 istek/sn
+zaten gerçek oturum hızı. Vercel tarafı rahat.
+
+Tam oturum yükü, koddan sayarak (100 kişi × 60 dk):
+
+| | |
+|---|---|
+| Fonksiyon çalıştırma | 42.140 |
+| — `/api/durum` | 3.600 · CDN emiyor, kenara 50/sn geliyor fonksiyona ~1 |
+| — `/api/buradayim` | 36.000 · önbelleklenemez |
+| Redis komutu | **86.060** · iki oturum 172.120 |
+
+**Darboğaz Vercel değil, Upstash.** Ücretsiz katman günde 10.000 komut; bir
+oturum bunun 8,6 katı ve yaklaşık 7. dakikada Redis hata dönmeye başlar.
+Pay As You Go'ya geçmek şart, iki oturum ~$0,34.
+
+~~Vercel Hobby planı ticari kullanım~~ — **kapatıldı, kullanıcı kararı.**
+Proje açık kaynak paylaşıldığı ve ölçek denetim eşiğinin çok altında olduğu
+için risk kabul edildi. Tekrar açmayın.
 
 ## Kullanıcıdan bekleyenler
 

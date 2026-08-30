@@ -8,7 +8,7 @@ import type { Oturum } from "./tipler";
 
    Yapı eğitim duyurusuna göre kuruldu: birinci oturum önce Agile yaklaşımı ve
    Scrum'ın temel ilkelerini, ardından üretken yapay zekanın çalışma mantığını
-   ve sınırlarını ele alıyor. Olayların aşama aşama işlenişi ikinci oturumda.
+   ve sınırlarını ele alıyor. Etkinliklerin aşama aşama işlenişi ikinci oturumda.
    Bu sıra keyfi değil — katılımcıya duyuruda verilen sözün karşılığı. */
 
 export const oturum1: Oturum = {
@@ -48,9 +48,9 @@ export const oturum1: Oturum = {
       baslik: "Bu eğitimin sonunda",
       giris: "İki oturumun sonunda katılımcılardan beklenen kazanımlar:",
       maddeler: [
-        { ana: "Scrum çerçevesini tarif edebilmek", alt: "Üç sorumluluk, beş olay, üç artefakt ve bunların neden var olduğu." },
+        { ana: "Scrum çerçevesini tarif edebilmek", alt: "Üç sorumluluk, beş etkinlik, üç eser ve bunların neden var olduğu." },
         { ana: "AI kavramlarını doğru adlandırabilmek", alt: "Model, token, bağlam, halüsinasyon, RAG, agentic AI." },
-        { ana: "Sprint Planning ve Daily Scrum'da AI'ı somut olarak kullanabilmek", alt: "İki olay örnek vaka olarak işlenecek: hangi aşamada, hangi girdiyle, hangi araçla." },
+        { ana: "Sprint Planning ve Daily Scrum'da AI'ı somut olarak kullanabilmek", alt: "İki etkinlik örnek vaka olarak işlenecek: hangi aşamada, hangi girdiyle, hangi araçla." },
         { ana: "Etkili istem (prompt) yazabilmek", alt: "Bağlamı kurmak, formatı belirlemek, çıktıyı değerlendirmek." },
         { ana: "Sorumlu kullanım sınırlarını bilmek", alt: "Hangi verinin aktarılmayacağı ve kararın kimde kaldığı." },
         { ana: "Ekip olarak ortak bir yaklaşımda anlaşmak", alt: "İkinci oturumun sonunda birlikte yazılacak çalışma anlaşması." },
@@ -139,7 +139,7 @@ export const oturum1: Oturum = {
       tip: "bolum",
       numara: "03",
       baslik: "Scrum çerçevesi",
-      ozet: "Üç sorumluluk, beş olay, üç artefakt — ve hepsinin altındaki ampirizm.",
+      ozet: "Üç sorumluluk, beş etkinlik, üç eser — ve hepsinin altındaki deneysellik.",
       not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Katılımcı nerede olduğunu bilsin diye var.",
     },
     {
@@ -160,7 +160,7 @@ export const oturum1: Oturum = {
         {
           ust: "BİREYLER VE ETKİLEŞİMLER",
           ana: "süreçler ve araçlardan önce gelir",
-          alt: "Scrum'daki karşılığı: olaylar birer toplantı değil, ekibin birlikte karar verdiği anlar. Bu eğitimin sınırı da burada yazıyor — AI bir araçtır.",
+          alt: "Scrum'daki karşılığı: etkinlikler birer toplantı değil, ekibin birlikte karar verdiği anlar. Bu eğitimin sınırı da burada yazıyor — AI bir araçtır.",
         },
         {
           ust: "ÇALIŞAN YAZILIM",
@@ -185,12 +185,12 @@ export const oturum1: Oturum = {
       id: "s1-ampirizm",
       blok: "Scrum çerçevesi",
       tip: "madde",
-      baslik: "Scrum ampirizme dayanır",
+      baslik: "Scrum deneyselliğe dayanır",
       giris: "Planı baştan doğru kurmaya değil, gerçekle karşılaşıp düzeltmeye güvenir.",
       maddeler: [
-        { ana: "Şeffaflık", alt: "İş görünür olmalı. Görünmeyen iş gözden geçirilemez." },
-        { ana: "Gözden geçirme", alt: "Düzenli aralıklarla gerçek çıktıya bakılır, plana değil." },
-        { ana: "Uyarlama", alt: "Bakılan şey yanlışsa yön değişir. Sprint bunun için kısa tutulur." },
+        { ana: "Şeffaflık", alt: "İş görünür olmalı. Görünmeyen iş gözlemlenemez." },
+        { ana: "Gözlem", alt: "Düzenli aralıklarla gerçek çıktıya bakılır, plana değil." },
+        { ana: "Adaptasyon", alt: "Bakılan şey yanlışsa yön değişir. Sprint bunun için kısa tutulur." },
       ],
       not: "AI üçünü de hızlandırabilir ama hiçbirinin yerine geçemez — sonraki blokların zemini bu.",
     },
@@ -198,8 +198,8 @@ export const oturum1: Oturum = {
       id: "s1-uc-bes-uc",
       blok: "Scrum çerçevesi",
       tip: "tablo",
-      baslik: "Üç sorumluluk, beş olay, üç artefakt",
-      sutunlar: ["Sorumluluklar", "Olaylar", "Artefaktlar"],
+      baslik: "Üç sorumluluk, beş etkinlik, üç eser",
+      sutunlar: ["Sorumluluklar", "Etkinlikler", "Eserler"],
       satirlar: [
         ["Product Owner", "Sprint", "Product Backlog"],
         ["Scrum Master", "Sprint Planning", "Sprint Backlog"],
@@ -228,7 +228,7 @@ export const oturum1: Oturum = {
         ],
         [
           "Geliştiriciler",
-          "Her Sprint'te kullanılabilir bir artış (Increment) üretmek",
+          "Her Sprint'te kullanılabilir bir Increment üretmek",
           "İşin nasıl yapılacağına birlikte karar verir",
         ],
       ],
@@ -386,14 +386,14 @@ export const oturum1: Oturum = {
         ["Muhakeme", "Çıktının işe yarayıp yaramadığını değerlendirirsiniz", "Bu çıktı neyi kaçırmış olabilir?"],
         ["Sahiplenme", "AI ile ürettiğiniz işin sorumluluğunu üstlenirsiniz", "Bu çıktıyı imzalayabilir miyim?"],
       ],
-      not: "Kaynak: 4D AI Fluency çerçevesi (Delegation · Description · Discernment · Diligence). Bu tablo eğitimin omurgası: ikinci oturumun her bloğu bu dört aşamadan birine denk geliyor. Eşleme şöyle: delegasyon → olay blokları (hangi olayda AI açık, hangisinde kapalı), tarif → bu oturumun beşinci bloğu (istem yazımı), muhakeme → AI çıktısını değerlendirme, sahiplenme → güvenlik bloğu ve ekip çalışma anlaşması. Bunu şimdi söyle, ikinci oturumda hatırlat.",
+      not: "Kaynak: 4D AI Fluency çerçevesi (Delegation · Description · Discernment · Diligence). Bu tablo eğitimin omurgası: ikinci oturumun her bloğu bu dört aşamadan birine denk geliyor. Eşleme şöyle: delegasyon → etkinlik blokları (hangi etkinlikte AI açık, hangisinde kapalı), tarif → bu oturumun beşinci bloğu (istem yazımı), muhakeme → AI çıktısını değerlendirme, sahiplenme → güvenlik bloğu ve ekip çalışma anlaşması. Bunu şimdi söyle, ikinci oturumda hatırlat.",
     },
     {
       id: "s1-olaylar",
       blok: "AI temelleri ve sınırları",
       tip: "tablo",
       baslik: "Peki bunlar Scrum'da nereye değiyor",
-      sutunlar: ["Olay", "AI ne yapabilir", "Nerede kullanılır"],
+      sutunlar: ["Etkinlik", "AI ne yapabilir", "Nerede kullanılır"],
       satirlar: [
         ["Product Backlog Refinement", "Büyük iş öğesini böler, kabul kriteri taslağı çıkarır", "Jira / ADO — iş öğesi açıklaması"],
         ["Sprint Planning", "Risk ve bağımlılık listesi çıkarır, sorulacak soruları üretir", "Sprint hedefi notu"],
@@ -445,10 +445,10 @@ export const oturum1: Oturum = {
           ],
         },
         {
-          soru: "Scrum'ın dayandığı ampirizm hangi üç ayağa oturur?",
+          soru: "Scrum'ın dayandığı deneysellik hangi üç taşıyıcı kolona oturur?",
           secenekler: [
             "Planlama, uygulama, raporlama",
-            "Şeffaflık, gözden geçirme, uyarlama",
+            "Şeffaflık, gözlem, adaptasyon",
             "Hız, kalite, maliyet",
             "Analiz, tasarım, test",
           ],
@@ -503,7 +503,7 @@ export const oturum1: Oturum = {
           secenekler: [
             "Geçen çeyreğin satış rakamlarını hatırlamak",
             "Dağınık toplantı notunu yapılandırılmış özete çevirmek",
-            "Sprint hedefini taahhüt etmek",
+            "Sprint Hedefi'ni taahhüt etmek",
             "Bir işin \"bitti\" olduğunu onaylamak",
           ],
         },
@@ -652,8 +652,8 @@ Varsayım yaptığın yeri [VARSAYIM] diye işaretle.`,
         "İş öğesi: \"Kullanıcı şifresini sıfırlayabilsin.\" Bu iş öğesi için kabul kriteri ürettirecek bir istem yazın. Rol, bağlam, format, sınır ve dürüstlük çağrısını kendi cümlelerinizle kurun.",
       parcalar: ["Rol", "Bağlam", "Format", "Sınır", "Dürüstlük"],
       yerTutucu: "Deneyimli bir Product Owner gibi davran…",
-      ipucu:
-        "Gerçek müşteri verisi, kişisel veri veya sözleşme metni yazmayın — uydurma bir ekip ve ürün tarif edin. Yazdığınız metin eğitmen ekranında görünecek ve değerlendirilmek üzere bir AI servisine gönderilebilir.",
+      uyari:
+        "Gerçek müşteri verisi, kişisel veri ve sözleşme metni yazmayın — uydurma bir ekip ve ürün tarif edin. Yazdığınız metin eğitmen ekranında görünecek ve değerlendirilmek üzere bir AI servisine gönderilecek.",
       not: "Panelden \"Gönderimi aç\" deyip süreyi söyle: dört dakika. Bu slaytta konuşma, sessiz kal — yazarken anlatılan şey duyulmuyor. Panelde gelen istemler puana göre sıralanıyor; puan KALİTE değil, beş parçadan kaçının bulunduğu. Süre bitince \"Gönderimi kapat\"a bas. Sonra en üstteki üç ile en alttaki üçe bak, ✓ ve ✗ ile işaretle. İlk gönderim geçerli, katılımcı düzeltemiyor — bunu baştan söyle ki kimse beklemesin. UYARI: gerçek veri yazmama cümlesini yüksek sesle tekrarla — bu metinler hem ekranda gösterilecek hem de değerlendirme için dışarıdaki bir AI servisine gidecek. Bunu saklamak yerine ÖRNEK olarak kullan: \"biz de aynı kararı verdik ve size söylüyoruz; blok 10'da bunun neden önemli olduğunu konuşacağız.\" Sorumlu kullanımın canlı örneği bu.",
     },
     {
@@ -687,8 +687,8 @@ Varsayım yaptığın yeri [VARSAYIM] diye işaretle.`,
       giris: "Açılıştaki tabloda Scrum Master hiçbir kutuya bağlanmıyordu. Cevap birleşmek değil — işin ağırlık merkezinin kayması.",
       maddeler: [
         { ana: "İnsan tarafı", alt: "AI'ın yapamadığı her şey: gerilimi konuşmak, güveni kurmak, kararın ekipte kalmasını sağlamak." },
-        { ana: "Araç manzarasını bilmek", alt: "Hangi araç ne yapıyor, hangisi bu ekibe girer, hangisi girmez." },
-        { ana: "Kurmak ve birleştirmek", alt: "Aracı sürece yerleştirmek, işe yaramayanı çıkarmak. Tek olayla başlayıp genişletmek." },
+        { ana: "Araçları tanımak", alt: "Hangi araç ne işe yarıyor, hangisi bu ekibe girer, hangisi girmez." },
+        { ana: "Kurmak ve birleştirmek", alt: "Aracı sürece yerleştirmek, işe yaramayanı çıkarmak. Tek etkinlikle başlayıp genişletmek." },
         { ana: "Muhakemeyi öğretmek", alt: "Ekip AI çıktısını yargılamayı öğrenmezse hız kalite değil, daha hızlı hata üretir." },
       ],
       not: "İlk üç madde Scrum.org'un AI-Powered Scrum Team kılavuzundan, dördüncüsü bu eğitimin eklediği. Açılıştaki soruyu burada kapat: çizgisi yoktu çünkü birleşmiyor, yer değiştiriyor. Oturumun düğüm noktası — acele etme.",
@@ -700,7 +700,7 @@ Varsayım yaptığın yeri [VARSAYIM] diye işaretle.`,
       baslik: "Birinci oturumun özeti",
       giris: "İkinci oturumda bu üç maddenin üstüne uygulama yapılacak.",
       maddeler: [
-        { ana: "Scrum ampirizme dayanır", alt: "Şeffaflık, gözden geçirme, uyarlama. AI üçünü de hızlandırır, hiçbirinin yerine geçmez." },
+        { ana: "Scrum deneyselliğe dayanır", alt: "Şeffaflık, gözlem, adaptasyon. AI üçünü de hızlandırır, hiçbirinin yerine geçmez." },
         { ana: "Dil modelinin üç sınırı vardır", alt: "Bilmediğini bilmez, sınırsız bağlam tutmaz, kurumsal verinizi bilmez." },
         { ana: "Yetkinlik dört aşamalıdır", alt: "Delegasyon, tarif, muhakeme, sahiplenme. İkinci oturumda dördünü de uygulayacağız." },
       ],
@@ -720,16 +720,16 @@ Varsayım yaptığın yeri [VARSAYIM] diye işaretle.`,
       id: "s1-veri-uyarisi",
       blok: "Özet ve kapanış",
       tip: "vurgu",
-      metin: "İki oturum arasında geçerli tek kural: gerçek müşteri verisi, kişisel veri ve sözleşme metni hiçbir AI aracına yapıştırılmaz.",
+      metin: "Atölyedeki kural bugünle sınırlı değil: gerçek müşteri verisi, kişisel veri ve sözleşme metni hiçbir AI aracına yapıştırılmaz.",
       kaynak: "Sorumlu kullanım · ayrıntısı ikinci oturumda",
-      not: "Otuz saniye, tek cümle, ama atlanmayacak. Sebebi zamanlama: katılımcılar istem yazmayı bugün öğrendi ve iki oturum arasında deneyecekler — güvenlik bloğu ise bir hafta sonra. O boşlukta ellerinde duracak tek kural bu. Söylenecek ek cümle: emin değilseniz yapıştırmayın, ikinci oturumda hangi verinin neden çıkamayacağını tek tek konuşacağız. Kurumun onaylı araç listesi varsa burada bir kez daha hatırlat.",
+      not: "Otuz saniye, tek cümle, ama atlanmayacak. Bu kuralın İLK söylenişi değil — atölyede kutunun üstünde yazıyordu ve sen de yüksek sesle söyledin. Burada GERİ ÇAĞIRIYORSUN: \"az önce atölyede söylediğim kural bugünle sınırlı değil.\" Tekrar kasıtlı; güvenlik kuralı bir kez duyulup unutulmaz. Sebebi zamanlama: katılımcılar istem yazmayı bugün öğrendi ve iki oturum arasında deneyecekler — güvenlik bloğu ise bir hafta sonra. O boşlukta ellerinde duracak tek kural bu. Söylenecek ek cümle: emin değilseniz yapıştırmayın, ikinci oturumda hangi verinin neden çıkamayacağını tek tek konuşacağız. Kurumun onaylı araç listesi varsa burada bir kez daha hatırlat.",
     },
     {
       id: "s1-kapanis",
       blok: "Özet ve kapanış",
       tip: "vurgu",
       metin: "İkinci oturumda Sprint Planning ve Daily Scrum'a tek tek gireceğiz.",
-      kaynak: "İkinci oturum · olaylar, araçlar ve ortak anlaşma",
+      kaynak: "İkinci oturum · etkinlikler, araçlar ve ortak anlaşma",
       not: "Tek cümle, sonra bitir. İkinci oturumun sonunda ekip çalışma anlaşmasını birlikte yazacağımızı söyle. Ön hazırlık istenmediğini açıkça belirt.",
     },
 

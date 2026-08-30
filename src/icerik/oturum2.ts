@@ -8,12 +8,12 @@ import type { Oturum } from "./tipler";
 
    Oturum ayrıca birinci oturumda tanıtılan dört aşamalı AI yetkinliği
    çerçevesinin (delegasyon · tarif · muhakeme · sahiplenme) uygulama tarafı:
-   olay bloklarında delegasyon, çıktı değerlendirmede muhakeme, güvenlik ve
+   etkinlik bloklarında delegasyon, çıktı değerlendirmede muhakeme, güvenlik ve
    çalışma anlaşmasında sahiplenme. */
 
 export const oturum2: Oturum = {
   numara: 2,
-  ad: "Olaylarda AI, güvenlik ve ortak anlaşma",
+  ad: "Etkinliklerde AI, güvenlik ve ortak anlaşma",
   slaytlar: [
     /* ---- 00:00 · İkinci oturum açılışı ---- */
 
@@ -22,16 +22,16 @@ export const oturum2: Oturum = {
       blok: "İkinci oturum açılışı",
       tip: "kapak",
       ust: "Scrum + AI · Kurum İçi Eğitim",
-      baslik: "Olaylarda AI",
+      baslik: "Etkinliklerde AI",
       alt: "İkinci oturum · 60 dakika",
       meta: "Sprint Planning ve Daily Scrum — öncesi, sırası, sonrası.",
-      not: "Geç kalanlar için bir dakika bekle. Oturumun yapısını bir cümleyle söyle: iki olay derinlemesine, çıktı değerlendirme, güvenlik ve etik, sonunda ekip çalışma anlaşması. Duyuruda vaat edilen sıra bu — aynen bu sırayla gidiyoruz.",
+      not: "Geç kalanlar için bir dakika bekle. Oturumun yapısını bir cümleyle söyle: iki etkinlik derinlemesine, çıktı değerlendirme, güvenlik ve etik, sonunda ekip çalışma anlaşması. Duyuruda vaat edilen sıra bu — aynen bu sırayla gidiyoruz.",
     },
     {
       id: "s2-asamalar",
       blok: "İkinci oturum açılışı",
       tip: "adim",
-      baslik: "Her olayı üç aşamada düşünün",
+      baslik: "Her etkinliği üç aşamada düşünün",
       giris: "Bu oturumun tamamı bu üç aşama üzerinden ilerleyecek: önce Sprint Planning, sonra Daily Scrum. İnsanlar AI'ı toplantının içine sokmaya çalışıyor; oysa en yüksek katkı hazırlıkta.",
       adimlar: [
         {
@@ -47,11 +47,11 @@ export const oturum2: Oturum = {
         {
           ad: "Sonrası",
           aciklama: "Toparlama ve takip.",
-          ornek: "Planning: Sprint hedefi taslağını yazar · Daily: engel kaydını biçimlendirir",
+          ornek: "Planning: Sprint Hedefi taslağını yazar · Daily: engel kaydını biçimlendirir",
         },
       ],
       kaynak: "Kaynak: Scrum.org, AI-Enhanced Scrum Events.",
-      not: "Oturumun haritası. İki cümle: (1) asıl kazanç hazırlıkta, (2) hepsini birden değiştirmeyin — tek olayla başlayın, oturunca sonrakine geçin. Sonraki iki blok bu üç sütunu Sprint Planning ve Daily Scrum için tek tek dolduracak.",
+      not: "Oturumun haritası. İki cümle: (1) asıl kazanç hazırlıkta, (2) hepsini birden değiştirmeyin — tek etkinlikle başlayın, oturunca sonrakine geçin. Sonraki iki blok bu üç sütunu Sprint Planning ve Daily Scrum için tek tek dolduracak.",
     },
 
     /* ---- 00:03 · Sprint Planning'de AI ---- */
@@ -80,16 +80,16 @@ export const oturum2: Oturum = {
         {
           ad: "Sırasında",
           aciklama: "Geri planda kalır. Tahmin ve taahhüt ekibin.",
-          ornek: "Konuşulanı not alır. Efor tahminine, kapasiteye ve Sprint hedefinin cümlesine karışmaz",
+          ornek: "Konuşulanı not alır. Efor tahminine, kapasiteye ve Sprint Hedefi'nin cümlesine karışmaz",
         },
         {
           ad: "Sonrası",
           aciklama: "Toparlama. Karar verilmiş şeyi yazıya geçirir.",
-          ornek: "Sprint hedefi taslağını biçimlendirir, Sprint Backlog kırılımını önerir, açık kalan soruları listeler",
+          ornek: "Sprint Hedefi taslağını biçimlendirir, Sprint Backlog kırılımını önerir, açık kalan soruları listeler",
         },
       ],
       kaynak: "Kaynak: Scrum.org, AI-Enhanced Scrum Events.",
-      not: "Orta aşamada dur. Sprint hedefi bir taahhüttür; taahhüdü model veremez. Odaya sor: son Planning'inizde hedef cümlesini kim yazdı? Sonraki slayt aynı üç aşamayı araç araç açıyor.",
+      not: "Orta aşamada dur. Sprint Hedefi bir taahhüttür; taahhüdü model veremez. Odaya sor: son Planning'inizde hedef cümlesini kim yazdı? Sonraki slayt aynı üç aşamayı araç araç açıyor.",
     },
     {
       id: "s2-planning-ornek",
@@ -149,8 +149,8 @@ export const oturum2: Oturum = {
         ],
         [
           "Sonrası",
-          "Sprint hedefi taslağı",
-          "NotebookLM · ChatGPT — dökümü ver, \"tek cümlelik Sprint hedefi taslağı çıkar\" de. Cümleyi ekip düzeltir ve sahiplenir.",
+          "Sprint Hedefi taslağı",
+          "NotebookLM · ChatGPT — dökümü ver, \"tek cümlelik Sprint Hedefi taslağı çıkar\" de. Cümleyi ekip düzeltir ve sahiplenir.",
         ],
         [
           "Sonrası",
@@ -164,7 +164,7 @@ export const oturum2: Oturum = {
       id: "s2-dod",
       blok: "Sprint Planning'de AI",
       tip: "ikili",
-      baslik: "Kabul kriteri ile Definition of Done aynı şey değil",
+      baslik: "Kabul kriteri ile Bitti Tanımı aynı şey değil",
       sol: {
         baslik: "Kabul kriteri",
         etiket: "İş öğesine özel",
@@ -177,7 +177,7 @@ export const oturum2: Oturum = {
         ],
       },
       sag: {
-        baslik: "Definition of Done",
+        baslik: "Bitti Tanımı (Definition of Done)",
         etiket: "Ekibin tamamı için",
         ton: "olumlu",
         maddeler: [
@@ -193,8 +193,8 @@ export const oturum2: Oturum = {
       id: "s2-dod-ai",
       blok: "Sprint Planning'de AI",
       tip: "madde",
-      baslik: "Definition of Done'a yedinci kategori",
-      giris: "Klasik DoD altı beklenti kategorisinden oluşur: süreç, teknik, teslim, sektör standartları, kurum ve fonksiyonel olmayan gereksinimler. Ürünü AI ile kuruyorsanız yedincisi ekleniyor.",
+      baslik: "Bitti Tanımı'na yedinci kategori",
+      giris: "Klasik Bitti Tanımı altı beklenti kategorisinden oluşur: süreç, teknik, teslim, sektör standartları, kurum ve fonksiyonel olmayan gereksinimler. Ürünü AI ile kuruyorsanız yedincisi ekleniyor.",
       maddeler: [
         { ana: "Önyargı kontrolü", alt: "Çıktı önyargılı yanıt üretmiyor. Eğitim verisinden gelen önyargı ürüne geçmemeli." },
         { ana: "Adillik", alt: "Yanıtlar kullanıcı gruplarına göre farklılaşmıyor." },
@@ -289,13 +289,13 @@ export const oturum2: Oturum = {
         { metin: "Metni biçimlendirmek ve yeniden yazmak", taraf: "sol" },
         { metin: "Neyin değerli olduğuna karar vermek", taraf: "sag" },
         { metin: "Uzun girdiden özet çıkarmak", taraf: "sol" },
-        { metin: "Sprint hedefini taahhüt etmek", taraf: "sag" },
+        { metin: "Sprint Hedefi'ni taahhüt etmek", taraf: "sag" },
         { metin: "Kontrol listesi ve soru üretmek", taraf: "sol" },
         { metin: "Bir işin \"bitti\" olduğunu onaylamak", taraf: "sag" },
         { metin: "Aynı içeriği birden fazla biçimde denemek", taraf: "sol" },
         { metin: "Ekip içi anlaşmazlığı konuşmak", taraf: "sag" },
       ],
-      not: "Sağ taraf eğitimin ahlaki merkezi. Acele etme. Scrum olayları denetleme ve uyarlama için var; AI girdi verir, kararı iş birliğiyle ekip verir.",
+      not: "Sağ taraf eğitimin ahlaki merkezi. Acele etme. Scrum etkinlikleri gözlem ve adaptasyon için var; AI girdi verir, kararı iş birliğiyle ekip verir.",
     },
 
     /* ---- 00:30 · AI çıktısını değerlendirme ---- */
@@ -334,7 +334,7 @@ export const oturum2: Oturum = {
           "Notun arkasındaki ton ve gerilim",
         ],
       },
-      not: "Ampirizmin neden yerini alamadığı tam olarak burada görülüyor. Bu slayt oturumun dönüm noktası; acele etme.",
+      not: "Deneyselliğin neden yerini alamadığı tam olarak burada görülüyor. Bu slayt oturumun dönüm noktası; acele etme.",
     },
     {
       id: "s2-dogrulama",
@@ -482,7 +482,7 @@ export const oturum2: Oturum = {
         },
         {
           ad: "Mevzuat · AB AI Yasası, KVKK",
-          aciklama: "İlke burada yükümlülüğe dönüşüyor. Definition of Done'a eklediğimiz \"mevzuat uyumu\" maddesinin dayanağı bu halka.",
+          aciklama: "İlke burada yükümlülüğe dönüşüyor. Bitti Tanımı'na eklediğimiz \"mevzuat uyumu\" maddesinin dayanağı bu halka.",
         },
         {
           ad: "Kurumun onaylı araç ve veri kuralları",
@@ -610,7 +610,7 @@ export const oturum2: Oturum = {
       kartlar: [
         {
           ust: "NEREDE",
-          ana: "Hangi olayda AI açık, hangisinde kapalı",
+          ana: "Hangi etkinlikte AI açık, hangisinde kapalı",
           alt: "Örnek: Planning ve Refinement öncesinde açık, Daily Scrum'ın içinde kapalı. Kararın ekipte kalması gereken yerleri isim isim yazın.",
         },
         {
@@ -669,7 +669,7 @@ export const oturum2: Oturum = {
       baslik: "Kişisel eylem planı",
       giris: "Herkes tek bir deney seçer. Üç alanı doldurun, sohbete yazın.",
       maddeler: [
-        { ana: "Hangi olayda deneyeceğim", alt: "Tek bir olay seçin. Hepsini birden değiştirmek işe yaramıyor; biri oturunca sonrakine geçilir." },
+        { ana: "Hangi etkinlikte deneyeceğim", alt: "Tek bir etkinlik seçin. Hepsini birden değiştirmek işe yaramıyor; biri oturunca sonrakine geçilir." },
         { ana: "İlk adımım ne", alt: "\"Önümüzdeki retrospektifin notlarını temaya indirgeteceğim\" gibi somut ve küçük." },
         { ana: "Nasıl ölçeceğim", alt: "İki Sprint sonra bakılacak tek bir gösterge: süre, madde sayısı ya da ekibin değerlendirmesi." },
       ],

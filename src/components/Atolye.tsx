@@ -104,6 +104,16 @@ export function Atolye({
 
       <p className={a.gorev}>{slayt.gorev}</p>
 
+      {/* Uyarı kutunun ÜSTÜNDE ve sessiz değil. Katılımcının gerçek veri
+          yazabileceği tek an burası; kural sonraki slaytlardan birinde
+          değil, tam burada durmalı. */}
+      {slayt.uyari && (
+        <p className={a.uyari}>
+          <span className={`etiket ${a.uyariEtiket}`}>Yazmadan önce</span>
+          {slayt.uyari}
+        </p>
+      )}
+
       {/* Kalıp kutunun üstünde: katılımcı yazarken önceki slayta dönemiyor. */}
       {slayt.parcalar && slayt.parcalar.length > 0 && (
         <div className={a.parcalar}>

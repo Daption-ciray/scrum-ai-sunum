@@ -69,7 +69,8 @@ const BILDIRIM_ARALIGI = 10_000;
 
 /**
  * Uyarlamalı yoklama.
- * - Sekme öndeyken varsayılan 2 sn.
+ * - Sekme öndeyken varsayılan 1,2 sn. (2 sn'den indirildi: geçiş gecikmesi
+ *   ölçüldüğünde toplam bütçenin yarısı bu aralıktan geliyordu.)
  * - Sekme arkaya düşünce 6 sn'ye seyrelir; öne gelince anında bir kez sorar.
  * - Hata halinde üstel geri çekilme, 10 sn'ye kadar.
  *
@@ -85,7 +86,7 @@ const BILDIRIM_ARALIGI = 10_000;
  * Sunucu paneli ayrı uçtan (/api/panel) besleniyor; orası önbelleklenmiyor.
  */
 export function useYoklama(ayar: Ayar = {}): YoklamaSonucu {
-  const { id, ad, anahtar, aralik = 2000, onAtildi } = ayar;
+  const { id, ad, anahtar, aralik = 1200, onAtildi } = ayar;
 
   const [sonuc, setSonuc] = useState<YoklamaSonucu>({
     durum: BASLANGIC,

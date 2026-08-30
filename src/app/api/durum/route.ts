@@ -21,9 +21,19 @@ export async function GET() {
     { durum, bagli, paylasimli: paylasimliDepo },
     {
       headers: {
-        // 1 sn taze, 4 sn bayat servis edilirken arkada tazeleniyor.
-        // Slayt senkronu zaten saniyeler mertebesinde; bu gecikme fark etmiyor.
-        "cache-control": "public, s-maxage=1, stale-while-revalidate=4",
+        /* ÖLÇÜLDÜ: `stale-while-revalidate=4` ile slayt geçişi katılımcıya
+           medyan 3,9 saniyede ulaşıyordu — CDN dört saniyeye kadar bayat
+           içerik servis ediyor. Ekran paylaşımının gecikmesi zaten 2-5 sn;
+           o gecikmeyi kaldırmak için yazılan sitede bu kabul edilemez.
+
+           swr kaldırıldı: bayatlık en fazla 1 saniye. Fonksiyon yükü
+           değişmiyor, `s-maxage=1` origin'i yine saniyede bir kez vuruyor
+           (CDN istekleri birleştiriyor).
+
+           `stale-if-error` bilerek duruyor: normal sürede bayat servis etmek
+           yanlış, ama origin veya Redis tökezlerse oda donmasın diye on
+           saniyeye kadar eski durumu göstermek doğru. */
+        "cache-control": "public, s-maxage=1, stale-if-error=10",
       },
     },
   );

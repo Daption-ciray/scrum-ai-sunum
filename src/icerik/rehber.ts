@@ -68,11 +68,11 @@ export const REHBER: Record<string, RehberKaydi> = {
   },
   "s1-ampirizm": {
     bilgi:
-      "Ampirizm: bilgi deneyimden gelir. Scrum planı baştan doğru kurmaya değil, gerçekle karşılaşıp düzeltmeye güvenir; Sprint'in kısa olmasının tek sebebi bu — yanlış yönde gidildiğinde kaybı sınırlamak. Üç ayak sıralı ve birbirine bağlı: görünmeyen iş gözden geçirilemez, gözden geçirilmeyen iş uyarlanamaz.",
+      "Deneysellik: bilgi deneyimden gelir. Scrum planı baştan doğru kurmaya değil, gerçekle karşılaşıp düzeltmeye güvenir; Sprint'in kısa olmasının tek sebebi bu — yanlış yönde gidildiğinde kaybı sınırlamak. Üç taşıyıcı kolon sıralı ve birbirine bağlı: görünmeyen iş gözlemlenemez, gözlemlenmeyen iş adapte edilemez.",
   },
   "s1-uc-bes-uc": {
     bilgi:
-      "Harita slaydı. Dikkat: Sprint'in kendisi de bir olaydır — diğer dördünü içeren kap. Bunu soran çıkabilir.",
+      "Harita slaydı. Dikkat: Sprint'in kendisi de bir etkinliktir — diğer dördünü içeren kap. Bunu soran çıkabilir.",
   },
   "s1-sorumluluklar": {
     bilgi:
@@ -112,7 +112,7 @@ export const REHBER: Record<string, RehberKaydi> = {
   },
   "s1-4d": {
     bilgi:
-      "4D AI Fluency çerçevesi (Delegation · Description · Discernment · Diligence), bu destenin omurgası. Dördü sırayla ilerliyor: Delegasyon (bu iş devredilebilir mi) → Tarif (model neyi bilmiyor) → Muhakeme (bu çıktı neyi kaçırdı) → Sahiplenme (bunu imzalayabilir miyim). Eşleme: delegasyon → ikinci oturumun olay blokları, tarif → beşinci blok, muhakeme → çıktı değerlendirme, sahiplenme → güvenlik bloğu ve çalışma anlaşması.",
+      "4D AI Fluency çerçevesi (Delegation · Description · Discernment · Diligence), bu destenin omurgası. Dördü sırayla ilerliyor: Delegasyon (bu iş devredilebilir mi) → Tarif (model neyi bilmiyor) → Muhakeme (bu çıktı neyi kaçırdı) → Sahiplenme (bunu imzalayabilir miyim). Eşleme: delegasyon → ikinci oturumun etkinlik blokları, tarif → beşinci blok, muhakeme → çıktı değerlendirme, sahiplenme → güvenlik bloğu ve çalışma anlaşması.",
   },
   "s1-olaylar": {
     bilgi:
@@ -126,7 +126,7 @@ export const REHBER: Record<string, RehberKaydi> = {
   },
   "s1-quiz-temeller": {
     bilgi:
-      "Sorular birinci oturumun tamamını tarıyor: manifesto · ampirizm · Sprint Backlog sahipliği · üretken AI ne değildir · katmanlar · bağlam penceresi · halüsinasyon nedeni · güvenilir iş · Hype Cycle ekseni · 4D muhakeme. Şıkka tıklamak doğrudan gönderiyor, ilk tıklama geçerli. Süre dolunca soru kendi kendine kilitleniyor. En çok zorlanılan sorular genellikle katmanlar, Hype Cycle ekseni ve 4D muhakeme.",
+      "Sorular birinci oturumun tamamını tarıyor: manifesto · deneysellik · Sprint Backlog sahipliği · üretken AI ne değildir · katmanlar · bağlam penceresi · halüsinasyon nedeni · güvenilir iş · Hype Cycle ekseni · 4D muhakeme. Şıkka tıklamak doğrudan gönderiyor, ilk tıklama geçerli. Süre dolunca soru kendi kendine kilitleniyor. En çok zorlanılan sorular genellikle katmanlar, Hype Cycle ekseni ve 4D muhakeme.",
     soru:
       "\"Yanlış tıkladım, düzeltebilir miyim?\" → Hayır, ilk tıklama geçerli. Bunu BAŞLAMADAN ÖNCE söyle ki kimse şaşırmasın.",
     uyari:
