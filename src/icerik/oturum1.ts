@@ -37,8 +37,9 @@ export const oturum1: Oturum = {
         { ana: "Bağlantı koparsa", alt: "Sayfayı yenileyin. Aynı adla, kaldığınız yerden devam edersiniz." },
         { ana: "Soru sormak için", alt: "Toplantı sohbetine yazabilir veya söz isteyebilirsiniz; her blok sonunda duruluyor." },
         { ana: "Serbest gezinme açık", alt: "Galeriden istediğiniz bloğa geçebilirsiniz; eğitmenin konumu kartta işaretli kalır." },
+        { ana: "Yazacaksınız ve cevaplayacaksınız", alt: "On soruluk bir bilgi kontrolü ve kendi isteminizi yazacağınız bir atölye var. Ön hazırlık gerekmiyor." },
       ],
-      not: "İki dakikayı geçme. Amaç teknik sorunları burada bitirmek. Bağlı sayısı katılımcı sayısını tutuyor mu, kontrol et.",
+      not: "İki dakikayı geçme. Amaç teknik sorunları burada bitirmek. Bağlı sayısı katılımcı sayısını tutuyor mu, kontrol et. Son maddeyi atlamadan oku — beklenti kurmak katılımı artırıyor, quiz ve atölye sürpriz olmasın.",
     },
     {
       id: "s1-hedefler",
