@@ -104,6 +104,17 @@ export function Atolye({
 
       <p className={a.gorev}>{slayt.gorev}</p>
 
+      {/* Kalıp kutunun üstünde: katılımcı yazarken önceki slayta dönemiyor. */}
+      {slayt.parcalar && slayt.parcalar.length > 0 && (
+        <div className={a.parcalar}>
+          {slayt.parcalar.map((p) => (
+            <span key={p} className={`etiket ${a.parca}`}>
+              {p}
+            </span>
+          ))}
+        </div>
+      )}
+
       {gonderilen ? (
         <div className={a.gonderildi}>
           <span className={`etiket ${a.rozet}`}>Gönderildi</span>

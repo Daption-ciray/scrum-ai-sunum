@@ -16,6 +16,16 @@
   max-width: 70ch;
 }
 
+/* Kalıp hatırlatması. Kutunun hemen üstünde duruyor çünkü katılımcı yazarken
+   beş parçayı görmek zorunda ve slayt değiştirip kalıba dönemiyor. */
+.parcalar { display: flex; flex-wrap: wrap; gap: .4rem; }
+.parca {
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  color: var(--metin);
+  padding: .35em .7em;
+}
+
 .kutu {
   width: 100%;
   resize: vertical;
@@ -90,5 +100,15 @@
 }
 
 @media (max-width: 680px) {
-  .kutu { box-shadow: 3px 3px 0 0 var(--cizgi-2); font-size: var(--ol-kucuk); }
+  /* Kalıp hatırlatması. Kutunun hemen üstünde duruyor çünkü katılımcı yazarken
+   beş parçayı görmek zorunda ve slayt değiştirip kalıba dönemiyor. */
+.parcalar { display: flex; flex-wrap: wrap; gap: .4rem; }
+.parca {
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  color: var(--metin);
+  padding: .35em .7em;
+}
+
+.kutu { box-shadow: 3px 3px 0 0 var(--cizgi-2); font-size: var(--ol-kucuk); }
 }

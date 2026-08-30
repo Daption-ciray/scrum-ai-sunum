@@ -109,6 +109,9 @@ export type SlaytGovde =
       giris?: string;
       /** Katılımcıya verilen somut görev. Kutunun hemen üstünde duruyor. */
       gorev: string;
+      /** Kutunun üstünde duran hatırlatma etiketleri — kalıbın parçaları.
+          Katılımcı yazarken slayt değiştirip kalıba geri dönemiyor. */
+      parcalar?: string[];
       yerTutucu?: string;
       ipucu?: string;
       kaynak?: string;

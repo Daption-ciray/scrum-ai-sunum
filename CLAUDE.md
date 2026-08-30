@@ -463,8 +463,9 @@ Baştan başlayın, blok blok ilerleyin.
    katman 10K/gün. İki oturum ~$0,60. Gerçek oturumdan önce şart.
 4. **Production'a yeni sürümü çıkarmak** — canlıdaki deploy 30 Ağustos
    öncesinden; 75 kişilik ölçek ve çıkış düğmesi orada yok.
-5. **`SUNUCU_ANAHTARI` kontrolü** — Vercel'de tanımlı ama değeri gizli.
-   Hâlâ `degistir-beni` ise değiştirin; depo public.
+5. ~~`SUNUCU_ANAHTARI` kontrolü~~ — **kapatıldı, kullanıcı kararı.** Depo
+   public olduğu için gündeme gelmişti; kullanıcı riski görüp "kalsın" dedi.
+   Tekrar açmayın.
 6. Oturum kaydedilecek mi, yönetici oturumda olacak mı
 7. Görsel kimlik: şu an bağımsız 8-bit tema. Kurumsal renge geçilecekse
    `tema.css` (ve `layout.tsx` içindeki `themeColor`, `icon.svg`)
