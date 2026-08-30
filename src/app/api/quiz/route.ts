@@ -1,4 +1,5 @@
 import { durumuOku, quizCevapYaz } from "@/lib/depo";
+import { SORU_SURESI, SURE_TOLERANSI } from "@/lib/durum";
 import { OTURUMLAR, slaytAl } from "@/icerik";
 import { dogrula } from "@/icerik/cevaplar";
 
@@ -50,6 +51,12 @@ export async function POST(istek: Request) {
   const soru = slayt.sorular[durum.quizSoru];
   if (!soru) {
     return Response.json({ hata: "Aktif soru yok." }, { status: 409 });
+  }
+  /* Süre sunucuda da kontrol ediliyor. İstemcideki geri sayım yalnızca
+     arayüzü kilitliyor; sekmesi duraklamış veya isteği elle atan biri
+     süresi geçmiş soruya cevap yazamasın. Tolerans ağ gecikmesi payı. */
+  if (Date.now() - durum.quizAcildi > SORU_SURESI + SURE_TOLERANSI) {
+    return Response.json({ hata: "Süre doldu." }, { status: 409 });
   }
 
   const sik = Number(govde.sik);

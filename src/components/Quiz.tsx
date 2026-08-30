@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { Slayt } from "@/icerik/tipler";
-import type { Durum } from "@/lib/durum";
+import { SORU_SURESI, type Durum } from "@/lib/durum";
 import { kimlikAl } from "@/lib/kimlik";
 import q from "./quiz.module.css";
 
@@ -49,8 +49,33 @@ export function Quiz({
 
   const aktif = durum?.quizSoru ?? -1;
   const acik = durum?.quizAcik ?? false;
+  const acildi = durum?.quizAcildi ?? 0;
   const soru = slayt.sorular[aktif];
   const secilen = verilen[aktif];
+
+  /* Geri sayım: sunucunun damgasından fark hesaplanmıyor, damganın DEĞİŞTİĞİ
+     an yerel saatte işaretleniyor. Katılımcının cihaz saati birkaç saniye
+     kaymış olabilir ve kimse sayaç yüzünden soru kaybetmemeli. Senkron kayması
+     en fazla bir yoklama turu (~2 sn) kadar. */
+  const [kalan, setKalan] = useState(SORU_SURESI);
+  useEffect(() => {
+    if (!acik || !acildi) {
+      setKalan(0);
+      return;
+    }
+    const baslangic = Date.now();
+    setKalan(SORU_SURESI);
+    const tik = () => {
+      const k = Math.max(0, SORU_SURESI - (Date.now() - baslangic));
+      setKalan(k);
+      if (k <= 0) clearInterval(sayac);
+    };
+    const sayac = setInterval(tik, 250);
+    return () => clearInterval(sayac);
+  }, [acik, acildi]);
+
+  const suresiDoldu = acik && kalan <= 0;
+  const saniye = Math.ceil(kalan / 1000);
 
   useEffect(() => {
     setVerilen(yerelOku(slayt.id));
@@ -64,7 +89,7 @@ export function Quiz({
 
   const sec = useCallback(
     async (sik: number) => {
-      if (!acik || gonderiliyor || secilen !== undefined) return;
+      if (!acik || gonderiliyor || secilen !== undefined || kalan <= 0) return;
       const kimlik = kimlikAl();
       if (!kimlik?.id || !kimlik.ad) {
         setHata("Kimlik bulunamadı. Sayfayı yenileyip adınızı tekrar girin.");
@@ -92,7 +117,7 @@ export function Quiz({
         setGonderiliyor(false);
       }
     },
-    [acik, aktif, gonderiliyor, secilen, slayt.id, verilen],
+    [acik, aktif, gonderiliyor, kalan, secilen, slayt.id, verilen],
   );
 
   const durumMetni =
@@ -138,6 +163,22 @@ export function Quiz({
             {soru.soru}
           </p>
 
+          {/* Geri sayım. Son beş saniyede uyarı rengine dönüyor; rakam mono,
+              çubuk adımlı — piksel font kesirli boyutta rakam okutmuyor. */}
+          {acik && secilen === undefined && (
+            <div className={`${q.sayacSar} ${saniye <= 5 ? q.sayacAz : ""}`}>
+              <div className={q.sayacYol} aria-hidden>
+                <div
+                  className={q.sayacDolgu}
+                  style={{ width: `${(kalan / SORU_SURESI) * 100}%` }}
+                />
+              </div>
+              <span className={`mono ${q.sayacSayi}`} aria-live="off">
+                {saniye}
+              </span>
+            </div>
+          )}
+
           <div className={q.sikler}>
             {soru.secenekler.map((sik, ki) => (
               <button
@@ -145,7 +186,7 @@ export function Quiz({
                 type="button"
                 className={`${q.sik} ${secilen === ki ? q.secili : ""}`}
                 onClick={() => sec(ki)}
-                disabled={!acik || gonderiliyor || secilen !== undefined}
+                disabled={!acik || gonderiliyor || secilen !== undefined || kalan <= 0}
                 aria-pressed={secilen === ki}
               >
                 {sik}

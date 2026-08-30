@@ -37,6 +37,35 @@
 }
 
 /* Şıklar ızgarada: uzun şıkkın kısa şıkkı yamultmaması için. */
+/* --- geri sayım -----------------------------------------------------------
+   Yalnızca arayüzü kilitliyor; asıl kontrol sunucuda. Çubuk adımlı değil
+   sürekli, çünkü 20 saniyede adımlı hareket kesik kesik görünüyor —
+   burada hareketin kendisi bilgi taşıyor. */
+
+.sayacSar { display: flex; align-items: center; gap: .7rem; }
+.sayacYol {
+  flex: 1;
+  height: 10px;
+  border: var(--kenar) solid var(--cizgi-2);
+  background: var(--yuzey);
+}
+.sayacDolgu {
+  height: 100%;
+  background: var(--metin);
+  transition: width .25s linear;
+}
+.sayacSayi {
+  flex: 0 0 auto;
+  min-width: 2.2ch;
+  text-align: right;
+  font-size: var(--ol-baslik);
+  font-weight: 700;
+  color: var(--metin);
+  font-variant-numeric: tabular-nums;
+}
+.sayacAz .sayacDolgu { background: var(--kotu); }
+.sayacAz .sayacSayi { color: var(--kotu); }
+
 .sikler {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
@@ -91,6 +120,35 @@
 }
 
 @media (max-width: 680px) {
-  .sikler { grid-template-columns: 1fr; }
+  /* --- geri sayım -----------------------------------------------------------
+   Yalnızca arayüzü kilitliyor; asıl kontrol sunucuda. Çubuk adımlı değil
+   sürekli, çünkü 20 saniyede adımlı hareket kesik kesik görünüyor —
+   burada hareketin kendisi bilgi taşıyor. */
+
+.sayacSar { display: flex; align-items: center; gap: .7rem; }
+.sayacYol {
+  flex: 1;
+  height: 10px;
+  border: var(--kenar) solid var(--cizgi-2);
+  background: var(--yuzey);
+}
+.sayacDolgu {
+  height: 100%;
+  background: var(--metin);
+  transition: width .25s linear;
+}
+.sayacSayi {
+  flex: 0 0 auto;
+  min-width: 2.2ch;
+  text-align: right;
+  font-size: var(--ol-baslik);
+  font-weight: 700;
+  color: var(--metin);
+  font-variant-numeric: tabular-nums;
+}
+.sayacAz .sayacDolgu { background: var(--kotu); }
+.sayacAz .sayacSayi { color: var(--kotu); }
+
+.sikler { grid-template-columns: 1fr; }
   .sik { box-shadow: 2px 2px 0 0 var(--cizgi-2); }
 }

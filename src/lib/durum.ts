@@ -28,6 +28,15 @@ export type Durum = {
   quizSoru: number;
   /** Aktif soru cevaplanabilir mi. Sunucu açar, sunucu kapatır. */
   quizAcik: boolean;
+  /**
+   * Aktif sorunun açıldığı an. Geri sayımın çıpası bu.
+   *
+   * İstemci bu değerin DEĞİŞTİĞİNİ görünce kendi 20 saniyesini başlatıyor —
+   * sunucunun damgasından fark hesaplamıyor. Sebebi saat kayması: katılımcının
+   * cihaz saati birkaç saniye ileri veya geri olabilir ve kimse sayaç yüzünden
+   * soru kaybetmemeli. Kayma en fazla bir yoklama turu (2 sn) kadar.
+   */
+  quizAcildi: number;
   /** Her değişiklikte artar. İstemci bunu karşılaştırıp gereksiz render etmez. */
   surum: number;
   zaman: number;
@@ -41,9 +50,15 @@ export const BASLANGIC: Durum = {
   istemAcik: false,
   quizSoru: -1,
   quizAcik: false,
+  quizAcildi: 0,
   surum: 0,
   zaman: 0,
 };
+
+/** Soru başına cevaplama süresi. On soruda toplam 200 saniye. */
+export const SORU_SURESI = 20_000;
+/** Ağ gecikmesi payı: sunucu bu kadar geç gelen cevabı da kabul ediyor. */
+export const SURE_TOLERANSI = 2_000;
 
 export type Katilimci = { id: string; ad: string; son: number };
 

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Perde, Slayt } from "@/components/Slayt";
 import { OTURUMLAR, bloklar } from "@/icerik";
-import type { Durum } from "@/lib/durum";
+import { SORU_SURESI, type Durum } from "@/lib/durum";
 import {
   anahtarDogrula,
   komutGonder,
@@ -350,6 +350,23 @@ function QuizKarti({
 }) {
   const sorular = (slayt.sorular ?? []) as { soru: string; secenekler: string[] }[];
   const aktif = durum.quizSoru;
+
+  /* Sunucunun da geri sayımı görmesi gerek: "beş saniye" deyip sonrakine
+     geçebilsin. Katılımcı ekranıyla aynı mantık — damganın değiştiği an
+     yerel saatte işaretleniyor, saat kayması sorun çıkarmasın. */
+  const [kalan, setKalan] = useState(0);
+  useEffect(() => {
+    if (!durum.quizAcik || !durum.quizAcildi) {
+      setKalan(0);
+      return;
+    }
+    const bas = Date.now();
+    setKalan(SORU_SURESI);
+    const sayac = setInterval(() => {
+      setKalan(Math.max(0, SORU_SURESI - (Date.now() - bas)));
+    }, 250);
+    return () => clearInterval(sayac);
+  }, [durum.quizAcik, durum.quizAcildi]);
   const basladi = aktif >= 0;
   const bitti = aktif >= sorular.length;
   const sonSoru = aktif >= sorular.length - 1;
@@ -363,6 +380,12 @@ function QuizKarti({
           : bitti
             ? "bitti"
             : `soru ${aktif + 1}/${sorular.length} · ${veri.cevaplayan} cevap`}
+        {durum.quizAcik && kalan > 0 && (
+          <span className={p.quizSayac}> · {Math.ceil(kalan / 1000)} sn</span>
+        )}
+        {durum.quizAcik && kalan <= 0 && (
+          <span className={p.quizSayacBitti}> · süre doldu</span>
+        )}
       </span>
 
       <div className={p.atolyeDugmeler}>

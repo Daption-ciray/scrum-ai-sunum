@@ -75,7 +75,7 @@ export async function POST(istek: Request) {
       yeni.perde = !onceki.perde;
       break;
     case "sifirla":
-      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false, quizAcik: false, quizSoru: -1 };
+      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false, quizAcik: false, quizSoru: -1, quizAcildi: 0 };
       break;
     case "istem": {
       // Hangi atölye olduğu slayttan çıkarılıyor; panel id göndermiyor.
@@ -120,17 +120,21 @@ export async function POST(istek: Request) {
         case "basla":
           yeni.quizSoru = 0;
           yeni.quizAcik = true;
+          yeni.quizAcildi = Date.now();
           break;
         case "kapat":
           // Soru ekranda kalır, cevaplama durur — dağılımı konuşurken gerek.
           yeni.quizAcik = false;
           break;
         case "ac":
+          // Yeniden açmak süreyi de sıfırdan başlatıyor.
           yeni.quizAcik = true;
+          yeni.quizAcildi = Date.now();
           break;
         case "sonraki":
           yeni.quizSoru = Math.min(onceki.quizSoru + 1, sonSoru);
           yeni.quizAcik = true;
+          yeni.quizAcildi = Date.now();
           break;
         case "bitir":
           // Soru sayısına eşitlemek "bitti" demek; katılımcı kapanış görüyor.
@@ -141,6 +145,7 @@ export async function POST(istek: Request) {
           await quizSifirla(slayt.id);
           yeni.quizSoru = -1;
           yeni.quizAcik = false;
+          yeni.quizAcildi = 0;
           break;
       }
       break;

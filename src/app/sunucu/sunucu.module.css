@@ -303,6 +303,9 @@
    Dağılım çubuğu yüzde, sayı adet. Doğru şık kalın; sunucu bir bakışta
    odanın nerede takıldığını görüyor. */
 
+.quizSayac { color: var(--metin); font-weight: 700; }
+.quizSayacBitti { color: var(--kotu); }
+
 .quizDagilim { display: flex; flex-direction: column; gap: .7rem; }
 /* Aktif soru vurgulu; geri kalanı soluk. Sunucu geriye bakıp "burada
    takıldınız" diyebilsin diye hepsi listede duruyor. */

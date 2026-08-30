@@ -260,10 +260,23 @@ soru başına ayrı anahtar sıfırlamada N tane DEL isterdi.
 başına iki tıklama akışı yavaşlatıyordu. `HSETNX` ilk tıklamayı geçerli
 kılıyor ve ekranda bu yazıyor.
 
-**Geri sayım YOK.** Puan yalnızca doğru oranı; hız sadece eşitlik bozuyor.
-Ortak sayaç ağı yavaş olanı sistematik olarak kaybettirirdi ve bu site zaten
-o gecikmeyi kaldırmak için yazıldı. Payda her zaman TOPLAM soru sayısı —
-sorusu kaçan katılımcı boş bırakmış sayılıyor.
+**Geri sayım var: soru başına 20 sn, toplam 200 sn** (`SORU_SURESI`,
+`src/lib/durum.ts`). Eski motorda geri sayım REDDEDİLMİŞTİ çünkü orada PUAN
+hıza bağlıydı ve ağı yavaş olan sistematik olarak kaybediyordu. Burada puan
+yalnızca doğru oranı; sayaç sadece soruyu kapatıyor, yani gecikmenin bedeli
+puan değil birkaç saniye. Gerekçe değişti, karar da değişti.
+
+Sayaç sunucunun damgasından FARK hesaplamıyor: istemci `Durum.quizAcildi`
+değerinin DEĞİŞTİĞİNİ görünce kendi 20 saniyesini başlatıyor. Sebebi cihaz
+saati kayması — kimse saati yüzünden soru kaybetmesin. Senkron kayması en
+fazla bir yoklama turu (~2 sn).
+
+**Süre sunucuda da kontrol ediliyor** (`SURE_TOLERANSI` = 2 sn pay).
+İstemcideki sayaç yalnızca arayüzü kilitliyor; sekmesi duraklamış veya
+isteği elle atan biri süresi geçmiş soruya yazamıyor.
+
+Payda her zaman TOPLAM soru sayısı — sorusu kaçan katılımcı boş bırakmış
+sayılıyor.
 
 **Doğru cevaplar `src/icerik/cevaplar.ts` içinde ve sunucuda kalır.** Bu dosyayı
 hiçbir istemci bileşeninden import etmeyin. `dogrula()` kontrolü bir ara

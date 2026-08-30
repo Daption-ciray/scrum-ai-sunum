@@ -432,7 +432,7 @@ export const oturum1: Oturum = {
       blok: "AI temelleri ve sınırları",
       tip: "quiz",
       baslik: "Bilgi kontrolü",
-      giris: "On soru, tek tek geliyor. Buraya kadar konuştuğumuz her şey içinde. Şıkka tıkladığınız an kaydediliyor — değiştirilemiyor. Puanınız oturum sonundaki sıralamaya giriyor.",
+      giris: "On soru, tek tek geliyor. Her soru için 20 saniyeniz var — toplam 200 saniye. Şıkka tıkladığınız an kaydediliyor, değiştirilemiyor. Puanınız oturum sonundaki sıralamaya giriyor.",
       sorular: [
         {
           soru: "Agile Manifesto'nun ilk değeri neyi neyin önüne koyar?",
@@ -462,8 +462,13 @@ export const oturum1: Oturum = {
           ],
         },
         {
-          soru: "Gartner'ın öngörüsüne göre 2029'da kuruluşların yüzde kaçı küçük yazılım ekiplerine geçmiş olacak?",
-          secenekler: ["%15", "%30", "%60", "%90"],
+          soru: "Aşağıdakilerden hangisi üretken AI DEĞİLDİR?",
+          secenekler: [
+            "Metin tarifinden görsel üreten model",
+            "Toplantı notundan özet çıkaran asistan",
+            "Kredi başvurusunu onay veya ret diye sınıflandıran model",
+            "Yazarken kodu tamamlayan araç",
+          ],
         },
         {
           soru: "AI katmanlarında üretken AI nerede durur?",
@@ -520,7 +525,7 @@ export const oturum1: Oturum = {
           ],
         },
       ],
-      not: "Panelden \"Başlat\", sonra her soruda: 20-30 saniye ver, \"Cevaplamayı kapat\"a bas, dağılıma bak, bir cümleyle doğruyu söyle, \"Sonraki soru\". On soru ~7 dakika — hızlı git, tartışma açma. DAĞILIM YALNIZCA SENİN EKRANINDA: çoğunluğu gören katılımcı ona uyar, bilgi kontrolü ankete döner. Panelde bütün sorular listeleniyor, aktif olan vurgulu — geriye bakıp \"burada takıldınız\" diyebilirsin. En çok yanlış gelen soruyu quiz bittikten sonra tekrar anlat; genellikle 5, 9 ve 10 zorlanılan sorular. Doğru cevaplar sunucuda, `src/icerik/cevaplar.ts` — katılımcının tarayıcısına inmiyor.",
+      not: "Panelden \"Başlat\". Her soru 20 saniyede KENDİ KENDİNE kilitleniyor, sen kapatmak zorunda değilsin — panelde de geri sayımı görüyorsun. Süre dolunca dağılıma bak, bir cümleyle doğruyu söyle, \"Sonraki soru\". Cevaplama süresi toplam 200 saniye; araya koyduğun açıklamalarla blok ~7 dakika. Hızlı git, tartışma açma. DAĞILIM YALNIZCA SENİN EKRANINDA: çoğunluğu gören katılımcı ona uyar, bilgi kontrolü ankete döner. Panelde bütün sorular listeleniyor, aktif olan vurgulu — geriye bakıp \"burada takıldınız\" diyebilirsin. En çok yanlış gelen soruyu quiz bittikten sonra tekrar anlat; genellikle 5, 9 ve 10 zorlanılan sorular. Doğru cevaplar sunucuda, `src/icerik/cevaplar.ts` — katılımcının tarayıcısına inmiyor.",
     },
 
     /* ---- 00:41 · Etkili istem yazımı ---- */
