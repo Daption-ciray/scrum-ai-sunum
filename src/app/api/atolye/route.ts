@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
  * KİŞİYE ÖZEL DEĞİL: herkese aynı yanıt gidiyor, o yüzden önbelleklenebilir.
  * Buraya kişiye özel bir alan eklerseniz önbelleği kaldırın.
  *
- * En kötü istemin SAHİBİ bu yanıtta YOK ve olmayacak. Ad yalnızca sunucu
+ * Eksik istemi YAZANIN adı bu yanıtta YOK ve olmayacak. Ad yalnızca sunucu
  * panelinde görünüyor; katılımcının ekranına inen tek şey metnin kendisi.
  * Amaç dersi göstermek, kimseyi odada küçük düşürmek değil.
  */

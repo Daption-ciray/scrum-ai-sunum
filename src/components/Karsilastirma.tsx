@@ -7,14 +7,15 @@ import k from "./karsilastirma.module.css";
 type Yanit = {
   toplam: number;
   iyi: { ad: string; metin: string } | null;
-  /** Ad YOK — en kötü istemin sahibi hiçbir zaman istemciye inmiyor. */
+  /** Ad YOK — eksik istemi yazan hiçbir zaman istemciye inmiyor. */
   kotu: { metin: string } | null;
 };
 
 /**
- * Atölye çıktısı: en iyi ve en kötü istem yan yana.
+ * Atölye çıktısı: tam istem ve eksik istem yan yana.
  *
- * En iyinin sahibi adıyla görünüyor, en kötününki GÖRÜNMÜYOR. Ödül kişiye,
+ * Tam istemi yazan adıyla görünüyor, eksik istemi yazan GÖRÜNMÜYOR. "Kötü"
+ * değil "eksik" deniyor: eksik olan istem, kişi değil. Ödül kişiye,
  * ders odaya. Sansür sunucu tarafında: `/api/atolye` yanıtında `kotu.ad`
  * diye bir alan hiç yok, istemcide gizlenmiyor.
  *
@@ -71,7 +72,7 @@ export function Karsilastirma({
       <div className={k.ikili}>
         <section className={`${k.panel} ${k.iyi}`}>
           <header className={k.tepe}>
-            <span className={`etiket ${k.rozet}`}>En iyi istem</span>
+            <span className={`etiket ${k.rozet}`}>Tam istem</span>
             {veri?.iyi && <span className={k.sahip}>{veri.iyi.ad}</span>}
           </header>
           <pre className={k.metin}>
@@ -90,7 +91,7 @@ export function Karsilastirma({
 
         <section className={`${k.panel} ${k.kotu}`}>
           <header className={k.tepe}>
-            <span className={`etiket ${k.rozet}`}>En kötü istem</span>
+            <span className={`etiket ${k.rozet}`}>Eksik istem</span>
             {/* Ad yok ve olmayacak — sunucu yanıtında da yok. */}
             <span className={k.sahip}>Anonim</span>
           </header>

@@ -660,12 +660,12 @@ Varsayım yaptığın yeri [VARSAYIM] diye işaretle.`,
       id: "s1-atolye-sonuc",
       blok: "Etkili istem yazımı",
       tip: "karsilastirma",
-      baslik: "En iyi ve en kötü istem",
+      baslik: "Aynı görev, iki istem",
       giris:
         "İkisi de aynı iş öğesi için, aynı modele yazıldı. Şimdi ikisini de aynı araca vereceğiz. Bakacağımız soru: iki çıktı arasındaki fark hangi parçadan geliyor?",
       kaynakSlayt: "s1-atolye-istem",
       araclar: ["ChatGPT", "Microsoft Copilot", "Gemini", "Claude"],
-      not: "EN KÖTÜ İSTEMİN SAHİBİ EKRANDA GÖRÜNMÜYOR ve adını sen de söyleme — ders odaya, ödül kişiye. En iyiyi yazanın adını oku, kısa bir teşekkür yeter. Sonra iki kopyala düğmesini kullanıp ikisini de kurumun onaylı asistanına art arda yapıştır, çıktıları ekranda göster. Sorulacak soru: iki çıktı arasındaki fark hangi parçadan geliyor? Cevap neredeyse her zaman BAĞLAM. Araç listesi örnek — kurumda onaylı olan hangisiyse onu kullan.",
+      not: "EKSİK İSTEMİ YAZANIN ADI EKRANDA GÖRÜNMÜYOR ve sen de söyleme — ders odaya, ödül kişiye. \"Eksik\" diyoruz, \"kötü\" demiyoruz: eksik olan istem, kişi değil. Tam istemi yazanın adını oku, kısa bir teşekkür yeter. Sonra iki kopyala düğmesini kullanıp ikisini de kurumun onaylı asistanına art arda yapıştır, çıktıları ekranda göster. Sorulacak soru: iki çıktı arasındaki fark hangi parçadan geliyor? Cevap neredeyse her zaman BAĞLAM. Araç listesi örnek — kurumda onaylı olan hangisiyse onu kullan.",
     },
 
     /* ---- 00:55 · Özet ve kapanış ---- */

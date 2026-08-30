@@ -503,8 +503,8 @@ function QuizKarti({
  * Atölye kartı — 75 istemi okumak yerine sıralı listeye bakılıyor.
  *
  * Puan KALİTE değil KALIP kontrolü: beş parçadan kaçı var. Sıralamanın işi
- * sunucuyu en üstteki ve en alttaki birkaç isteme götürmek; en iyi ve en kötü
- * kararı yine sunucunun. Aynı satıra ikinci kez basmak işareti kaldırıyor.
+ * sunucuyu en üstteki ve en alttaki birkaç isteme götürmek; tam ve eksik
+ * istem kararı yine sunucunun. Aynı satıra ikinci kez basmak işareti kaldırıyor.
  */
 function AtolyeKarti({
   veri,
@@ -614,7 +614,7 @@ function AtolyeKarti({
               className={p.kopyaDugme}
               onClick={() => kopyala("iyi", iyi.metin)}
             >
-              {kopyalanan === "iyi" ? "Kopyalandı" : `En iyiyi kopyala — ${iyi.ad}`}
+              {kopyalanan === "iyi" ? "Kopyalandı" : `Tam istemi kopyala — ${iyi.ad}`}
             </button>
           )}
           {kotu && (
@@ -623,7 +623,7 @@ function AtolyeKarti({
               className={p.kopyaDugme}
               onClick={() => kopyala("kotu", kotu.metin)}
             >
-              {kopyalanan === "kotu" ? "Kopyalandı" : "En kötüyü kopyala — anonim"}
+              {kopyalanan === "kotu" ? "Kopyalandı" : "Eksik istemi kopyala — anonim"}
             </button>
           )}
         </div>
@@ -668,8 +668,8 @@ function AtolyeKarti({
                 type="button"
                 className={p.istemIsaret}
                 onClick={() => gonder({ komut: "istem", eylem: "iyi", deger: i.id })}
-                title="En iyi olarak işaretle"
-                aria-label={`${i.ad} — en iyi olarak işaretle`}
+                title="Tam istem olarak işaretle"
+                aria-label={`${i.ad} — tam istem olarak işaretle`}
               >
                 ✓
               </button>
@@ -677,8 +677,8 @@ function AtolyeKarti({
                 type="button"
                 className={p.istemIsaret}
                 onClick={() => gonder({ komut: "istem", eylem: "kotu", deger: i.id })}
-                title="En kötü olarak işaretle"
-                aria-label={`${i.ad} — en kötü olarak işaretle`}
+                title="Eksik istem olarak işaretle"
+                aria-label={`${i.ad} — eksik istem olarak işaretle`}
               >
                 ✗
               </button>

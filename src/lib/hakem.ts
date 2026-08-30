@@ -4,7 +4,7 @@ import type { Istem } from "./depo";
    HAKEM — istemleri LLM'e yargılatan katman.
 
    Anahtar kelime puanı (istemPuan.ts) ELEME yapıyor, bu dosya YARGI yapıyor.
-   75 istemin tamamı gönderilmiyor: elek en iyi ve en kötü uçları seçiyor,
+   75 istemin tamamı gönderilmiyor: elek iki ucu seçiyor,
    hakem yalnızca onlara bakıyor. Tek çağrı, ~10 istem.
 
    Neden TEK çağrıda hepsi: model istemleri BİRLİKTE görünce göreli yargı

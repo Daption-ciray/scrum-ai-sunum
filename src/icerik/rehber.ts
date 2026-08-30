@@ -158,9 +158,9 @@ export const REHBER: Record<string, RehberKaydi> = {
   },
   "s1-atolye-sonuc": {
     bilgi:
-      "En kötü istemin sahibinin adı hiçbir zaman katılımcı ekranına inmiyor — sunucu yanıtında böyle bir alan yok. Ad yalnızca senin panelinde. Kırmızı ve yeşil, katılımcının yarım saat önce gördüğü çevir kartıyla aynı çift; ders o eşleşmeden geliyor.",
+      "Eksik istemi yazanın adı hiçbir zaman katılımcı ekranına inmiyor — sunucu yanıtında böyle bir alan yok. Ad yalnızca senin panelinde. Kırmızı ve yeşil, katılımcının yarım saat önce gördüğü çevir kartıyla aynı çift; ders o eşleşmeden geliyor.",
     uyari:
-      "En kötü istemi kimin yazdığını SÖYLEME. Ödül kişiye, ders odaya.",
+      "Eksik istemi kimin yazdığını SÖYLEME. Ödül kişiye, ders odaya. Ve \"kötü\" deme, \"eksik\" de — eksik olan istem, kişi değil.",
   },
 
   /* ---- Blok 06 · Özet ve kapanış ---- */

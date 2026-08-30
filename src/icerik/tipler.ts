@@ -123,7 +123,7 @@ export type SlaytGovde =
       ipucu?: string;
       kaynak?: string;
     }
-  /** Atölye çıktısı: en iyi ve en kötü istem yan yana. */
+  /** Atölye çıktısı: tam istem ve eksik istem yan yana. */
   | {
       tip: "karsilastirma";
       baslik: string;

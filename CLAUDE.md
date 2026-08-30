@@ -329,7 +329,14 @@ anahtar kelime **eleğinin** puanı × 10; hakem puanı bilerek kullanılmıyor
 sıralamada adaletsiz olurdu. Slayt bu yüzden "kalıp puanı" diyor, "kalite
 puanı" demiyor — sunucu notu da bunu söylemeyi hatırlatıyor.
 
-**Atölye: istem yaz → puanla → en iyi/en kötü → canlı karşılaştır.**
+**"En iyi / en kötü" değil, "tam istem / eksik istem".** Anonim olsa bile
+"en kötü" kırıcı ve yanlış şeyi adlandırıyor: eksik olan istem, kişi değil.
+Katılımcı ekranında, panelde ve sunucu notlarında bu dil kullanılıyor —
+`iyi`/`kotu` yalnızca kod içi anahtar olarak kaldı, oraya dokunmaya gerek yok.
+Karşılaştırma slaydının başlığı da "Aynı görev, iki istem": başlık cevabı
+vermiyor, çünkü slaydın sorusu zaten "fark hangi parçadan geliyor?".
+
+**Atölye: istem yaz → puanla → tam/eksik istem → canlı karşılaştır.**
 İki slayt (`s1-atolye-istem` tip `atolye`, `s1-atolye-sonuc` tip
 `karsilastirma`) ve dört karar:
 
@@ -570,6 +577,21 @@ Tam oturum yükü, koddan sayarak (100 kişi × 60 dk):
 | — `/api/durum` | 3.600 · CDN emiyor, kenara 50/sn geliyor fonksiyona ~1 |
 | — `/api/buradayim` | 36.000 · önbelleklenemez |
 | Redis komutu | **86.060** · iki oturum 172.120 |
+
+**Yerel geliştirme production ile AYNI Redis'e bağlıydı.** `vercel env pull`
+Upstash bağlantısını `.env.local`'e indiriyor ve o bağlantı production'ın ta
+kendisi. Ölçüldü: yerelde slayt 17 yapıldığında production da 17 oldu. Canlı
+oturumda `npm run dev` açıkken bir tuşa basmak sunumu oynatırdı.
+
+Çözüm `DEPO=bellek`: bağlantı bilgisi dursa bile bellek moduna düşülüyor
+(`src/lib/depo.ts`). Değişken Vercel'in **Development** ortamında tanımlı,
+böylece `vercel env pull` her çektiğinde geri geliyor; Production ve
+Preview'da yok. Doğrulandı: yerelde slayt 22, production 0'da kaldı.
+
+Yerelde gerçekten Redis'i denemek isterseniz `.env.local`'deki satırı geçici
+silin — ama o sırada canlı oturum olmadığından emin olun. Panelde yerelde
+sarı "Bellek modu" uyarısı görünmesi artık NORMAL; o uyarı production için
+anlamlı.
 
 **Slayt geçiş gecikmesi ölçüldü ve düşürüldü.** Sunucu ilerlettiğinde
 katılımcının ekranına ulaşma süresi (production, 20 eşzamanlı istemci):

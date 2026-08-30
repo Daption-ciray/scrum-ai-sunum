@@ -22,7 +22,7 @@ const KATILIMCI_ANAHTARI = "sunum:katilimcilar";
 const ATILAN_ANAHTARI = "sunum:atilan";
 /** Atölye gönderimleri: `sunum:istem:<slaytId>` hash'i, alan = katılımcı id. */
 const ISTEM_ANAHTARI = "sunum:istem";
-/** Sunucunun en iyi/en kötü işaretleri: `sunum:istem-secim:<slaytId>`. */
+/** Sunucunun tam/eksik istem işaretleri: `sunum:istem-secim:<slaytId>`. */
 const SECIM_ANAHTARI = "sunum:istem-secim";
 /** Quiz gönderimleri: `sunum:quiz:<slaytId>` hash'i, alan = katılımcı id. */
 const QUIZ_ANAHTARI = "sunum:quiz";
@@ -43,7 +43,23 @@ const dolu = (d?: string) => (d && d.trim() ? d.trim() : undefined);
 const URL_ = dolu(process.env.KV_REST_API_URL) ?? dolu(process.env.UPSTASH_REDIS_REST_URL);
 const TOKEN = dolu(process.env.KV_REST_API_TOKEN) ?? dolu(process.env.UPSTASH_REDIS_REST_TOKEN);
 
-export const paylasimliDepo = Boolean(URL_ && TOKEN);
+/* Yerel geliştirmeyi production'dan ayıran anahtar.
+
+   Upstash bağlantısı `vercel env pull` ile .env.local'e iniyor ve
+   production'la AYNI veritabanını gösteriyor — yani `npm run dev` açıkken
+   bir tuşa basmak canlı sunumu oynatıyor. Ölçüldü: yerelde slayt 17
+   yapıldığında production da 17 oldu.
+
+   `DEPO=bellek` bu bağı kesiyor: bağlantı bilgisi dursa bile bellek moduna
+   düşülüyor. Değişken Vercel'in DEVELOPMENT ortamında tanımlı, böylece
+   `vercel env pull` her çektiğinde geri geliyor. Production ve Preview'da
+   yok, oradaki davranış değişmiyor.
+
+   Yerelde gerçekten Redis'i test etmek isterseniz .env.local'deki satırı
+   geçici olarak silin — ama o sırada canlı bir oturum olmadığından emin olun. */
+const bellekZorla = dolu(process.env.DEPO)?.toLowerCase() === "bellek";
+
+export const paylasimliDepo = Boolean(URL_ && TOKEN) && !bellekZorla;
 
 async function redis<T = unknown>(komut: (string | number)[]): Promise<T> {
   const yanit = await fetch(URL_!, {
