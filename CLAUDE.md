@@ -571,9 +571,24 @@ Tam oturum yükü, koddan sayarak (100 kişi × 60 dk):
 | — `/api/buradayim` | 36.000 · önbelleklenemez |
 | Redis komutu | **86.060** · iki oturum 172.120 |
 
+**Slayt geçiş gecikmesi ölçüldü ve düşürüldü.** Sunucu ilerlettiğinde
+katılımcının ekranına ulaşma süresi (production, 20 eşzamanlı istemci):
+
+| | medyan | en kötü |
+|---|---|---|
+| `swr=4`, yoklama 2000 ms | 3.943 ms | 4.061 ms |
+| **swr yok, yoklama 1200 ms** | **1.408 ms** | **1.699 ms** |
+
+Sebep `stale-while-revalidate=4` idi: CDN dört saniyeye kadar bayat içerik
+servis ediyordu. Ekran paylaşımının gecikmesi 2-5 sn; o gecikmeyi kaldırmak
+için yazılmış sitede 3,9 sn kabul edilemezdi. **swr'yi geri eklemeyin.**
+`stale-if-error=10` kalsın — normal sürede bayat servis etmek yanlış, ama
+origin tökezlerse oda donmamalı. Fonksiyon yükü değişmedi: `s-maxage=1`
+origin'i yine saniyede bir kez vuruyor.
+
 **Darboğaz Vercel değil, Upstash.** Ücretsiz katman günde 10.000 komut; bir
 oturum bunun 8,6 katı ve yaklaşık 7. dakikada Redis hata dönmeye başlar.
-Pay As You Go'ya geçmek şart, iki oturum ~$0,34.
+Pay As You Go'ya geçmek şart, iki oturum ~$0,34. **Aylık sabit ücreti yok**, boştaki veritabanı $0 — test aşamasında geçmek maliyet doğurmuyor. $10/ay olan sabit plana geçmeyin.
 
 ~~Vercel Hobby planı ticari kullanım~~ — **kapatıldı, kullanıcı kararı.**
 Proje açık kaynak paylaşıldığı ve ölçek denetim eşiğinin çok altında olduğu
