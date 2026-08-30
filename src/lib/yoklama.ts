@@ -45,6 +45,8 @@ export type YoklamaSonucu = {
   hakemVar?: boolean;
   /** Yalnızca sunucu panelinde ve yalnızca quiz slaytlarında dolu. */
   quiz?: QuizVerisi | null;
+  /** Aktif slaydın sunucu rehberi. Yalnızca sunucu panelinde. */
+  rehber?: { bilgi?: string; soru?: string; uyari?: string } | null;
   /** Son istek başarılı mı? Kullanıcıya "bağlantı koptu" demek için. */
   saglikli: boolean;
   /** İlk yanıt gelene kadar true. */

@@ -401,11 +401,25 @@ bir kutunun ortasına, ekranın çok altına düşüyordu. Panel ekrana sabitlen
 kaydırma `.sag`'a bırakıldı. Dar ekranda (900 px altı) iki sütun alt alta
 geldiği için orada `height: auto`.
 
-**Sunucu notları istemci paketinde.** `not` alanı görsel olarak yalnızca
-/sunucu'da görünüyor ama slayt tanımlarıyla birlikte tarayıcıya iniyor;
-kaynağa bakan katılımcı okuyabilir. Bilinen ve şimdilik kabul edilen bir
-sınır — düzeltmek notları ayrı bir sunucu dosyasına taşımayı gerektirir.
-Doğru cevaplar bundan etkilenmiyor, onlar ayrı dosyada.
+**Sunucu rehberi `src/icerik/rehber.ts` içinde ve SUNUCUDA kalır.**
+Panelin alt bölümü üç kaynaktan besleniyor:
+
+| Bölüm | Nereden | İstemci paketinde mi |
+|---|---|---|
+| Nasıl anlat | slaytın `not` alanı | **evet** |
+| Bilmen gereken | `rehber.bilgi` | hayır |
+| Gelebilecek soru | `rehber.soru` | hayır |
+| Dikkat | `rehber.uyari` | hayır |
+
+`not` alanı slayt tanımlarıyla birlikte tarayıcıya iniyor — görsel olarak
+yalnızca /sunucu'da görünüyor ama kaynağa bakan katılımcı okuyabilir. Rehber
+baştan sunucuda tutuldu ki aynı sorun büyümesin; `/api/panel` üzerinden,
+sunucu anahtarıyla geliyor. **`rehber.ts`'i hiçbir istemci bileşeninden
+import etmeyin.** Yeni rehber malzemesi eklerken `not`'a değil oraya yazın.
+
+Panelde sıra kasıtlı: önce **Dikkat** (katlanmıyor — atlanmaması gereken şey
+gizlenmemeli), sonra **Nasıl anlat**, sonra katlanmış hâlde arka plan. Canlı
+oturumda gözün ilk düştüğü yer söylenecek cümle olmalı.
 
 **Gemini model adı ENV'den geliyor, sabit değil.** `gemini-2.5-flash` bir gün
 404 vermeye başladı: *"no longer available to new users, use

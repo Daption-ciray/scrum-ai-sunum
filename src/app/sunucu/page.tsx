@@ -157,12 +157,35 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
         </div>
 
         <div className={p.notlar}>
-          <span className="etiket">Sunucu notu</span>
+          {/* Sıra bilerek böyle: önce SÖYLENECEK şey, sonra arkasındaki bilgi.
+              Canlı oturumda gözün ilk düştüğü yer anlatılacak cümle olmalı. */}
+          {yoklama.rehber?.uyari && (
+            <div className={p.rehberUyari}>
+              <span className="etiket">Dikkat</span>
+              <p>{yoklama.rehber.uyari}</p>
+            </div>
+          )}
+
+          <span className="etiket">Nasıl anlat</span>
           {slayt.not ? (
             <p className={p.notMetin}>{slayt.not}</p>
           ) : (
             <p className={p.notYok}>Bu slayt için not yok.</p>
           )}
+
+          {yoklama.rehber?.bilgi && (
+            <details className={p.rehber}>
+              <summary className="etiket">Bilmen gereken</summary>
+              <p className={p.rehberMetin}>{yoklama.rehber.bilgi}</p>
+            </details>
+          )}
+          {yoklama.rehber?.soru && (
+            <details className={p.rehber}>
+              <summary className="etiket">Gelebilecek soru</summary>
+              <p className={p.rehberMetin}>{yoklama.rehber.soru}</p>
+            </details>
+          )}
+
           <p className={p.sonraki}>
             Sıradaki: <b>{sonrakiSlayt ? baslikCikar(sonrakiSlayt) : "— oturum sonu —"}</b>
           </p>

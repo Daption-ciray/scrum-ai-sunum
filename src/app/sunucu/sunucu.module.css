@@ -53,6 +53,47 @@
 }
 .notMetin { font-size: var(--ol-govde); color: var(--metin); max-width: 70ch; }
 .notYok { font-size: var(--ol-govde); color: var(--metin-3); font-style: italic; }
+/* Rehber katlanır: canlı oturumda gözün ilk düştüğü yer "nasıl anlat"
+   olmalı, arka plan bilgisi istendiğinde açılsın. Açık/kapalı durumu
+   tarayıcının kendi <details> davranışı — ekstra durum tutmaya değmez. */
+.rehber { border-top: 1px solid var(--cizgi); padding-top: .45rem; }
+.rehber summary {
+  cursor: pointer;
+  color: var(--metin-3);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+.rehber summary::-webkit-details-marker { display: none; }
+.rehber summary::before { content: "▸"; font-size: .8em; }
+.rehber[open] summary::before { content: "▾"; }
+.rehber summary:hover { color: var(--metin); }
+.rehberMetin {
+  margin-top: .4rem;
+  font-size: var(--ol-kucuk);
+  line-height: 1.55;
+  color: var(--metin-2);
+  max-width: 70ch;
+}
+
+/* Uyarı katlanmıyor: atlanmaması gereken şey gizlenmemeli. */
+.rehberUyari {
+  border-left: 3px solid var(--kotu);
+  background: var(--kotu-zemin);
+  padding: .5rem .7rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.rehberUyari .etiket { color: var(--kotu-metin); }
+.rehberUyari p {
+  font-size: var(--ol-kucuk);
+  line-height: 1.5;
+  color: var(--kotu-metin);
+  max-width: 70ch;
+}
+
 .sonraki { font-size: var(--ol-kucuk); color: var(--metin-3); }
 .sonraki b { color: var(--metin-2); font-weight: 600; }
 

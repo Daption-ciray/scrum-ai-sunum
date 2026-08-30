@@ -11,6 +11,7 @@ import { slaytAl } from "@/icerik";
 import { PARCA_ADI, istemPuanla } from "@/lib/istemPuan";
 import { hakemVar } from "@/lib/hakem";
 import { CEVAPLAR } from "@/icerik/cevaplar";
+import { REHBER } from "@/icerik/rehber";
 
 export const dynamic = "force-dynamic";
 
@@ -91,6 +92,9 @@ export async function GET(istek: Request) {
     {
       durum,
       quiz,
+      /* Sunucu rehberi. `not` alanının aksine bu içerik istemci paketinde
+         DEĞİL — yalnızca bu korumalı uçtan geliyor. */
+      rehber: slayt ? (REHBER[slayt.id] ?? null) : null,
       bagli: katilimcilar.length,
       paylasimli: paylasimliDepo,
       atolye,
