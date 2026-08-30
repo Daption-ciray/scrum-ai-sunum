@@ -1,0 +1,88 @@
+/* Bölüm ayracındaki destekleyici görsel — Corporate Memphis'in yumuşak dili.
+
+   Biçim kararı: şekiller KONTURLA değil DOLGUYLA tanımlanıyor, formlar
+   yuvarlak, palet üç düz ton. Corporate Memphis budur; ilk denemede kalın
+   konturla yapılmıştı ve sert çıkmıştı.
+
+   Renk YOK — yeşil hâlâ yalnızca "sunucu burada" demek. Memphis'in üç renkli
+   düz paletinin yerini temanın gri rampası alıyor: soluk, orta, koyu. Derinlik
+   duygusunu tonlar veriyor, çizgi değil. */
+
+.gorsel {
+  width: 100%;
+  height: auto;
+  color: var(--metin);
+  overflow: visible;
+}
+
+/* Üç düz ton. Memphis'te düz renk alanlarının yaptığı işi yapıyorlar:
+   nereye bakılacağını söylüyorlar. */
+.ton1 { fill: var(--vurgu-sis); }   /* geniş, sakin alanlar */
+.ton2 { fill: var(--vurgu-koyu); }  /* ikincil kütleler */
+.ton3 { fill: var(--metin); }       /* odak */
+
+/* Kollar figürün İÇİNDE çizilir; rengi tonundan miras alsın diye tonun
+   altına yazılmış. Dolgu değil kontur olduğu için ayrı kural gerekiyordu. */
+.kol { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.ton1 .kol { stroke: var(--vurgu-sis); }
+.ton2 .kol { stroke: var(--vurgu-koyu); }
+.ton3 .kol { stroke: var(--metin); }
+
+/* Organik bağ çizgileri. Yuvarlak uç, ince gövde — Memphis'in tek çizgisel
+   öğesi bu; kalınlaşırsa dil yine sertleşir. */
+.baglanti {
+  fill: none;
+  stroke: var(--vurgu-koyu);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Büyüteç sapı gibi kısa, koyu, yuvarlak uçlu çubuklar. */
+.sap {
+  fill: none;
+  stroke: var(--metin);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.halka {
+  fill: none;
+  stroke: var(--vurgu-koyu);
+  stroke-width: 13;
+  stroke-linecap: round;
+}
+.onay {
+  fill: none;
+  stroke: var(--metin);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Koyu kütlenin ÜSTÜNDEKİ onay — zemin rengiyle çiziliyor, oyulmuş gibi. */
+.onayTers {
+  fill: none;
+  stroke: var(--zemin);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Ok ucu. Köşeleri kendi rengiyle konturlanarak yuvarlatılıyor — sivri
+   üçgen bu dilde sert duruyor. */
+.uc {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gorsel {
+    opacity: 0;
+    animation: gorselBelir .55s cubic-bezier(.2, .7, .3, 1) .1s forwards;
+  }
+  @keyframes gorselBelir {
+    from { opacity: 0; transform: translateY(10px) scale(.96); }
+    to   { opacity: 1; transform: none; }
+  }
+}

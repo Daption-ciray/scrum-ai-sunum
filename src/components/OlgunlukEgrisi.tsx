@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import type { OlgunlukNoktasi, Slayt } from "@/icerik/tipler";
 import o from "./olgunluk.module.css";
 
-/* Çizim alanı. Etiketler eğrinin üstünde durduğu için üstte bolca boşluk var. */
+/* Çizim alanı. */
 const EN = 100;
 const BOY = 46;
 
@@ -43,8 +43,20 @@ function yol(): string {
   return d;
 }
 
+/**
+ * Eğri üstünde ad değil NUMARA duruyor, adlar altındaki listede.
+ *
+ * Dokuz noktanın hepsi zirve bölgesinde (x 9–39) toplanıyor ve orada eğri
+ * yatıklaştığı için etiketler hem yatayda hem dikeyde üst üste biniyordu.
+ * Etiketi noktadan uzaklaştırmak da çözmedi: anlamlı ayrım için 100 px'ten
+ * fazla kaydırmak gerekiyor, o da etiketin hangi noktaya ait olduğunu
+ * belirsizleştiriyor. Numara + lejant, Gartner'ın kendi çözümü.
+ *
+ * Rozet iki yerde de aynı: dolgu olgunlaşma ufkunu, numara kimliği taşıyor.
+ */
 export function OlgunlukEgrisi({ slayt }: { slayt: Extract<Slayt, { tip: "olgunluk" }> }) {
   const sirali = [...slayt.noktalar].sort((a, b) => a.x - b.x);
+  const gecikme = (i: number) => ({ "--g": `${1.1 + i * 0.09}s` }) as CSSProperties;
 
   return (
     <div className={o.sarma}>
@@ -59,25 +71,23 @@ export function OlgunlukEgrisi({ slayt }: { slayt: Extract<Slayt, { tip: "olgunl
           role="img"
           aria-label={`${slayt.baslik} — olgunluk eğrisi`}
         >
-          <path className={o.egri} d={yol()} pathLength={1} />
+          <path className={o.egri} d={yol()} />
         </svg>
 
-        {/* Noktalar SVG'nin dışında, yüzde konumla duruyor: metin ölçeği
+        {/* Numaralar SVG'nin dışında, yüzde konumla duruyor: metin ölçeği
             preserveAspectRatio="none" ile bozulmasın diye. */}
         {sirali.map((n, i) => (
           <span
             key={n.ad}
-            className={`${o.nokta} ${o[n.ufuk]} ${n.one ? o.one : ""}`}
-            style={
-              {
-                left: `${n.x}%`,
-                top: `${(py(n.x) / BOY) * 100}%`,
-                "--g": `${1.5 + i * 0.11}s`,
-              } as CSSProperties
-            }
+            className={`${o.nokta} ${o.rozet} ${o[n.ufuk]} ${n.one ? o.one : ""}`}
+            style={{
+              left: `${n.x}%`,
+              top: `${(py(n.x) / BOY) * 100}%`,
+              ...gecikme(i),
+            }}
+            aria-hidden
           >
-            <span className={o.isaret} aria-hidden />
-            <span className={o.ad}>{n.ad}</span>
+            {i + 1}
           </span>
         ))}
       </div>
@@ -90,15 +100,28 @@ export function OlgunlukEgrisi({ slayt }: { slayt: Extract<Slayt, { tip: "olgunl
         ))}
       </div>
 
+      {slayt.aciklama && <p className={o.okuma}>{slayt.aciklama}</p>}
+
+      <ol className={o.liste}>
+        {sirali.map((n, i) => (
+          <li key={n.ad} className={`${o.oge} ${n.one ? o.one : ""}`} style={gecikme(i)}>
+            <span className={`${o.rozet} ${o[n.ufuk]}`} aria-hidden>
+              {i + 1}
+            </span>
+            <span>{n.ad}</span>
+          </li>
+        ))}
+      </ol>
+
       <div className={o.lejant}>
-        <span className={`${o.lejantOge} ${o.yakin}`}>
-          <span className={o.isaret} aria-hidden /> 2 yıldan az
+        <span className={o.lejantOge}>
+          <span className={`${o.kutucuk} ${o.yakin}`} aria-hidden /> 2 yıldan az
         </span>
-        <span className={`${o.lejantOge} ${o.orta}`}>
-          <span className={o.isaret} aria-hidden /> 2–5 yıl
+        <span className={o.lejantOge}>
+          <span className={`${o.kutucuk} ${o.orta}`} aria-hidden /> 2–5 yıl
         </span>
-        <span className={`${o.lejantOge} ${o.uzak}`}>
-          <span className={o.isaret} aria-hidden /> 5–10 yıl
+        <span className={o.lejantOge}>
+          <span className={`${o.kutucuk} ${o.uzak}`} aria-hidden /> 5–10 yıl
         </span>
       </div>
 

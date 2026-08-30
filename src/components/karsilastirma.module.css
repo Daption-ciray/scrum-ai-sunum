@@ -1,0 +1,83 @@
+/* Atölye çıktısı — en iyi ve en kötü istem yan yana.
+
+   Renk çifti `cevir` kartıyla AYNI: kırmızı kötü istem, yeşil etkili istem.
+   Katılımcı bu ikiliyi yarım saat önce kartta gördü; ders o eşleşmeden
+   geliyor. Bu iki yer dışında kırmızı kullanmayın. */
+
+.sarma { display: flex; flex-direction: column; gap: .8rem; width: 100%; }
+
+.baslik { font-size: var(--ol-baslik); line-height: 1.1; letter-spacing: -.02em; }
+.giris { color: var(--metin-2); font-size: var(--ol-govde); max-width: 62ch; line-height: 1.45; }
+
+.ikili {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  border: var(--kenar) solid var(--cizgi-2);
+  box-shadow: 4px 4px 0 0 var(--cizgi-2);
+  padding: .9rem 1rem 1rem;
+  min-width: 0;
+}
+.iyi { background: var(--sunucu-zemin); }
+.kotu { background: var(--kotu-zemin); }
+
+.tepe { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.rozet { background: var(--cizgi-2); color: var(--yuzey); padding: .3em .6em; }
+.sahip {
+  font-family: var(--yazi-mono), monospace;
+  font-size: var(--ol-kucuk);
+  color: var(--metin);
+}
+
+.metin {
+  margin: 0;
+  font-family: var(--yazi-mono), monospace;
+  font-size: var(--ol-kucuk);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--metin);
+  /* İki panel farklı uzunlukta; sabit yükseklik olmadan biri diğerinin
+     yanında minicik kalıyor ve karşılaştırma zorlaşıyor. */
+  min-height: 11lh;
+  max-height: 20lh;
+  overflow-y: auto;
+}
+.kotu .metin { color: var(--kotu-metin); }
+
+.kopya {
+  align-self: flex-start;
+  background: var(--metin);
+  color: var(--yuzey);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--yazi-piksel), monospace;
+  font-size: calc(var(--ol-etiket) * 1.15);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .45em .8em;
+  cursor: pointer;
+}
+.kopya:hover { background: var(--cizgi); }
+.kopya:active { transform: translate(2px, 2px); }
+
+.araclar { font-size: var(--ol-kucuk); color: var(--metin-2); line-height: 1.5; }
+.ipucu { font-size: var(--ol-kucuk); color: var(--metin-3); }
+.kaynak {
+  font-size: var(--ol-etiket);
+  color: var(--metin-3);
+  font-family: var(--yazi-mono), monospace;
+  letter-spacing: .04em;
+}
+
+@media (max-width: 760px) {
+  .ikili { grid-template-columns: 1fr; }
+  .metin { min-height: 7lh; }
+}

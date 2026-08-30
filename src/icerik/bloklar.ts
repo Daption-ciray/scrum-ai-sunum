@@ -1,7 +1,7 @@
 import { bloklar } from "./index";
 
 export type BlokOzeti = {
-  /** 1..14 — galeride kartın üstünde görünen numara. */
+  /** 1..13 — galeride kartın üstünde görünen numara. */
   no: number;
   ad: string;
   /** Plandaki dakika. Galeride çizginin uzunluğu buradan geliyor. */
@@ -12,27 +12,28 @@ export type BlokOzeti = {
   adet: number;
 };
 
-/** Blok süreleri eğitim planından.
- *  Yoruma alınmış satırlar: o bloğun slaytları `beklemede.ts` içinde park
- *  edildi, blok akışta görünmüyor. Geri koyunca yorumu kaldırın. Slayt sayısıyla değil, gerçek dakikayla.
+/** Blok süreleri eğitim planından. Slayt sayısıyla değil, gerçek dakikayla.
  *  Anahtarlar `oturum1.ts` / `oturum2.ts` içindeki `blok` alanlarıyla birebir
- *  aynı olmalı; eşleşmeyen blok sessizce 5 dakikaya düşer. */
+ *  aynı olmalı; eşleşmeyen blok sessizce 5 dakikaya düşer.
+ *
+ *  Dağılım eğitim duyurusuna göre kuruldu: birinci oturum Scrum'ın temel
+ *  ilkeleri ve üretken AI'ın çalışma mantığı, ikinci oturum Sprint Planning
+ *  ve Daily Scrum'ın üç aşaması, kapanışta güvenlik ve ortak anlaşma. */
 const SURELER: Record<string, number> = {
   // Oturum 1 — toplam 60 dk
   "Açılış ve kurulum": 4,
-  // park edildi: "Roller değişiyor": 4,
-  "Scrum çerçevesi": 12,
+  "Roller değişiyor": 4,
+  "Scrum çerçevesi": 10,
   "AI temelleri ve sınırları": 14,
-  // park edildi: "Bilgi kontrolü 1": 5,
-  "Scrum olaylarında AI": 15,
+  "Etkili istem yazımı": 22,
   "Özet ve kapanış": 6,
   // Oturum 2 — toplam 60 dk
-  "İkinci oturum açılışı": 5,
-  "Etkili istem yazımı": 18,
-  "AI çıktısını değerlendirme": 12,
-  "Sorumlu kullanım: güvenlik ve etik": 16,
-  // park edildi: "Ekip çalışma anlaşması": 7,
-  // park edildi: "Kapanış değerlendirmesi": 6,
+  "İkinci oturum açılışı": 3,
+  "Sprint Planning'de AI": 15,
+  "Daily Scrum'da AI": 11,
+  "AI çıktısını değerlendirme": 9,
+  "Sorumlu kullanım: güvenlik ve etik": 15,
+  "Ekip çalışma anlaşması": 5,
   "Eylem planı": 2,
 };
 
@@ -41,6 +42,9 @@ const KISA_AD: Record<string, string> = {
   "AI temelleri ve sınırları": "AI temelleri",
   "Sorumlu kullanım: güvenlik ve etik": "Güvenlik ve etik",
   "AI çıktısını değerlendirme": "Çıktıyı değerlendirme",
+  "Sprint Planning'de AI": "Sprint Planning",
+  "Daily Scrum'da AI": "Daily Scrum",
+  "Ekip çalışma anlaşması": "Çalışma anlaşması",
 };
 
 let onbellek: BlokOzeti[] | null = null;

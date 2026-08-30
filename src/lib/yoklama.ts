@@ -5,12 +5,33 @@ import { BASLANGIC, type Durum } from "./durum";
 
 export type Katilan = { id: string; ad: string };
 
+/** Atölye gönderimi — YALNIZCA sunucu panelinde. Ad burada var. */
+export type AtolyeIstem = {
+  id: string;
+  ad: string;
+  metin: string;
+  /** Beş parçalı kalıba göre 0–100. Kalite değil, kalıp kontrolü. */
+  puan: number;
+  parcalar: string[];
+};
+
+export type AtolyeVerisi = {
+  slaytId: string;
+  secim: { iyi?: string; kotu?: string };
+  /** Puanı yüksekten alçağa sıralı. */
+  istemler: AtolyeIstem[];
+};
+
 export type YoklamaSonucu = {
   durum: Durum;
   bagli: number;
   paylasimli: boolean;
   /** Yalnızca sunucu panelinde dolu. */
   katilimcilar?: Katilan[];
+  /** Yalnızca sunucu panelinde ve yalnızca atölye slaytlarında dolu. */
+  atolye?: AtolyeVerisi | null;
+  /** Değerlendirme anahtarı tanımlı mı. Panel düğmeyi buna göre gösteriyor. */
+  hakemVar?: boolean;
   /** Son istek başarılı mı? Kullanıcıya "bağlantı koptu" demek için. */
   saglikli: boolean;
   /** İlk yanıt gelene kadar true. */

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Perde, Slayt } from "@/components/Slayt";
 import { OTURUMLAR, bloklar } from "@/icerik";
 import type { Durum } from "@/lib/durum";
-import { anahtarDogrula, komutGonder, useYoklama } from "@/lib/yoklama";
+import { anahtarDogrula, komutGonder, useYoklama, type AtolyeVerisi } from "@/lib/yoklama";
 import p from "./sunucu.module.css";
 
 const ANAHTAR_DEPO = "sunum.sunucu.anahtar";
@@ -147,7 +147,7 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
         </div>
 
         <div className={p.onizleme}>
-          {durum.perde ? <Perde /> : <Slayt slayt={slayt} />}
+          {durum.perde ? <Perde /> : <Slayt slayt={slayt} durum={durum} />}
         </div>
 
         <div className={p.notlar}>
@@ -262,6 +262,16 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
           )}
         </div>
 
+        {yoklama.atolye && (
+          <AtolyeKarti
+            veri={yoklama.atolye}
+            acik={durum.istemAcik}
+            gonder={gonder}
+            anahtar={anahtar}
+            hakemVar={Boolean(yoklama.hakemVar)}
+          />
+        )}
+
         <div className={p.kart}>
           <span className={`etiket ${p.kartBaslik}`}>Bloklar — {oturum.ad}</span>
           <div className={p.bloklar}>
@@ -301,6 +311,198 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
             Paneli kilitle
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Atölye kartı — 75 istemi okumak yerine sıralı listeye bakılıyor.
+ *
+ * Puan KALİTE değil KALIP kontrolü: beş parçadan kaçı var. Sıralamanın işi
+ * sunucuyu en üstteki ve en alttaki birkaç isteme götürmek; en iyi ve en kötü
+ * kararı yine sunucunun. Aynı satıra ikinci kez basmak işareti kaldırıyor.
+ */
+function AtolyeKarti({
+  veri,
+  acik,
+  gonder,
+  anahtar,
+  hakemVar,
+}: {
+  veri: AtolyeVerisi;
+  acik: boolean;
+  gonder: (govde: Record<string, unknown>) => void;
+  anahtar: string;
+  hakemVar: boolean;
+}) {
+  const [kopyalanan, setKopyalanan] = useState<string | null>(null);
+  const [acikListe, setAcikListe] = useState<string | null>(null);
+  /* Hakem notları panelde yerel tutuluyor, depoya yazılmıyor: sunucu
+     değerlendirmeden hemen sonra işaretliyor, kalıcı olmasına gerek yok.
+     Kaybolursa tekrar çalıştırmak birkaç kuruş. */
+  const [notlar, setNotlar] = useState<Record<string, { puan: number; gerekce: string }>>({});
+  const [degerlendiriyor, setDegerlendiriyor] = useState(false);
+  const [hakemHatasi, setHakemHatasi] = useState("");
+
+  const degerlendir = async () => {
+    setDegerlendiriyor(true);
+    setHakemHatasi("");
+    try {
+      const yanit = await fetch("/api/degerlendir", {
+        method: "POST",
+        headers: { "x-sunucu-anahtari": anahtar },
+      });
+      const veriJson = (await yanit.json().catch(() => ({}))) as {
+        notlar?: { id: string; puan: number; gerekce: string }[] | null;
+        hata?: string;
+      };
+      if (!veriJson.notlar) {
+        // Yedek: sıralama olduğu gibi kalıyor, oturum durmuyor.
+        setHakemHatasi(veriJson.hata ?? "Değerlendirme başarısız — sıralama anahtar kelimeye göre.");
+        return;
+      }
+      const harita: Record<string, { puan: number; gerekce: string }> = {};
+      for (const n of veriJson.notlar) harita[n.id] = { puan: n.puan, gerekce: n.gerekce };
+      setNotlar(harita);
+    } catch {
+      setHakemHatasi("Değerlendirmeye ulaşılamadı — sıralama anahtar kelimeye göre.");
+    } finally {
+      setDegerlendiriyor(false);
+    }
+  };
+
+  const kopyala = async (etiket: string, metin: string) => {
+    try {
+      await navigator.clipboard.writeText(metin);
+      setKopyalanan(etiket);
+      setTimeout(() => setKopyalanan(null), 1800);
+    } catch {
+      /* pano yoksa sunucu metni elle seçer */
+    }
+  };
+
+  const bul = (id?: string) => veri.istemler.find((i) => i.id === id);
+  const iyi = bul(veri.secim.iyi);
+  const kotu = bul(veri.secim.kotu);
+
+  return (
+    <div className={p.kart}>
+      <span className={`etiket ${p.kartBaslik}`}>
+        Atölye — {veri.istemler.length} istem
+      </span>
+
+      <div className={p.atolyeDugmeler}>
+        <button
+          type="button"
+          className={`${p.dugme} ${acik ? p.aktif : ""}`}
+          onClick={() => gonder({ komut: "istem", eylem: acik ? "kapat" : "ac" })}
+        >
+          {acik ? "Gönderimi kapat" : "Gönderimi aç"}
+        </button>
+        {hakemVar && (
+          <button
+            type="button"
+            className={p.dugme}
+            onClick={degerlendir}
+            disabled={degerlendiriyor || veri.istemler.length === 0}
+            title="Uçlardaki istemleri AI ile değerlendirir"
+          >
+            {degerlendiriyor ? "Değerlendiriliyor…" : "AI ile değerlendir"}
+          </button>
+        )}
+        <button
+          type="button"
+          className={p.dugme}
+          onClick={() => gonder({ komut: "istem", eylem: "sifirla" })}
+          title="Bütün gönderimleri ve işaretleri siler"
+        >
+          Sıfırla
+        </button>
+      </div>
+
+      {hakemHatasi && <p className={p.hata}>{hakemHatasi}</p>}
+
+      {(iyi || kotu) && (
+        <div className={p.atolyeSecim}>
+          {iyi && (
+            <button
+              type="button"
+              className={p.kopyaDugme}
+              onClick={() => kopyala("iyi", iyi.metin)}
+            >
+              {kopyalanan === "iyi" ? "Kopyalandı" : `En iyiyi kopyala — ${iyi.ad}`}
+            </button>
+          )}
+          {kotu && (
+            <button
+              type="button"
+              className={p.kopyaDugme}
+              onClick={() => kopyala("kotu", kotu.metin)}
+            >
+              {kopyalanan === "kotu" ? "Kopyalandı" : "En kötüyü kopyala — anonim"}
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className={p.istemListe}>
+        {veri.istemler.length === 0 && (
+          <p className={p.istemBos}>
+            {acik ? "Gönderim bekleniyor…" : "Henüz gönderim yok. Gönderimi açın."}
+          </p>
+        )}
+        {veri.istemler.map((i) => {
+          const secili =
+            veri.secim.iyi === i.id ? "iyi" : veri.secim.kotu === i.id ? "kotu" : null;
+          return (
+            <div
+              key={i.id}
+              className={`${p.istemSatir} ${secili === "iyi" ? p.istemIyi : ""} ${
+                secili === "kotu" ? p.istemKotu : ""
+              }`}
+            >
+              <span className={`mono ${p.istemPuan}`}>
+                {notlar[i.id] ? notlar[i.id].puan : i.puan}
+                {notlar[i.id] && <span className={p.istemOnPuan}>{i.puan}</span>}
+              </span>
+              <button
+                type="button"
+                className={p.istemAd}
+                onClick={() => setAcikListe(acikListe === i.id ? null : i.id)}
+                title="Metni aç / kapat"
+              >
+                <span className={p.istemAdMetin}>{i.ad}</span>
+                <span className={p.istemParca}>
+                  {notlar[i.id]
+                    ? notlar[i.id].gerekce
+                    : i.parcalar.length > 0
+                      ? i.parcalar.join(" · ")
+                      : "—"}
+                </span>
+              </button>
+              <button
+                type="button"
+                className={p.istemIsaret}
+                onClick={() => gonder({ komut: "istem", eylem: "iyi", deger: i.id })}
+                title="En iyi olarak işaretle"
+                aria-label={`${i.ad} — en iyi olarak işaretle`}
+              >
+                ✓
+              </button>
+              <button
+                type="button"
+                className={p.istemIsaret}
+                onClick={() => gonder({ komut: "istem", eylem: "kotu", deger: i.id })}
+                title="En kötü olarak işaretle"
+                aria-label={`${i.ad} — en kötü olarak işaretle`}
+              >
+                ✗
+              </button>
+              {acikListe === i.id && <pre className={p.istemMetin}>{i.metin}</pre>}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

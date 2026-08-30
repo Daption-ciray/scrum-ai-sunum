@@ -14,6 +14,13 @@ export type Durum = {
    * açık kalır. `sifirla` komutu başa alıyor.
    */
   acilan: 1 | 2;
+  /**
+   * Atölye slaytında gönderim açık mı. Sunucu açar, sunucu kapatır.
+   * Kapalıyken metin kutusu kilitli — herkesin aynı anda yazması ve aynı
+   * anda durması için. Slayta gelmek tek başına açmıyor; sunucu hazır
+   * olduğunda basıyor.
+   */
+  istemAcik: boolean;
   /** Her değişiklikte artar. İstemci bunu karşılaştırıp gereksiz render etmez. */
   surum: number;
   zaman: number;
@@ -24,6 +31,7 @@ export const BASLANGIC: Durum = {
   slayt: 0,
   perde: false,
   acilan: 1,
+  istemAcik: false,
   surum: 0,
   zaman: 0,
 };

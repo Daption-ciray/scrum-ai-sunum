@@ -1,0 +1,94 @@
+/* Atölye — katılımcının kendi istemini yazdığı slayt. */
+
+.sarma { display: flex; flex-direction: column; gap: .8rem; width: 100%; }
+
+.baslik { font-size: var(--ol-baslik); line-height: 1.1; letter-spacing: -.02em; }
+.giris { color: var(--metin-2); font-size: var(--ol-govde); max-width: 60ch; line-height: 1.45; }
+
+/* Görev kutunun hemen üstünde ve vurgulu: katılımcı yazarken tek bakışta
+   ne istendiğini görebilmeli, yukarı kaydırmak zorunda kalmamalı. */
+.gorev {
+  border-left: var(--kenar) solid var(--cizgi-2);
+  padding-left: .8rem;
+  font-size: var(--ol-alt);
+  color: var(--metin);
+  line-height: 1.4;
+  max-width: 70ch;
+}
+
+.kutu {
+  width: 100%;
+  resize: vertical;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi-2);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 0 var(--cizgi-2);
+  padding: .9rem 1rem;
+  font-family: var(--yazi-mono), monospace;
+  font-size: var(--ol-govde);
+  line-height: 1.55;
+  color: var(--metin);
+}
+.kutu:focus-visible { outline: var(--kenar) solid var(--cizgi-2); outline-offset: 3px; }
+.kutu:disabled { background: var(--zemin-2); color: var(--metin-3); box-shadow: none; }
+
+.alt { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.sayac { color: var(--metin-3); font-size: var(--ol-kucuk); }
+
+.dugme {
+  background: var(--metin);
+  color: var(--yuzey);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--yazi-piksel), monospace;
+  font-size: calc(var(--ol-etiket) * 1.25);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .6em 1.2em;
+  cursor: pointer;
+  transition: transform var(--gecis), background-color var(--gecis);
+}
+.dugme:hover:not(:disabled) { background: var(--sunucu); color: var(--metin); }
+.dugme:active:not(:disabled) { transform: translate(2px, 2px); }
+.dugme:disabled { background: var(--metin-3); cursor: not-allowed; }
+
+/* --- gönderildikten sonra --- */
+
+.gonderildi {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  background: var(--sunucu-zemin);
+  border: var(--kenar) solid var(--cizgi-2);
+  box-shadow: 4px 4px 0 0 var(--cizgi-2);
+  padding: 1rem;
+}
+.rozet {
+  align-self: flex-start;
+  background: var(--cizgi-2);
+  color: var(--yuzey);
+  padding: .3em .6em;
+}
+.kendiIstem {
+  margin: 0;
+  font-family: var(--yazi-mono), monospace;
+  font-size: var(--ol-kucuk);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--metin);
+}
+
+.ipucu { font-size: var(--ol-kucuk); color: var(--metin-3); line-height: 1.4; }
+.hata { font-size: var(--ol-kucuk); color: var(--kotu); font-weight: 600; }
+.kaynak {
+  font-size: var(--ol-etiket);
+  color: var(--metin-3);
+  font-family: var(--yazi-mono), monospace;
+  letter-spacing: .04em;
+}
+
+@media (max-width: 680px) {
+  .kutu { box-shadow: 3px 3px 0 0 var(--cizgi-2); font-size: var(--ol-kucuk); }
+}

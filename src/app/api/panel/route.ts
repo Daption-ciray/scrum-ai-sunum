@@ -1,5 +1,14 @@
-import { durumuOku, katilimcilariOku, paylasimliDepo } from "@/lib/depo";
+import {
+  durumuOku,
+  istemleriOku,
+  katilimcilariOku,
+  paylasimliDepo,
+  secimOku,
+} from "@/lib/depo";
 import { yoneticiMi } from "@/lib/anahtar";
+import { slaytAl } from "@/icerik";
+import { PARCA_ADI, istemPuanla } from "@/lib/istemPuan";
+import { hakemVar } from "@/lib/hakem";
 
 export const dynamic = "force-dynamic";
 
@@ -15,11 +24,46 @@ export async function GET(istek: Request) {
 
   const [durum, katilimcilar] = await Promise.all([durumuOku(), katilimcilariOku()]);
 
+  /* Atölye verisi yalnızca ilgili slayttayken okunuyor. Her yoklamada
+     HGETALL çekmek 75 kişilik odada gereksiz Redis trafiği demek. */
+  const slayt = slaytAl(durum.oturum, durum.slayt);
+  const atolyeId =
+    slayt?.tip === "atolye"
+      ? slayt.id
+      : slayt?.tip === "karsilastirma"
+        ? slayt.kaynakSlayt
+        : null;
+
+  let atolye: {
+    slaytId: string;
+    secim: { iyi?: string; kotu?: string };
+    istemler: { id: string; ad: string; metin: string; puan: number; parcalar: string[] }[];
+  } | null = null;
+
+  if (atolyeId) {
+    const [istemler, secim] = await Promise.all([istemleriOku(atolyeId), secimOku(atolyeId)]);
+    atolye = {
+      slaytId: atolyeId,
+      secim,
+      istemler: istemler
+        .map((i) => {
+          const { puan, parcalar } = istemPuanla(i.metin);
+          // Panelde ham anahtar değil okunur ad görünsün.
+          return { ...i, puan, parcalar: parcalar.map((x) => PARCA_ADI[x]) };
+        })
+        // Yüksekten alçağa: sunucu en üstteki üçe ve en alttaki üçe bakıyor.
+        .sort((a, b) => b.puan - a.puan),
+    };
+  }
+
   return Response.json(
     {
       durum,
       bagli: katilimcilar.length,
       paylasimli: paylasimliDepo,
+      atolye,
+      /* Değerlendirme anahtarı tanımlı mı — panel düğmeyi ona göre gösteriyor. */
+      hakemVar,
       katilimcilar: katilimcilar
         .map((k) => ({ id: k.id, ad: k.ad }))
         .sort((a, b) => a.ad.localeCompare(b.ad, "tr")),

@@ -140,7 +140,7 @@ export default function Oda() {
           ) : undefined
         }
       >
-        {durum.perde && !kaydi ? <Perde /> : <Slayt slayt={slayt} />}
+        {durum.perde && !kaydi ? <Perde /> : <Slayt slayt={slayt} durum={durum} />}
       </Kabuk>
 
       {kaydi && (

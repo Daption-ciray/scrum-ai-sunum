@@ -35,7 +35,24 @@
 }
 
 /* ---------------- bölüm ayracı ---------------- */
-.bolum { display: flex; flex-direction: column; gap: 1rem; }
+/* Bölüm ayracı: solda metin, sağda destekleyici görsel.
+   Ayraç slaytları en boş slaytlardı; görsel o boşluğu bilgiyle dolduruyor,
+   dekorasyonla değil — her biri bloğun konusunu tek bakışta veriyor. */
+.bolum {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+.bolumMetin { display: flex; flex-direction: column; gap: 1rem; }
+.bolumGorsel { justify-self: end; width: 100%; max-width: 15rem; }
+
+@media (max-width: 760px) {
+  /* Dar ekranda görsel metnin ÜSTÜNE geçiyor ve küçülüyor; yan yana
+     durursa başlık iki kelimeye sıkışıyor. */
+  .bolum { grid-template-columns: 1fr; }
+  .bolumGorsel { order: -1; justify-self: start; max-width: 7.5rem; }
+}
 .bolumNumara { font-size: var(--ol-dev); color: var(--vurgu-koyu); line-height: 1; }
 .bolumBaslik { font-size: var(--ol-buyuk); }
 .bolumOzet { font-size: var(--ol-alt); color: var(--metin-2); max-width: 52ch; }
@@ -154,6 +171,17 @@
   color: var(--vurgu);
 }
 .katmanAciklama { font-size: var(--ol-govde); color: var(--metin-2); }
+
+/* Kaynak satırı — `katman` slaytları için. Diğer tipler kendi modülünde
+   aynı biçimi taşıyor; ikisi değişirse birlikte değişsin. */
+.kaynak {
+  margin-top: 1rem;
+  color: var(--metin-3);
+  font-size: var(--ol-etiket);
+  font-family: var(--yazi-mono), monospace;
+  letter-spacing: .04em;
+  line-height: 1.5;
+}
 
 /* ---------------- tablo ---------------- */
 .tabloSarma { overflow-x: auto; border: 1px solid var(--cizgi); border-radius: var(--kose); }

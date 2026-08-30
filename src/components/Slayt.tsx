@@ -1,11 +1,16 @@
 import type { CSSProperties } from "react";
 import type { Slayt as SlaytTipi, SutunIcerik } from "@/icerik/tipler";
+import type { Durum } from "@/lib/durum";
 import { RollerAkisi } from "./RollerAkisi";
 import { Sayilar } from "./Sayilar";
 import { Adimlar } from "./Adimlar";
 import { Terazi } from "./Terazi";
 import { Kartlar } from "./Kartlar";
 import { Alinti } from "./Alinti";
+import { IstemCevir } from "./IstemCevir";
+import { BolumGorseli } from "./BolumGorseli";
+import { Atolye } from "./Atolye";
+import { Karsilastirma } from "./Karsilastirma";
 import { OlgunlukEgrisi } from "./OlgunlukEgrisi";
 import s from "./slayt.module.css";
 
@@ -18,18 +23,20 @@ export function Perde() {
   );
 }
 
-export function Slayt({ slayt }: { slayt: SlaytTipi }) {
+export function Slayt({ slayt, durum }: { slayt: SlaytTipi; durum?: Durum }) {
   return (
     <div className={s.sahne}>
       {/* key: slayt değişince giriş animasyonu yeniden çalışsın */}
       <div className={s.icerik} key={slayt.id}>
-        <Govde slayt={slayt} />
+        <Govde slayt={slayt} durum={durum} />
       </div>
     </div>
   );
 }
 
-function Govde({ slayt }: { slayt: SlaytTipi }) {
+/* `durum` yalnızca atölyenin ihtiyacı: gönderimin açık olup olmadığını
+   sunucu söylüyor. Diğer tipler görmezden geliyor. */
+function Govde({ slayt, durum }: { slayt: SlaytTipi; durum?: Durum }) {
   switch (slayt.tip) {
     case "kapak":
       return (
@@ -44,9 +51,14 @@ function Govde({ slayt }: { slayt: SlaytTipi }) {
     case "bolum":
       return (
         <div className={s.bolum}>
-          <p className={`mono ${s.bolumNumara}`}>{slayt.numara}</p>
-          <h2 className={s.bolumBaslik}>{slayt.baslik}</h2>
-          {slayt.ozet && <p className={s.bolumOzet}>{slayt.ozet}</p>}
+          <div className={s.bolumMetin}>
+            <p className={`mono ${s.bolumNumara}`}>{slayt.numara}</p>
+            <h2 className={s.bolumBaslik}>{slayt.baslik}</h2>
+            {slayt.ozet && <p className={s.bolumOzet}>{slayt.ozet}</p>}
+          </div>
+          <div className={s.bolumGorsel} aria-hidden>
+            <BolumGorseli numara={slayt.numara} />
+          </div>
         </div>
       );
 
@@ -111,6 +123,7 @@ function Govde({ slayt }: { slayt: SlaytTipi }) {
               </div>
             ))}
           </div>
+          {slayt.kaynak && <p className={s.kaynak}>{slayt.kaynak}</p>}
         </div>
       );
 
@@ -165,6 +178,15 @@ function Govde({ slayt }: { slayt: SlaytTipi }) {
 
     case "olgunluk":
       return <OlgunlukEgrisi slayt={slayt} />;
+
+    case "cevir":
+      return <IstemCevir slayt={slayt} />;
+
+    case "atolye":
+      return <Atolye slayt={slayt} durum={durum} />;
+
+    case "karsilastirma":
+      return <Karsilastirma slayt={slayt} />;
 
     case "taslak":
       return (

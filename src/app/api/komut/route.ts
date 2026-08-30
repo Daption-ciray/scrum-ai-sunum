@@ -1,6 +1,14 @@
-import { durumuOku, durumuYaz, katilimcilariTemizle, katilimciyiAt } from "@/lib/depo";
+import {
+  atolyeSifirla,
+  durumuOku,
+  durumuYaz,
+  katilimcilariTemizle,
+  katilimciyiAt,
+  secimOku,
+  secimYaz,
+} from "@/lib/depo";
 import { yoneticiMi } from "@/lib/anahtar";
-import { slaytSayisi } from "@/icerik";
+import { slaytAl, slaytSayisi } from "@/icerik";
 import type { Durum } from "@/lib/durum";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +22,8 @@ type Komut =
   | { komut: "sifirla" }
   | { komut: "katilimcilari-temizle" }
   | { komut: "at"; id: string }
-  | { komut: "kilitle" };
+  | { komut: "kilitle" }
+  | { komut: "istem"; eylem: "ac" | "kapat" | "iyi" | "kotu" | "sifirla"; deger?: string };
 
 const sinirla = (n: number, enAz: number, enCok: number) => Math.min(Math.max(n, enAz), enCok);
 
@@ -64,8 +73,41 @@ export async function POST(istek: Request) {
       yeni.perde = !onceki.perde;
       break;
     case "sifirla":
-      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1 };
+      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false };
       break;
+    case "istem": {
+      // Hangi atölye olduğu slayttan çıkarılıyor; panel id göndermiyor.
+      const slayt = slaytAl(onceki.oturum, onceki.slayt);
+      const hedefId =
+        slayt?.tip === "atolye"
+          ? slayt.id
+          : slayt?.tip === "karsilastirma"
+            ? slayt.kaynakSlayt
+            : null;
+      if (!hedefId) {
+        return Response.json({ hata: "Bu slaytta atölye yok." }, { status: 409 });
+      }
+      if (govde.eylem === "ac" || govde.eylem === "kapat") {
+        yeni.istemAcik = govde.eylem === "ac";
+        break;
+      }
+      if (govde.eylem === "sifirla") {
+        await atolyeSifirla(hedefId);
+        yeni.istemAcik = false;
+        break;
+      }
+      // iyi / kotu: yan yana yazılmasın diye önce okunup birleştiriliyor.
+      const secilen = String(govde.deger ?? "").slice(0, 64);
+      if (!secilen) return Response.json({ hata: "Kimlik eksik." }, { status: 400 });
+      const mevcut = await secimOku(hedefId);
+      const anahtar = govde.eylem === "iyi" ? "iyi" : "kotu";
+      // Aynı kişiye ikinci kez basmak işareti kaldırıyor.
+      await secimYaz(hedefId, {
+        ...mevcut,
+        [anahtar]: mevcut[anahtar] === secilen ? undefined : secilen,
+      });
+      return Response.json({ durum: onceki }, { headers: { "cache-control": "no-store" } });
+    }
     case "katilimcilari-temizle":
       await katilimcilariTemizle();
       return Response.json({ durum: onceki }, { headers: { "cache-control": "no-store" } });

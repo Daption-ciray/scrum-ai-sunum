@@ -1,78 +1,168 @@
 import type { Oturum } from "./tipler";
 
-/* Bu oturum, birinci oturumda tanıtılan dört aşamalı AI yetkinliği
-   çerçevesinin (delegasyon · tarif · muhakeme · sahiplenme) uygulama tarafı.
-   İstem yazımı tarif, çıktı değerlendirme muhakeme, veri güvenliği
-   sahiplenme aşamasına denk geliyor. */
+/* Duyuruda ikinci oturum için verilen söz: Daily Scrum ve Sprint Planning
+   süreçlerinin öncesi, sırası ve sonrası olarak üç aşamada ele alınması;
+   AI'ın katkı sağlayabileceği alanlarla birlikte ekip içi iletişimin ön
+   planda tutulması gereken noktalar; ve veri güvenliği ile sorumlu kullanım
+   ilkeleriyle kapanış. Blok sırası bu cümleyi birebir takip ediyor.
+
+   Oturum ayrıca birinci oturumda tanıtılan dört aşamalı AI yetkinliği
+   çerçevesinin (delegasyon · tarif · muhakeme · sahiplenme) uygulama tarafı:
+   olay bloklarında delegasyon, çıktı değerlendirmede muhakeme, güvenlik ve
+   çalışma anlaşmasında sahiplenme. */
 
 export const oturum2: Oturum = {
   numara: 2,
-  ad: "Uygulama oturumu",
+  ad: "Olaylarda AI, güvenlik ve ortak anlaşma",
   slaytlar: [
-    /* ---- 00:00 · Tekrar ve bilgi kontrolü ---- */
+    /* ---- 00:00 · İkinci oturum açılışı ---- */
+
     {
       id: "s2-kapak",
       blok: "İkinci oturum açılışı",
       tip: "kapak",
       ust: "Scrum + AI · Kurum İçi Eğitim",
-      baslik: "Uygulama oturumu",
+      baslik: "Olaylarda AI",
       alt: "İkinci oturum · 60 dakika",
-      meta: "Bu oturumda konuşma süresinin çoğu sizde.",
-      not: "Geç kalanlar için bir dakika bekle, sonra doğrudan bilgi kontrolüne geç. Oturumun yapısını bir cümleyle söyle: iki atölye, bir güvenlik bloğu, bir ortak anlaşma.",
+      meta: "Sprint Planning ve Daily Scrum — öncesi, sırası, sonrası.",
+      not: "Geç kalanlar için bir dakika bekle. Oturumun yapısını bir cümleyle söyle: iki olay derinlemesine, çıktı değerlendirme, güvenlik ve etik, sonunda ekip çalışma anlaşması. Duyuruda vaat edilen sıra bu — aynen bu sırayla gidiyoruz.",
+    },
+    {
+      id: "s2-asamalar",
+      blok: "İkinci oturum açılışı",
+      tip: "adim",
+      baslik: "Her olayı üç aşamada düşünün",
+      giris: "Bu oturumun tamamı bu üç aşama üzerinden ilerleyecek: önce Sprint Planning, sonra Daily Scrum. İnsanlar AI'ı toplantının içine sokmaya çalışıyor; oysa en yüksek katkı hazırlıkta.",
+      adimlar: [
+        {
+          ad: "Öncesi",
+          aciklama: "Hazırlık. Katkının en yüksek olduğu aşama burası.",
+          ornek: "Planning: eksik kabul kriterlerini çıkarır · Daily: dünden bugüne panoda değişeni özetler",
+        },
+        {
+          ad: "Sırasında",
+          aciklama: "Geri planda kalır. Konuşan ekiptir.",
+          ornek: "Planning: konuşulanı not alır, tahmine karışmaz · Daily: hiç açılmaz",
+        },
+        {
+          ad: "Sonrası",
+          aciklama: "Toparlama ve takip.",
+          ornek: "Planning: Sprint hedefi taslağını yazar · Daily: engel kaydını biçimlendirir",
+        },
+      ],
+      kaynak: "Kaynak: Scrum.org, AI-Enhanced Scrum Events.",
+      not: "Oturumun haritası. İki cümle: (1) asıl kazanç hazırlıkta, (2) hepsini birden değiştirmeyin — tek olayla başlayın, oturunca sonrakine geçin. Sonraki iki blok bu üç sütunu Sprint Planning ve Daily Scrum için tek tek dolduracak.",
     },
 
-    /* ---- 00:05 · Atölye 1 — Kabul kriteri ---- */
+    /* ---- 00:03 · Sprint Planning'de AI ---- */
 
     {
-      id: "b-atolye1-giris",
-      blok: "Etkili istem yazımı",
+      id: "b-planning",
+      blok: "Sprint Planning'de AI",
       tip: "bolum",
-      numara: "08",
-      baslik: "Etkili istem yazımı",
-      ozet: "İstem bir cümle değil, kurduğunuz bağlam.",
+      numara: "07",
+      baslik: "Sprint Planning'de AI",
+      ozet: "Öncesi, sırası, sonrası — ve her aşamada hangi araç.",
       not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Katılımcı nerede olduğunu bilsin diye var.",
     },
     {
-      id: "s2-atolye1-giris",
-      blok: "Etkili istem yazımı",
-      tip: "vurgu",
-      metin: "Aynı iş öğesi, iki farklı istem. Fark modelde değil, istemde.",
-      kaynak: "Yetkinliğin tarif aşaması",
-      not: "Bu cümle bloğun bütün öğretisi. Slaytı geçmeden önce bir kez daha söyle. Dört aşamadan tarif aşamasındayız — hatırlat.",
+      id: "s2-planning-akis",
+      blok: "Sprint Planning'de AI",
+      tip: "adim",
+      baslik: "Sprint Planning — üç aşama",
+      giris: "Planning iki soruya cevap arar: bu Sprint neden değerli, ve ne yapılacak. AI ikinci sorunun hazırlığını taşır; birincisine karışmaz.",
+      adimlar: [
+        {
+          ad: "Öncesi",
+          aciklama: "Backlog öğeleri toplantıya hazır gelsin. Katkının en yüksek olduğu aşama.",
+          ornek: "Üst sıradaki öğelerde eksik kabul kriteri, tanımsız hata durumu ve bağımlılık listesi çıkarılır; sorulacak sorular önceden hazırlanır",
+        },
+        {
+          ad: "Sırasında",
+          aciklama: "Geri planda kalır. Tahmin ve taahhüt ekibin.",
+          ornek: "Konuşulanı not alır. Efor tahminine, kapasiteye ve Sprint hedefinin cümlesine karışmaz",
+        },
+        {
+          ad: "Sonrası",
+          aciklama: "Toparlama. Karar verilmiş şeyi yazıya geçirir.",
+          ornek: "Sprint hedefi taslağını biçimlendirir, Sprint Backlog kırılımını önerir, açık kalan soruları listeler",
+        },
+      ],
+      kaynak: "Kaynak: Scrum.org, AI-Enhanced Scrum Events.",
+      not: "Orta aşamada dur. Sprint hedefi bir taahhüttür; taahhüdü model veremez. Odaya sor: son Planning'inizde hedef cümlesini kim yazdı? Sonraki slayt aynı üç aşamayı araç araç açıyor.",
     },
     {
-      id: "s2-baglam",
-      blok: "Etkili istem yazımı",
-      tip: "madde",
-      baslik: "İstem bir cümle değil, kurduğunuz bağlamdır",
-      giris: "Alanın dili \"istem mühendisliği\"nden \"bağlam mühendisliği\"ne kaydı. Sebebi basit: modelin bilmediğini siz vereceksiniz.",
-      maddeler: [
-        { ana: "Doğru bilgi", alt: "Ekip, ürün, kullanıcı, kısıt. Model bunları bilmiyor; eksik bilgi eksik çıktı olarak geri döner." },
-        { ana: "Doğru format", alt: "Ham veri yığını yerine düzenli özet verin. Nasıl sunduğunuz, ne sunduğunuz kadar etkili." },
-        { ana: "Doğru zaman", alt: "Her şeyi baştan yüklemeyin. Gerekeni gerektiği adımda verin; kalabalık bağlam sinyali boğar." },
-        { ana: "Doğru araç", alt: "Kurumsal dokümanla çalışacaksanız modele belgeyi getirtin (RAG). Ezberinden yanıtlamasını istemeyin." },
-      ],
-      not: "Kaynak: \"The New Skill in AI is Not Prompting, It's Context Engineering\". Bir cümlede özetle: çöp girerse çöp çıkar. Katılımcıların çoğu tek satırlık istem yazıyor — asıl atlanan şey bağlam.",
+      id: "s2-planning-ornek",
+      blok: "Sprint Planning'de AI",
+      tip: "ikili",
+      baslik: "Planning öncesi — somut örnek",
+      sol: {
+        baslik: "Ekipten çıkan ham iş öğesi",
+        etiket: "Girdi",
+        ton: "notr",
+        maddeler: [
+          "\"Kullanıcı şifresini sıfırlayabilsin.\"",
+          "Kabul kriteri yok",
+          "Hata durumları tanımsız",
+          "Kimin için, hangi kanaldan belirsiz",
+        ],
+      },
+      sag: {
+        baslik: "AI taslağından sonra",
+        etiket: "Çıktı",
+        ton: "olumlu",
+        maddeler: [
+          "Given/When/Then biçiminde beş kriter",
+          "Süresi dolmuş bağlantı senaryosu eklenmiş",
+          "E-posta ve SMS kanalları ayrılmış",
+          "İki varsayım açıkça işaretlenmiş",
+        ],
+      },
+      not: "Sağdaki listeyi 'bitmiş iş' diye sunma. Ekibin doğrulaması gereken bir taslak; işaretlenmiş iki varsayım tam bunun için. İkinci oturumda bunu katılımcılar kendi cihazlarında yapacak.",
     },
     {
-      id: "s2-prompt-kalibi",
-      blok: "Etkili istem yazımı",
-      tip: "madde",
-      baslik: "İstem kalıbı — oturumdan çıkan kart",
-      giris: "Beş parça. Eksik olan her parça, çıktıda bir eksiklik olarak geri dönüyor.",
-      maddeler: [
-        { ana: "Rol", alt: "\"Deneyimli bir Product Owner gibi davran.\"" },
-        { ana: "Bağlam", alt: "Ekip, ürün, kullanıcı, kısıt. En uzun parça bu olmalı; çoğu kişi burayı atlıyor." },
-        { ana: "Format", alt: "\"Given/When/Then biçiminde, en fazla beş madde.\"" },
-        { ana: "Sınır", alt: "\"Teknik çözüm önerme, sadece davranışı tarif et.\"" },
-        { ana: "Dürüstlük çağrısı", alt: "\"Varsayım yaptığın yeri işaretle.\" En çok atlanan ve en çok işe yarayan madde." },
+      id: "s2-planning-araclar",
+      blok: "Sprint Planning'de AI",
+      tip: "tablo",
+      baslik: "Planning — hangi aşamada hangi araç, nasıl",
+      sutunlar: ["Aşama", "Ne yapılır", "Araç ve nasıl kullanılır"],
+      satirlar: [
+        [
+          "Öncesi",
+          "Backlog öğesi hazır mı, denetle",
+          "Jira / Azure DevOps içindeki AI — iş öğesi açıklamasını ver, \"eksik kabul kriterlerini ve bağımlılıkları listele\" de. Çıktıyı öğeye yorum olarak ekle, açıklamanın üstüne yazma.",
+        ],
+        [
+          "Öncesi",
+          "Sorulacak soruları çıkar",
+          "ChatGPT · Copilot — birinci oturumdaki istem kalıbı: rol, bağlam, format, sınır, dürüstlük çağrısı. Ürün ve kısıtları elle yazın; model bunları bilmiyor.",
+        ],
+        [
+          "Sırasında",
+          "Konuşulanı kaydet",
+          "Fireflies.ai · Otter.ai · Tactiq — toplantıya kaydedici olarak katılır. Kimse döküme bakmaz; sonrası için kayıt tutar.",
+        ],
+        [
+          "Sırasında",
+          "Ortak tahtayı toparla",
+          "Miro AI — dağınık notları kümeler ve başlıklandırır. Kümeyi ekip onaylar, araç değil.",
+        ],
+        [
+          "Sonrası",
+          "Sprint hedefi taslağı",
+          "NotebookLM · ChatGPT — dökümü ver, \"tek cümlelik Sprint hedefi taslağı çıkar\" de. Cümleyi ekip düzeltir ve sahiplenir.",
+        ],
+        [
+          "Sonrası",
+          "Sprint Backlog kırılımı",
+          "Jira / ADO AI — görev kırılımı taslağı üretir. Kimin neyi alacağı kararı Geliştiricilerde kalır.",
+        ],
       ],
-      not: "Bu kartı katılımcılar oturumdan sonra kullanacak. Beş parçayı tek tek oku; ikinci maddede dur ve önceki slayta bağla.",
+      not: "Araç adlarını tek tek okuma — \"her satırda bir örnek var\" de, üçüncü sütunun NASIL kısmını oku. ÖNEMLİ: bu liste örnek, tavsiye değil; kurumun onaylı araç listesi neyse o geçerli. Bu cümleyi söylemeden geçme, güvenlik bloğuyla çelişmesin.",
     },
-
     {
       id: "s2-dod",
-      blok: "Etkili istem yazımı",
+      blok: "Sprint Planning'de AI",
       tip: "ikili",
       baslik: "Kabul kriteri ile Definition of Done aynı şey değil",
       sol: {
@@ -99,10 +189,9 @@ export const oturum2: Oturum = {
       },
       not: "Kaynak: Scrum.org, AI Impacts On Your Definition of Done. Anahtar cümle: ürünü kurma biçiminiz değiştiyse, Definition of Done'ınız da bunu yansıtmalı. Odaya sor: sizin DoD'nizde AI'la ilgili tek bir madde var mı?",
     },
-
     {
       id: "s2-dod-ai",
-      blok: "Etkili istem yazımı",
+      blok: "Sprint Planning'de AI",
       tip: "madde",
       baslik: "Definition of Done'a yedinci kategori",
       giris: "Klasik DoD altı beklenti kategorisinden oluşur: süreç, teknik, teslim, sektör standartları, kurum ve fonksiyonel olmayan gereksinimler. Ürünü AI ile kuruyorsanız yedincisi ekleniyor.",
@@ -116,8 +205,100 @@ export const oturum2: Oturum = {
       not: "Kaynak: Scrum.org, \"AI Impacts On Your Definition of Done\". Anahtar cümle: ürünü kurma biçiminiz değiştiyse, Definition of Done'ınız da bunu yansıtmalı. Odaya sor: sizin DoD'nizde AI ile ilgili tek bir madde var mı? Cevap büyük ihtimalle hayır — bu slaytın çıktısı o boşluğun görülmesi. Üçüncü madde, veri güvenliği bloğundaki insan denetimi tablosuyla aynı şey; ileride oraya bağla.",
     },
 
-    /* ---- 00:23 · AI çıktısını değerlendirme ---- */
+    /* ---- 00:18 · Daily Scrum'da AI ---- */
 
+    {
+      id: "b-daily",
+      blok: "Daily Scrum'da AI",
+      tip: "bolum",
+      numara: "08",
+      baslik: "Daily Scrum'da AI",
+      ozet: "On beş dakika ekibin. AI dışarıda çalışır.",
+      not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Katılımcı nerede olduğunu bilsin diye var.",
+    },
+    {
+      id: "s2-daily-akis",
+      blok: "Daily Scrum'da AI",
+      tip: "adim",
+      baslik: "Daily Scrum — üç aşama",
+      giris: "Daily bir durum raporu değil; Geliştiricilerin günlük planını kurduğu on beş dakika. Bu blokta orta aşama diğer ikisinden farklı: AI kapalı.",
+      adimlar: [
+        {
+          ad: "Öncesi",
+          aciklama: "Scrum Master beş dakika harcar, ekip on beş dakika kazanır.",
+          ornek: "Panoda son 24 saatte değişen öğeler ve iki günden uzun süredir kımıldamayanlar özetlenir; tekrar eden engel işaretlenir",
+        },
+        {
+          ad: "Sırasında",
+          aciklama: "AI kapalı. Konuşan ekiptir; toplantıda kimse pano ya da özet okumaz.",
+          ornek: "Ekran paylaşımı yok, kaydedici yok. On beş dakika yalnızca Geliştiricilerin konuşması",
+        },
+        {
+          ad: "Sonrası",
+          aciklama: "Konuşulan engel yazıya geçer.",
+          ornek: "Engel kaydı güncellenir; metni AI biçimlendirir, sahibini ve tarihini insan yazar",
+        },
+      ],
+      kaynak: "Kaynak: Scrum.org, AI-Enhanced Scrum Events.",
+      not: "Bloğun can alıcı noktası orta aşama. Duyuruda \"ekip içi iletişimin ön planda tutulması gereken noktalar\" denen yer tam burası — cümleyi aynen kullan. Odaya sor: Daily'nizde kim pano okuyor? Çoğu ekipte Daily bir rapora dönüşmüş durumda; AI bunu hızlandırırsa toplantı büsbütün rapora döner.",
+    },
+    {
+      id: "s2-daily-araclar",
+      blok: "Daily Scrum'da AI",
+      tip: "tablo",
+      baslik: "Daily — hangi aşamada hangi araç, nasıl",
+      sutunlar: ["Aşama", "Ne yapılır", "Araç ve nasıl kullanılır"],
+      satirlar: [
+        [
+          "Öncesi",
+          "Dünden bugüne değişeni özetle",
+          "Jira / ADO pano sorgusu + AI özeti — \"son 24 saatte durum değiştiren öğeler ve iki günden uzun süredir aynı sütunda duranlar\". Daily'ye beş dakika kala çalıştırılır.",
+        ],
+        [
+          "Öncesi",
+          "Tekrar eden engeli işaretle",
+          "ChatGPT · Copilot — son üç Daily'nin engel notlarını ver, \"tekrar eden temaları çıkar\" de. Aynı engel üçüncü kez görünüyorsa Scrum Master'ın işi başlıyor.",
+        ],
+        [
+          "Sırasında",
+          "Araç yok",
+          "Kaydedici bile değil. Daily'nin çıktısı bir döküm değil, ekibin günlük planı. Bu satır bilerek boş.",
+        ],
+        [
+          "Sonrası",
+          "Engel kaydını güncelle",
+          "Jira / ADO — engeller madde madde girilir. AI cümleyi biçimlendirir; sahibi, tarihi ve önceliği insan koyar.",
+        ],
+        [
+          "Sonrası",
+          "Duran işi görünür kıl",
+          "Pano otomasyonu — üç günden uzun süredir aynı sütunda duran öğe için otomatik hatırlatma. Şeffaflığı insan hatırlamasına bırakmaz.",
+        ],
+      ],
+      not: "Üçüncü satırda dur ve sessiz kal. Tabloda bilerek boş bırakılmış tek hücre o; mesajın tamamı orada. Araç adları örnek — kurumun onaylı listesi geçerli.",
+    },
+    {
+      id: "s2-daily-iletisim",
+      blok: "Daily Scrum'da AI",
+      tip: "terazi",
+      baslik: "Devredilebilir işler ve ekipte kalması gerekenler",
+      giris: "Ayrım tek bir soruda: bu iş taslak üretmek mi, karar vermek mi?",
+      solEtiket: "AI'a devredilebilir · taslak işi",
+      sagEtiket: "Ekipte kalmalı · karar işi",
+      ogeler: [
+        { metin: "Metni biçimlendirmek ve yeniden yazmak", taraf: "sol" },
+        { metin: "Neyin değerli olduğuna karar vermek", taraf: "sag" },
+        { metin: "Uzun girdiden özet çıkarmak", taraf: "sol" },
+        { metin: "Sprint hedefini taahhüt etmek", taraf: "sag" },
+        { metin: "Kontrol listesi ve soru üretmek", taraf: "sol" },
+        { metin: "Bir işin \"bitti\" olduğunu onaylamak", taraf: "sag" },
+        { metin: "Aynı içeriği birden fazla biçimde denemek", taraf: "sol" },
+        { metin: "Ekip içi anlaşmazlığı konuşmak", taraf: "sag" },
+      ],
+      not: "Sağ taraf eğitimin ahlaki merkezi. Acele etme. Scrum olayları denetleme ve uyarlama için var; AI girdi verir, kararı iş birliğiyle ekip verir.",
+    },
+
+    /* ---- 00:30 · AI çıktısını değerlendirme ---- */
 
     {
       id: "b-atolye2-ders",
@@ -170,7 +351,7 @@ export const oturum2: Oturum = {
       not: "Kaynak: MIT Sloan, When AI Gets It Wrong. Dördüncü madde en ucuz ve en etkili olanı; katılımcılardan bugün bir kez denemelerini iste.",
     },
 
-    /* ---- 00:35 · Veri güvenliği ve sorumlu kullanım ---- */
+    /* ---- 00:39 · Sorumlu kullanım: güvenlik ve etik ---- */
 
     {
       id: "b-yapistirma",
@@ -225,6 +406,37 @@ export const oturum2: Oturum = {
       not: "Bu slayt eğitimin en çok işe yarayan pratik çıktısı. Yasak listesi kimseyi durdurmuyor; alternatif yöntem durduruyor. Sağ sütunu yavaş oku.",
     },
     {
+      id: "s2-cerceve",
+      blok: "Sorumlu kullanım: güvenlik ve etik",
+      tip: "katman",
+      baslik: "Bu kurallar nereden geliyor",
+      giris: "Sorumlu kullanım bir görüş değil. Dışarıda başlayıp masanıza kadar daralan bir zincir var — ve en içteki halkayı siz yazacaksınız.",
+      katmanlar: [
+        {
+          ad: "OECD AI İlkeleri · 2019, 2024'te güncellendi",
+          aciklama: "AI konusundaki ilk hükümetler arası standart. Beş değer ilkesi: kapsayıcı büyüme ve refah · insan hakları ve demokratik değerler (adillik ve mahremiyet dahil) · şeffaflık ve açıklanabilirlik · sağlamlık, emniyet ve güvenlik · hesap verebilirlik. Türkiye dahil OECD üyeleri ve ortak ülkeler benimsedi.",
+        },
+        {
+          ad: "AB Güvenilir AI Etik Kılavuzu",
+          aciklama: "Aynı ilkeleri yedi somut koşula çeviriyor — bu blokta göreceğiniz tablo oradan. İnsan denetiminin üç biçimi de buradan geliyor.",
+        },
+        {
+          ad: "Mevzuat · AB AI Yasası, KVKK",
+          aciklama: "İlke burada yükümlülüğe dönüşüyor. Definition of Done'a eklediğimiz \"mevzuat uyumu\" maddesinin dayanağı bu halka.",
+        },
+        {
+          ad: "Kurumun onaylı araç ve veri kuralları",
+          aciklama: "Hangi aracı kullanabileceğinizi belirleyen halka. Eğitimde geçen araç adları örnek; bağlayıcı olan burası.",
+        },
+        {
+          ad: "Ekibin çalışma anlaşması",
+          aciklama: "En içteki halka — ve tek, sizin yazacağınız halka. Dışarıdaki dört halka \"ne\" diyor; bunu ekibinizin günlük işine çeviren metin yok. Son blokta birlikte yazacağız.",
+        },
+      ],
+      kaynak: "Kaynak: OECD AI Principles (oecd.org/en/topics/ai-principles) · Avrupa Komisyonu, Güvenilir AI Etik Kılavuzu.",
+      not: "Bu slaydın işi otorite kurmak. Yönetici odadaysa asıl hedef kitle o. Söylenecek cümle: bunlar bizim tercihimiz değil, 2019'da imzalanmış hükümetler arası bir standardın uzantısı — 2023 itibarıyla 70'ten fazla ülkede bin ayrı politika girişimi bu ilkeleri izliyor. Beş ilkeyi tek tek okuma, halkaları oku. ASIL VURGU en içteki halka: dışarıdaki dördü \"ne\" diyor ama hiçbiri sizin Daily'nizde AI'ın açık mı kapalı mı olduğunu söylemiyor. O boşluk son bloğun tamamı.",
+    },
+    {
       id: "s2-onay",
       blok: "Sorumlu kullanım: güvenlik ve etik",
       tip: "tablo",
@@ -239,7 +451,7 @@ export const oturum2: Oturum = {
         [
           "İnsan döngü üstünde",
           "Süreç kendi işler; insan izler ve gerektiğinde durdurur",
-          "Tekrarlayan işleri yürüten ajanlar, otomatik özetler",
+          "Tekrarlayan işleri yürüten agent'lar, otomatik özetler",
         ],
         [
           "İnsan komutada",
@@ -318,9 +530,66 @@ export const oturum2: Oturum = {
       not: "Çalışma anlaşmasının ilk maddesi bu olacak. Köprüyü burada kur ve doğrudan oylamaya geç.",
     },
 
-    /* ---- 00:45 · Ekip çalışma anlaşması ---- */
+    /* ---- 00:53 · Ekip çalışma anlaşması ---- */
 
-    /* ---- 00:52 · Kapanış değerlendirmesi ---- */
+    {
+      id: "b-anlasma",
+      blok: "Ekip çalışma anlaşması",
+      tip: "bolum",
+      numara: "11",
+      baslik: "Ekip çalışma anlaşması",
+      ozet: "Eğitimin amacı buydu: ortak ve yazılı bir yaklaşım.",
+      not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Eğitimin duyurusunda \"ortak bir yaklaşım oluşturmak\" yazıyordu — bu blok o sözün karşılığı, bunu söyle.",
+    },
+    {
+      id: "s2-anlasma",
+      blok: "Ekip çalışma anlaşması",
+      tip: "kartlar",
+      baslik: "Ortak yaklaşım — beş başlık",
+      giris: "Eğitimin amacı buydu: AI'ı bilinçli ve tutarlı kullanmak için ekibin üzerinde anlaştığı bir metin. Aşağıdakiler başlangıç başlıkları; cümleleri ekip kendi yazar.",
+      kartlar: [
+        {
+          ust: "NEREDE",
+          ana: "Hangi olayda AI açık, hangisinde kapalı",
+          alt: "Örnek: Planning ve Refinement öncesinde açık, Daily Scrum'ın içinde kapalı. Kararın ekipte kalması gereken yerleri isim isim yazın.",
+        },
+        {
+          ust: "NE VERİLİR",
+          ana: "Hangi veri araca girer, hangisi girmez",
+          alt: "Müşteri adı, kişisel veri, sözleşme metni ve kaynak kod dışarı çıkmaz. Şüphedeyseniz sormadan yapıştırmayın.",
+        },
+        {
+          ust: "KİM ONAYLAR",
+          ana: "AI çıktısı kimin onayıyla işe girer",
+          alt: "Taslak AI'dan, karar insandan. Onaylayan kişi adını koyar; \"AI öyle demişti\" bir gerekçe değildir.",
+        },
+        {
+          ust: "NASIL İŞARETLENİR",
+          ana: "AI ile üretilen içerik nasıl belli olur",
+          alt: "İş öğesi yorumunda tek satır yeter: taslak AI ile üretildi, gözden geçiren kim. Şeffaflık Scrum'ın ilk ayağı.",
+        },
+        {
+          ust: "NE ZAMAN BAKILIR",
+          ana: "Anlaşma ne sıklıkta gözden geçirilir",
+          alt: "Her Retrospektif'te tek soru: bu anlaşma işe yaradı mı? Yaramayan madde silinir, eksik madde eklenir.",
+        },
+      ],
+      not: "Bu slayt eğitimin çıktısı. Beş başlığı oku, sonra ekiplere söyle: bu sayfayı kendi Retrospektif'inizde açın. Üçüncü kart güvenlik bloğundaki insan denetimi tablosuyla, birinci kart Daily bloğundaki 'AI kapalı' satırıyla aynı şeyi söylüyor — ikisine de geri bağla.",
+    },
+    {
+      id: "s2-anlasma-nasil",
+      blok: "Ekip çalışma anlaşması",
+      tip: "madde",
+      baslik: "Anlaşma nasıl yapılır",
+      giris: "Bu eğitimden sonra ekibinizle on beş dakika. Daha uzunu gerekmiyor.",
+      maddeler: [
+        { ana: "Beş başlığı sırayla açın", alt: "Her başlık için tek cümle yazın. Uzun metin okunmuyor, okunmayan anlaşma uygulanmıyor." },
+        { ana: "Anlaşamadığınız yeri not edin", alt: "Orada karar vermeye çalışmayın. Anlaşmazlık bir sonraki Retrospektif'in gündemi olur." },
+        { ana: "Metni ekibin gördüğü yere koyun", alt: "Wiki'nin derinine değil, panonun üstüne. Görünmeyen anlaşma yok sayılır." },
+        { ana: "Retrospektif'te tek soruyla açın", alt: "\"Bu anlaşma işe yaradı mı?\" Yaramayan maddeyi silin — yaşamayan kural güveni aşındırır." },
+      ],
+      not: "Kapanışa köprü. Ekiplere şunu söyle: bu anlaşmayı yazmadan eğitim yarım kalır. Bir sonraki blok kişisel eylem planı; bu blok ekibin, o blok bireyin.",
+    },
 
     /* ---- 00:58 · Eylem planı ---- */
 
@@ -328,7 +597,7 @@ export const oturum2: Oturum = {
       id: "b-eylem-plani",
       blok: "Eylem planı",
       tip: "bolum",
-      numara: "11",
+      numara: "12",
       baslik: "Eylem planı",
       ozet: "Kişi başı bir deney, iki Sprint sonra ölçüm.",
       not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Katılımcı nerede olduğunu bilsin diye var.",
@@ -354,5 +623,6 @@ export const oturum2: Oturum = {
       kaynak: "Eğitimin tek çıktısı",
       not: "Son slayt. Teşekkür et, çalışma anlaşmasının metnini bugün göndereceğini söyle ve bitir.",
     },
+
   ],
 };

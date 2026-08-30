@@ -12,8 +12,14 @@ export type SlaytGovde =
   | { tip: "vurgu"; metin: string; kaynak?: string }
   /** İki sütun karşılaştırma: zayıf vs iyi, önce vs sonra. */
   | { tip: "ikili"; baslik: string; sol: SutunIcerik; sag: SutunIcerik }
-  /** İç içe geçen katmanlar: ML → derin öğrenme → üretken AI → ajanlı AI. */
-  | { tip: "katman"; baslik: string; giris?: string; katmanlar: { ad: string; aciklama: string }[] }
+  /** İç içe geçen katmanlar: ML → derin öğrenme → üretken AI → agentic AI. */
+  | {
+      tip: "katman";
+      baslik: string;
+      giris?: string;
+      katmanlar: { ad: string; aciklama: string }[];
+      kaynak?: string;
+    }
   /** Tablo. Beş Scrum olayının AI karşılıkları gibi ızgara içerik için. */
   | { tip: "tablo"; baslik: string; sutunlar: string[]; satirlar: string[][] }
   /** Sıralı adımlar. Süreç anlatan içerik tabloya sıkıştırılmasın. */
@@ -76,7 +82,46 @@ export type SlaytGovde =
       giris?: string;
       /** Eğri üzerindeki aşama adları, soldan sağa. */
       asamalar: [string, string, string, string, string];
+      /** Aşama adlarının altındaki tek satırlık okuma notu. Eğri sözlü
+          anlatım olmadan yanlış okunuyor; bu satır o boşluğu kapatıyor. */
+      aciklama?: string;
       noktalar: OlgunlukNoktasi[];
+      kaynak?: string;
+    }
+  /** Tıklanınca metni "şifre çözülüyormuş" gibi hedefe dönüştüren kart.
+      Kötü istem (kırmızı yüz) → etkili istem (yeşil yüz). */
+  | {
+      tip: "cevir";
+      baslik: string;
+      giris?: string;
+      /** Kapalı yüz — kötü örnek. */
+      on: { etiket: string; metin: string };
+      /** Açılan yüz — düzeltilmiş örnek. */
+      arka: { etiket: string; metin: string };
+      /** Kartın altındaki yönlendirme. Boşsa "Karta tıklayın." yazar. */
+      ipucu?: string;
+      kaynak?: string;
+    }
+  /** Atölye: katılımcı metin kutusuna kendi istemini yazıp gönderiyor. */
+  | {
+      tip: "atolye";
+      baslik: string;
+      giris?: string;
+      /** Katılımcıya verilen somut görev. Kutunun hemen üstünde duruyor. */
+      gorev: string;
+      yerTutucu?: string;
+      ipucu?: string;
+      kaynak?: string;
+    }
+  /** Atölye çıktısı: en iyi ve en kötü istem yan yana. */
+  | {
+      tip: "karsilastirma";
+      baslik: string;
+      giris?: string;
+      /** İstemlerin toplandığı `atolye` slaydının id'si. */
+      kaynakSlayt: string;
+      /** Sunucunun canlı denemesi için önerilen araçlar. */
+      araclar?: string[];
       kaynak?: string;
     }
   /** Henüz içeriği yazılmamış blok. Sunum akışını bozmadan iskelette durur. */

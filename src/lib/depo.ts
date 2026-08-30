@@ -20,6 +20,10 @@ const DURUM_ANAHTARI = "sunum:durum";
    (sunucu panelinden "Katılımcıları temizle" bunu yapıyor). */
 const KATILIMCI_ANAHTARI = "sunum:katilimcilar";
 const ATILAN_ANAHTARI = "sunum:atilan";
+/** Atölye gönderimleri: `sunum:istem:<slaytId>` hash'i, alan = katılımcı id. */
+const ISTEM_ANAHTARI = "sunum:istem";
+/** Sunucunun en iyi/en kötü işaretleri: `sunum:istem-secim:<slaytId>`. */
+const SECIM_ANAHTARI = "sunum:istem-secim";
 
 /** Atılan kimlik bu süre boyunca geri giremez. Kalıcı yasak değil —
  *  istemcinin durumu görüp çıkış yapmasına yetecek kadar. */
@@ -60,6 +64,10 @@ type Bellek = {
   katilimcilar: Map<string, Katilimci>;
   /** id → atılmanın biteceği zaman damgası. */
   atilan: Map<string, number>;
+  /** slaytId → (katılımcı id → istem). */
+  istemler: Map<string, Map<string, Istem>>;
+  /** slaytId → sunucunun işaretleri. */
+  secimler: Map<string, Secim>;
 };
 const g = globalThis as unknown as { __sunumBellek?: Partial<Bellek> };
 /**
@@ -73,6 +81,8 @@ function bellek(): Bellek {
   b.durum ??= { ...BASLANGIC };
   b.katilimcilar ??= new Map();
   b.atilan ??= new Map();
+  b.istemler ??= new Map();
+  b.secimler ??= new Map();
   return b as Bellek;
 }
 
@@ -194,4 +204,90 @@ export async function katilimcilariTemizle(): Promise<void> {
     return;
   }
   await redis(["DEL", KATILIMCI_ANAHTARI]);
+}
+
+
+/* --- atölye: istem gönderimleri -------------------------------------------
+   Cevaplar gibi ayrı bir anahtarda tutuluyor, durumun içinde değil: durumu
+   sunucu yazar, istemi katılımcı; aynı kayda iki taraf dokunursa biri
+   diğerinin üstüne yazar.
+
+   `HSETNX` — ilk gönderim geçerli. Puanı görüp düzeltip tekrar göndermek yok;
+   sıralama böyle anlamını koruyor. */
+
+export type Istem = { id: string; ad: string; metin: string };
+/** Sunucunun işaretleri. Katılımcı id'si tutuluyor, metin değil. */
+export type Secim = { iyi?: string; kotu?: string };
+
+const ISTEM_SINIRI = 2000;
+
+/** Kabul edildiyse true, bu kişi daha önce göndermişse false. */
+export async function istemYaz(
+  slaytId: string,
+  id: string,
+  ad: string,
+  metin: string,
+): Promise<boolean> {
+  const kayit: Istem = { id, ad, metin: metin.trim().slice(0, ISTEM_SINIRI) };
+  if (!paylasimliDepo) {
+    const harita = bellek().istemler.get(slaytId) ?? new Map<string, Istem>();
+    bellek().istemler.set(slaytId, harita);
+    if (harita.has(id)) return false;
+    harita.set(id, kayit);
+    return true;
+  }
+  const sonuc = await redis<number>([
+    "HSETNX", `${ISTEM_ANAHTARI}:${slaytId}`, id, JSON.stringify(kayit),
+  ]);
+  return sonuc === 1;
+}
+
+/** Tüm gönderimler. YALNIZCA sunucu paneline gider — adlar burada. */
+export async function istemleriOku(slaytId: string): Promise<Istem[]> {
+  if (!paylasimliDepo) {
+    return [...(bellek().istemler.get(slaytId)?.values() ?? [])];
+  }
+  const ham = await redis<Record<string, string> | null>([
+    "HGETALL", `${ISTEM_ANAHTARI}:${slaytId}`,
+  ]);
+  if (!ham) return [];
+  const liste: Istem[] = [];
+  for (const deger of Object.values(ham)) {
+    try {
+      liste.push(JSON.parse(deger) as Istem);
+    } catch {
+      /* bozuk kayıt sessizce atlanır; bir kişinin istemi için oturum durmaz */
+    }
+  }
+  return liste;
+}
+
+export async function secimOku(slaytId: string): Promise<Secim> {
+  if (!paylasimliDepo) return { ...(bellek().secimler.get(slaytId) ?? {}) };
+  const ham = await redis<string | null>(["GET", `${SECIM_ANAHTARI}:${slaytId}`]);
+  if (!ham) return {};
+  try {
+    return JSON.parse(ham) as Secim;
+  } catch {
+    return {};
+  }
+}
+
+export async function secimYaz(slaytId: string, secim: Secim): Promise<void> {
+  if (!paylasimliDepo) {
+    bellek().secimler.set(slaytId, secim);
+    return;
+  }
+  await redis(["SET", `${SECIM_ANAHTARI}:${slaytId}`, JSON.stringify(secim)]);
+}
+
+/** Provadan sonra temiz sayfa: gönderimler ve işaretler birlikte silinir. */
+export async function atolyeSifirla(slaytId: string): Promise<void> {
+  if (!paylasimliDepo) {
+    bellek().istemler.delete(slaytId);
+    bellek().secimler.delete(slaytId);
+    return;
+  }
+  await redis(["DEL", `${ISTEM_ANAHTARI}:${slaytId}`]);
+  await redis(["DEL", `${SECIM_ANAHTARI}:${slaytId}`]);
 }

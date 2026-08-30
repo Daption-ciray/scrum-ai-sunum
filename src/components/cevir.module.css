@@ -1,0 +1,126 @@
+/* Kötü istem → etkili istem çeviren kart.
+   Renk burada BİLGİ taşıyor: kırmızı yüz kötü istem, yeşil yüz etkili istem.
+   Arada, çözülme sırasında kart siyaha düşüp gliflerini yeşil yakıyor —
+   "şifre çözülüyor" hissi oradan geliyor. */
+
+.sarma {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.baslik {
+  font-size: var(--ol-baslik);
+  font-weight: 700;
+  line-height: 1.15;
+  text-wrap: balance;
+  color: var(--metin);
+}
+
+.giris {
+  font-size: var(--ol-alt);
+  color: var(--metin-2);
+  max-width: 60ch;
+  line-height: 1.45;
+}
+
+/* --- kart ---------------------------------------------------------------- */
+
+.kart {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: var(--kenar) solid var(--cizgi-2);
+  border-radius: 0;
+  box-shadow: 6px 6px 0 0 var(--cizgi-2);
+  padding: 1.6rem 1.3rem 1.2rem;
+  cursor: pointer;
+  font: inherit;
+  transition: transform var(--gecis), box-shadow var(--gecis),
+    background-color var(--gecis), color var(--gecis);
+}
+
+.kart:hover,
+.kart:focus-visible {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 0 var(--cizgi-2);
+}
+.kart:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 0 var(--cizgi-2);
+}
+
+/* Üç durum. Sadece zemin ve metin rengi değişiyor; geometri sabit kalıyor ki
+   çözülme sırasında kart zıplamasın. */
+.kotu {
+  background: var(--kotu-zemin);
+  color: var(--kotu-metin);
+}
+.iyi {
+  background: var(--sunucu-zemin);
+  color: var(--metin);
+}
+.cozuluyor {
+  background: var(--cizgi-2);
+  color: var(--sunucu);
+  cursor: progress;
+}
+.cozuluyor:hover {
+  transform: none;
+  box-shadow: 6px 6px 0 0 var(--cizgi-2);
+}
+
+/* --- rozet --------------------------------------------------------------- */
+
+.rozet {
+  display: inline-block;
+  margin-bottom: .9rem;
+  padding: .3em .6em;
+  background: var(--cizgi-2);
+  color: var(--yuzey);
+}
+.cozuluyor .rozet {
+  background: var(--sunucu);
+  color: var(--cizgi-2);
+}
+
+/* --- istem metni ---------------------------------------------------------
+   Mono: hem istem gerçekte böyle yazılır hem de sabit genişlik sayesinde
+   çözülme sırasında satırlar yerinden oynamıyor. */
+
+.metin {
+  margin: 0;
+  font-family: var(--yazi-mono), monospace;
+  font-size: var(--ol-govde);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  /* İki yüz farklı uzunlukta. Yükseklik uzun yüze göre sabitlendi, yoksa
+     çevirince kart zıplıyor. Kısa yüzdeki boşluk kaybolmuş yer değil —
+     modele ne kadar az şey verdiğinizi gösteren şey tam olarak o boşluk. */
+  min-height: 13lh;
+}
+
+.ipucu {
+  font-size: var(--ol-kucuk);
+  color: var(--metin-3);
+}
+
+.kaynak {
+  font-size: var(--ol-etiket);
+  color: var(--metin-3);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 680px) {
+  .kart { padding: 1.2rem 1rem 1rem; box-shadow: 4px 4px 0 0 var(--cizgi-2); }
+  .metin { font-size: var(--ol-kucuk); min-height: 18lh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kart { transition: none; }
+  .kart:hover, .kart:focus-visible { transform: none; }
+}

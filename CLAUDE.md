@@ -15,8 +15,32 @@ adları ve arayüz Türkçe; İngilizceye çevirmeyin.
 | Cihaz | Herkes kendi cihazında — laptop/telefon karışık, önceden bilinmiyor |
 | Ödev | Yok (kullanıcı kararı). Perşembe atölyesi hazır materyalle çalışır. |
 
-Akış: 14 blok, 7'si birinci oturum 7'si ikinci oturum. Dakika dakika akış
-`src/icerik/` içinde slayt olarak duruyor; blok süreleri `src/icerik/bloklar.ts`.
+Akış: **13 blok, 67 slayt** — 6'sı birinci oturum (36 slayt), 7'si ikinci (31). Dakika dakika
+akış `src/icerik/` içinde slayt olarak duruyor; blok süreleri
+`src/icerik/bloklar.ts` (iki oturum da tam 60 dk'ya toplanıyor).
+
+## Eğitim duyurusu — desteyi bağlayan söz
+
+Katılımcıya gönderilen duyurunun içerik kısmı desteyi belirliyor. **Blok sırası
+bu cümleleri birebir takip ediyor; içerik değişikliği yapmadan önce buraya
+bakın.**
+
+> Sunumun içeriği, yapay zeka araçlarının Scrum uygulamalarında bilinçli ve
+> tutarlı şekilde kullanılmasına yönelik **ortak bir yaklaşım oluşturmayı**
+> amaçlamaktadır. 1. oturumda öncelikle **Agile yaklaşımı ve Scrum'ın temel
+> ilkeleri** ele alınacak, ardından **üretken yapay zekanın çalışma mantığı ve
+> sınırlarına** değinilecektir. 2. **Daily Scrum ve Sprint Planning** süreçleri
+> **öncesi, sırası ve sonrası** olarak üç aşamada ele alınacak. Bu kapsamda
+> yapay zekanın katkı sağlayabileceği alanlar ile **ekip içi iletişimin ön
+> planda tutulması gereken noktalar** değerlendirilecektir. Oturum **veri
+> güvenliği ve sorumlu kullanım** ilkeleriyle tamamlanacaktır.
+
+Karşılıkları: ortak yaklaşım → `Ekip çalışma anlaşması` bloğu · Agile/Scrum
+ilkeleri → `Scrum çerçevesi` · üretken AI mantığı ve sınırları →
+`AI temelleri ve sınırları` + `Etkili istem yazımı` · iki olayın üç aşaması →
+`Sprint Planning'de AI` + `Daily Scrum'da AI` · iletişimin ön planda kaldığı
+noktalar → `s2-daily-akis` orta aşaması ve `s2-daily-iletisim` terazisi ·
+güvenlik ve sorumlu kullanım → `Sorumlu kullanım: güvenlik ve etik`.
 
 **Dil kurumsal eğitim dili.** Blok adları ("Bağlan ve ısın", "İlk yarış" gibi
 gündelik adlar) kurumsal eğitim terminolojisine çevrildi: Açılış ve kurulum,
@@ -41,23 +65,50 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
 
 **Çalışıyor**
 - Senkron slayt motoru (sunucu ilerletir, herkes takip eder)
-- Sunucu paneli: canlı önizleme, sunucu notları, blok atlama, perde, klavye
-- Giriş sayfasından sunucu girişi — anahtar doğruysa doğrudan `/sunucu`
-- Galeri: 14 blok 3B kart yığını (GSAP), serbest gezinme, ikinci oturum kilitli
-- İki oturumun 23+18 slaytı — kurumsal eğitim dilinde, kaynaklı
-- **Quiz motoru** — 5 slaytta çalışıyor: `s1-nabiz` (nabız, puansız),
-  `s1-quiz-1` ve `s2-hatirlatma-quiz` (4'er soru, 20 sn), `s2-anlasma`
-  (5 maddelik oylama, puansız), `s2-final-quiz` (8 soru, 15 sn, podyum).
-  Sorular yazıldı.
+- Sunucu paneli: canlı önizleme, sunucu notları, blok atlama, perde, klavye,
+  katılımcı listesi ve tek tek oturum kapatma
+- Giriş sayfasından sunucu girişi; galeride katılımcı için çıkış düğmesi
+- Galeri: 13 blok 3B kart yığını (GSAP), ikinci oturum kilitli
+- **67 slayt, 13 blok** — kurumsal eğitim dilinde, kaynakları slaytın içinde
+- 18 slayt tipi; `bolum` ayraçları, `sayi`, `adim`, `terazi`, `kartlar`,
+  `alinti`, `roller`, `olgunluk`, `cevir`, `atolye`, `karsilastirma` dahil
+- Upstash Redis bağlı, 75 kişilik yüke göre kurgulanmış
 
-**Yok — sıradaki iş, bu sırayla**
-1. **Site içi AI** — blok 09 ve 10 atölyeleri için
-2. **İçerik** — örnek user story, dağınık retro not seti
-3. Blok 12'nin 5. maddesi oturumda odadan gelecek (slaytta yer tutucu duruyor)
+**Blok sırası**
 
-Bunların yerinde şu an "Yapım aşamasında" rozetli `taslak` tipi slaytlar var;
-her birinin `beklenen` alanında ne geleceği yazılı. Akış şimdiden baştan sona
-prova edilebilir durumda — **iskeleti bozmadan doldurun.**
+| # | Blok | dk | Oturum |
+|---|---|---|---|
+| 1 | Açılış ve kurulum | 4 | 1 |
+| 2 | Roller değişiyor | 4 | 1 |
+| 3 | Scrum çerçevesi | 10 | 1 |
+| 4 | AI temelleri ve sınırları | 14 | 1 |
+| 5 | Etkili istem yazımı | 22 | 1 | ← atölye
+| 6 | Özet ve kapanış | 6 | 1 |
+| 7 | İkinci oturum açılışı | 3 | 2 |
+| 8 | Sprint Planning'de AI | 15 | 2 |
+| 9 | Daily Scrum'da AI | 11 | 2 |
+| 10 | AI çıktısını değerlendirme | 9 | 2 |
+| 11 | Sorumlu kullanım: güvenlik ve etik | 15 | 2 |
+| 12 | Ekip çalışma anlaşması | 5 | 2 |
+| 13 | Eylem planı | 2 | 2 |
+
+**Yok — sıradaki iş**
+1. **Slayt slayt içerik gözden geçirmesi** — 13 bloğu baştan sona konuşmak.
+   Yeni yazılan slaytlar öncelikli: `s2-planning-akis`, `s2-planning-araclar`,
+   `s2-daily-akis`, `s2-daily-araclar`, `s2-anlasma`, `s2-anlasma-nasil`.
+2. **Chart slaytları** — `echarts` kurulmadı; Evil Charts'ın tonlamalı dili
+   henüz uygulanmadı. Referans: evilcharts.com (shadcn/Tailwind istiyor,
+   yalnızca `echarts` kurup option reçetelerini almak yeterli).
+3. **Kalan tekdüzelik** — 62 slaydın bir kısmı hâlâ `madde`.
+4. **Quiz motoru hâlâ yok.** Atölye geri geldi ama quiz gelmedi; istenirse
+   yeniden yazılacak.
+
+**Bilinçli olarak yok (kullanıcı kararı)**
+- **Quiz motoru silindi.** Bileşen, `/api/cevap`, depo tarafı, panel kontrolü
+  ve cevap tanımları kaldırıldı. Geri istenirse yeniden yazılacak.
+- **Atölye slaytları çıkarıldı.** Site içi AI da bu yüzden gündemde değil.
+- **Kart görselleri kullanılmıyor.** Dosyalar `public/kartlar/` altında duruyor
+  (1,2 MB) ama hiçbir yerden referans verilmiyor.
 
 ## Komutlar
 
@@ -182,6 +233,85 @@ silinmediler, kullanıcı kararı bekliyor. Geri dönülürse üretim betiği
 (`kartlar/fal-uret.mjs`) ve promptlar yerinde; promptların zemin varsayımını
 yeni temaya göre çevirmek gerekir.
 
+**Kırmızı yalnızca `cevir` kartında var.** Tema tek renkliydi: yeşil =
+"sunucu burada". `s1-istem-cevir` kartı ikinci bir renk getirdi (`--kotu`,
+`--kotu-zemin`, `--kotu-metin`) çünkü orada renk gerçekten bilgi taşıyor:
+kırmızı yüz kötü istem, yeşil yüz etkili istem. **İkisi hiçbir karede yan yana
+gelmiyor** — kart tek seferde tek yüz gösteriyor, arada zemin siyaha düşüyor —
+o yüzden yeşilin tek anlamı bozulmuyor. Kırmızıyı başka bir yerde kullanırsanız
+bu denge biter.
+
+**`cevir` kartı yerel, senkron değil.** Katılımcı kendi cihazında çeviriyor,
+sunucuya bildirilmiyor. Bilerek: herkesin aynı anda çevirmesi gerekmiyor.
+Çözülme animasyonu sıralıya YAKIN (soldan sağa kayan taban + rastgele sapma);
+tam sıralı olsa yazı makinesi, tamamen rastgele olsa kaynayan bulanıklık olurdu.
+Metin yüksekliği uzun yüze göre sabit — kısa yüzdeki boşluk kaybolmuş yer değil,
+slaydın mesajı.
+
+**Ajan değil agent.** İçerikte "ajan" geçmiyor; jargon olarak `agent` /
+`agentic AI` kullanılıyor (kullanıcı kararı). Yeni slaytta da böyle yazın.
+
+**Atölye: istem yaz → puanla → en iyi/en kötü → canlı karşılaştır.**
+İki slayt (`s1-atolye-istem` tip `atolye`, `s1-atolye-sonuc` tip
+`karsilastirma`) ve dört karar:
+
+1. **İki katmanlı değerlendirme: elek + hakem.**
+   `src/lib/istemPuan.ts` = **elek**, anahtar kelime deseni, 0 ms, 0 ₺.
+   `src/lib/hakem.ts` = **hakem**, Gemini'ye yargılatıyor.
+   Elek 75 istemi uçlardaki 10'a indiriyor, hakem yalnızca onlara bakıyor —
+   tek çağrıda hepsi birden, çünkü model istemleri BİRLİKTE görünce göreli ve
+   tutarlı puan veriyor. Ayrı ayrı sorulsa aynı istem farklı turlarda farklı
+   puan alırdı. Hakem katılımcı ADINI görmüyor, yalnızca id ve metin.
+
+   Neden ikisi birden: elek tek başına aldanıyor. Ölçülen bir örnek —
+   `"gibi davran ekip ürün format sadece varsayım madde biçim..."` gibi 168
+   karakterlik anlamsız bir kelime dizisi elekten **88** alıp listenin ikinci
+   sırasına çıkıyor; hakem aynı metne **10** verip "anahtar kelimeler rastgele
+   dizildiği için anlamlı bir bağlam içermemektedir" diyor. Asıl kazanç puan
+   değil, o **gerekçe cümlesi** — sunucu odada yüksek sesle okuyor.
+
+   **Hakem her hata yolunda `null` döndürür, asla atmaz.** Anahtar yoksa,
+   API çökerse, zaman aşımına uğrarsa panel eleğin sıralamasıyla çalışmaya
+   devam eder ve "değerlendirilemedi" satırı gösterir. Yönetici önünde tek
+   hata noktası bırakılmıyor. `GOOGLE_AI_API_KEY` tanımlı değilse düğme hiç
+   görünmez.
+
+2. **Elek puanı KALİTE değil KALIP kontrolü.** `src/lib/istemPuan.ts` beş parçadan
+   (rol · bağlam · format · sınır · dürüstlük) kaçının bulunduğuna bakıyor,
+   artı uzunluk bonusu. İşi sunucuyu 75 istemin en üstüne ve en altına
+   götürmek; **son söz her zaman sunucuda** (panelde ✓ / ✗). Desenler Türkçe
+   ünsüz yumuşamasını hesaba katıyor — `/ekip/` "ekibimiz"i kaçırıyordu,
+   `/eki[pb]/` yakalıyor. Dosya sunucuda kalır, istemciye inmez: katılımcı
+   deseni görüp puan avlamasın.
+3. **En kötünün SAHİBİ istemciye hiç inmiyor.** `/api/atolye` yanıtında
+   `kotu.ad` diye bir alan yok — sansür sunucuda, istemcide gizleme değil.
+   Ad yalnızca sunucu panelinde. Ödül kişiye, ders odaya.
+4. **`HSETNX` — ilk gönderim geçerli.** Puanı görüp düzeltip tekrar göndermek
+   olsaydı sıralama anlamını kaybederdi. Cevaplardaki gerekçenin aynısı.
+5. **Panel verisi yalnızca atölye slaytlarında okunuyor.** Her yoklamada
+   `HGETALL` çekmek 75 kişilik odada gereksiz Redis trafiği. `/api/panel`
+   önce slayt tipine bakıyor.
+
+Gönderim `Durum.istemAcik` ile açılıp kapanıyor — slayta gelmek tek başına
+açmıyor, sunucu basıyor. Karşılaştırma slaydındaki kırmızı/yeşil çifti `cevir`
+kartıyla AYNI: katılımcı o ikiliyi yarım saat önce gördü, ders eşleşmeden
+geliyor. **Bu iki yer dışında kırmızı kullanmayın.**
+
+**Blok sırası duyuruya göre kuruldu, ters yöne çevirmeyin.** Olayların üç
+aşamalı işlenişi (`s2-asamalar` ve iki olay bloğu) önce birinci oturumdaydı,
+`s1-asamalar` tek slayt hâlinde ve örnekleri Retrospektif üzerindendi. Duyuru
+bu içeriği ikinci oturuma ve **isim isim Daily Scrum ile Sprint Planning'e**
+bağladığı için taşındı; `Etkili istem yazımı` da yer açmak için birinci oturuma
+geçti — orası zaten "üretken yapay zekanın çalışma mantığı" başlığının altına
+düşüyor. `Ekip çalışma anlaşması` bloğu quiz silinirken kaldırılmıştı; duyurunun
+ilk cümlesi ("ortak bir yaklaşım oluşturmayı amaçlamaktadır") tam olarak o bloğu
+vaat ettiği için geri kondu. Slayt kimlikleri taşınırken yenilendi: prefiks
+oturum numarasını taşıyor (`s1-baglam`, `s2-planning-akis`), kod hiçbir yerde
+slayt id'si aramıyor.
+
+**`Daily` araç tablosunda bir hücre bilerek boş.** `s2-daily-araclar` içindeki
+"Sırasında · Araç yok" satırı eksiklik değil, slaytın mesajı. Doldurmayın.
+
 ## Tuzaklar
 
 **Piksel font kesirli punto boyutunda okunmuyor.** `clamp()` ile verilen
@@ -200,6 +330,51 @@ olduğunu fark etmez; kesilen sütun görülmemiş sütundur.
 
 **`uDim` / `uFocus` uniform'ları.** Kart durumları (geçildi / odakta) shader
 içinde. DOM tarafında karşılığı yok, oradan aramayın.
+
+**Bölüm ayraçlarındaki görseller Corporate Memphis, ama renksiz.**
+`BolumGorseli.tsx` içinde 11 kompozisyon var, hepsi `viewBox 0 0 100 100`.
+Üç kural, üçü de kasıtlı:
+
+1. **Kontur yok, dolgu var.** Şekiller `fill` ile tanımlanıyor. İlk sürüm
+   `stroke-width: 7` ile çizilmişti; kullanıcı "çok kalın, daha soft" dedi ve
+   haklıydı — Corporate Memphis'in yumuşaklığı tam olarak konturun
+   yokluğundan geliyor. Kontur yalnızca üç yerde: `.baglanti` (ince organik
+   bağ), `.halka` (kalın yay), `.onay` / `.onayTers` (işaret).
+2. **Formlar yuvarlak.** `rx`, daire, yay. Temanın `--kose: 0px` kuralı
+   arayüz kroması için — düğme, kart, kutu; illüstrasyon ayrı bir register.
+3. **Renk yok, üç düz ton var.** `.ton1` soluk · `.ton2` orta · `.ton3` koyu.
+   Memphis'in üç renkli paletinin yerini temanın gri rampası aldı. **Renk
+   eklemeyin** — yeşil hâlâ yalnızca "sunucu burada" demek.
+
+Figürler `Kisi` yardımcısıyla çiziliyor: baş daire, gövde hap, **yüz yok** —
+figürün "herkes" olması bundan. Görseller bölüm `numara` alanına göre
+eşleşiyor; yeni bölüm eklerseniz oraya bir `case` ekleyin, yoksa görsel
+sessizce boş kalır. **Hex yazmayın**, hepsi token.
+
+**Gemini model adı ENV'den geliyor, sabit değil.** `gemini-2.5-flash` bir gün
+404 vermeye başladı: *"no longer available to new users, use
+models/gemini-3.6-flash"*. Varsayılan güncellendi ama asıl çözüm `HAKEM_MODEL`
+ortam değişkeni — Google bir adı daha kapatırsa kod değişikliği değil tek satır
+env yeter. Anahtar **başlıkta** gönderiliyor (`x-goog-api-key`), sorgu dizesinde
+değil: sorgu dizeleri günlüklere düşüyor.
+
+**Olgunluk eğrisinde çizilme animasyonu denemeyin.** İki yol da kırıldı ve
+sebep ortak: SVG `preserveAspectRatio="none"` ile esnetiliyor, çizgi kalınlığı
+`vector-effect: non-scaling-stroke` ile düzeltiliyor. (1) `stroke-dasharray`:
+non-scaling-stroke dash'i ekran pikselinde ölçtürüyor, `pathLength={1}`
+normalizasyonu iptal oluyor — eğri **kesik kesik** çiziliyordu ve uzun süre
+öyle kaldı. (2) `clip-path: inset()`: SVG'de referans kutu `fill-box`,
+yüzdeler beklendiği gibi çözülmüyor — eğri **hiç görünmedi**. Şimdi eğri sabit,
+hareketi noktalar taşıyor. Gerçekten gerekiyorsa SVG `<clipPath>` içinde
+genişliği animasyonlanan bir `<rect>` ile yapın, CSS ile değil.
+
+**Olgunluk eğrisinde ad değil NUMARA var.** Dokuz noktanın hepsi zirve
+bölgesinde (x 9–39) toplandığı için etiketler üst üste biniyordu; etiketi
+noktadan uzaklaştırmak da çözmedi (anlamlı ayrım 100 px'ten fazla kaydırma
+istiyor, o da bağı koparıyor). Şimdi eğri üstünde numaralı rozet, altında üç
+sütunlu ad listesi var — Gartner'ın kendi çözümü. Aynı `.rozet` iki yerde de
+kullanılıyor; dolgu olgunlaşma ufkunu, numara kimliği taşıyor. Nokta eklerken
+listenin de büyüdüğünü unutmayın, slayt yüksekliği sınıra yakın.
 
 **Görsel modeli hex kodu okumaz.** Kart promptlarında vurgu rengi hex olarak
 yazılıydı; flux/dev bunu tamamen yok saydı, 14 kartın 14'ü de gri çıktı
@@ -271,16 +446,29 @@ yapıştırmayın" uyarısı duracak; bu kısıt değil, blok 11'in canlı örne
 
 ## Sıradaki oturum
 
-**Slayt slayt içerik gözden geçirmesi.** Kullanıcı 11 bloğun 52 slaydını tek tek
-konuşmak istiyor. Tasarım ve yapı işi şimdilik durdu; sırada içeriğin kendisi
-var. Gözden geçirmeye baştan başlayın, blok blok ilerleyin.
+**Slayt slayt içerik gözden geçirmesi — SÜRÜYOR.** Bloklar 1-4 konuşuldu ve
+düzeltildi; sırada **blok 5 (Etkili istem yazımı)**. Kullanıcı 13 bloğun 62
+slaydını tek tek konuşmak istiyor. Tasarım ve yapı işi durdu; sırada içeriğin kendisi var.
+Baştan başlayın, blok blok ilerleyin.
 
 ## Kullanıcıdan bekleyenler
 
-1. **Tarih/saat teyidi** — 1 ve 3 Eylül mü, saat kaç, daveti kim gönderiyor
-2. **Vercel'e deploy + Upstash Redis + `SUNUCU_ANAHTARI`** — Salı'ya bırakılmamalı
-3. Quiz ödülü var mı, oturum kaydedilecek mi, yönetici oturumda olacak mı
-4. Görsel kimlik: şu an bağımsız tema. Kurumsal renge geçilecekse `tema.css`
+1. **Gemini anahtarını yenileyin.** Anahtar sohbete yapıştırıldığı için
+   transkriptte duruyor. `.env.local` gitignore'da, depoya girmiyor — ama
+   oturum öncesi Google AI Studio'dan yeni bir anahtar üretip eskisini iptal
+   edin. Production için ayrıca Vercel'e `GOOGLE_AI_API_KEY` eklenecek;
+   eklenmezse atölye çalışır, yalnızca AI değerlendirmesi kapalı kalır.
+2. **Tarih/saat teyidi** — hangi günler, saat kaç, daveti kim gönderiyor
+3. **Upstash Pay As You Go** — 75 kişide oturum başına ~150K komut, ücretsiz
+   katman 10K/gün. İki oturum ~$0,60. Gerçek oturumdan önce şart.
+4. **Production'a yeni sürümü çıkarmak** — canlıdaki deploy 30 Ağustos
+   öncesinden; 75 kişilik ölçek ve çıkış düğmesi orada yok.
+5. **`SUNUCU_ANAHTARI` kontrolü** — Vercel'de tanımlı ama değeri gizli.
+   Hâlâ `degistir-beni` ise değiştirin; depo public.
+6. Oturum kaydedilecek mi, yönetici oturumda olacak mı
+7. Görsel kimlik: şu an bağımsız 8-bit tema. Kurumsal renge geçilecekse
+   `tema.css` (ve `layout.tsx` içindeki `themeColor`, `icon.svg`)
+
 
 ## Önceki oturumun ortamına ait notlar — sizde geçerli değil
 

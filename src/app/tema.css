@@ -54,6 +54,15 @@
   --sunucu:       #1F9D4D;
   --sunucu-zemin: #A9E4B8;
 
+  /* --- ikinci renk: kötü istem -----------------------------------------
+     Yeşil "sunucu burada" der; bu kırmızı yalnızca `cevir` kartının kötü
+     yüzünde kullanılıyor. İkisi hiçbir yerde yan yana gelmiyor — kart tek
+     seferde tek yüz gösteriyor — o yüzden yeşilin tek anlamı bozulmuyor.
+     Başka bir yerde kullanmayın; kullanırsanız iki renk de anlamını yitirir. */
+  --kotu:         #B3392B;
+  --kotu-zemin:   #F0CFCA;
+  --kotu-metin:   #4A1610;
+
   /* --- durum renkleri --------------------------------------------------
      Sistemde tek hue var; olumlu durum sunucu yeşilini paylaşıyor.
      Olumsuz ve uyarı renkle değil, ağırlık ve desenle ayrılıyor.          */
