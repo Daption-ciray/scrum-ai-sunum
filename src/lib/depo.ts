@@ -30,6 +30,9 @@ const QUIZ_ANAHTARI = "sunum:quiz";
 /** ZSET üyesi `id` ve `ad`ı birlikte taşıyor; isimlerde geçmeyecek bir ayraç. */
 const AYRAC = "\u0001";
 
+/** Atölye gönderimlerinin ömrü (saniye). Oturum 60 dk; 12 saat bol pay. */
+const ISTEM_OMRU = 12 * 60 * 60;
+
 /* İki isimlendirme birden destekleniyor.
    Vercel Marketplace üzerinden kurulan Upstash, eski @vercel/kv adlarını
    veriyor: KV_REST_API_URL / KV_REST_API_TOKEN. Upstash'i doğrudan kendi
@@ -279,6 +282,16 @@ export async function istemYaz(
   const sonuc = await redis<number>([
     "HSETNX", `${ISTEM_ANAHTARI}:${slaytId}`, id, JSON.stringify(kayit),
   ]);
+
+  /* Katılımcının yazdığı metin süreli.
+
+     Sunucu atölyeyi açarken odaya "yazdıklarınız oturumdan sonra siliniyor"
+     diyor. Bu söz eskiden yalnızca sunucunun `sifirla` basmasına bağlıydı —
+     basmayı unutursa metinler Redis'te kalıyordu. Söz artık sistemde:
+     anahtar her yazmada 12 saate tazeleniyor, oturum bitince kendiliğinden
+     düşüyor. Sunucu yine de sıfırlayabilir; bu onun yerine değil, altına
+     konan zemin. */
+  await redis(["EXPIRE", `${ISTEM_ANAHTARI}:${slaytId}`, ISTEM_OMRU]).catch(() => {});
   return sonuc === 1;
 }
 
