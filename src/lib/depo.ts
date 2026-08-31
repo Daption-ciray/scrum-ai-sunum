@@ -1,4 +1,4 @@
-import { BASLANGIC, CANLI_ESIGI, type Durum, type Katilimci } from "./durum";
+import { ATILMA_SURESI, BASLANGIC, CANLI_ESIGI, type Durum, type Katilimci } from "./durum";
 
 /* =============================================================================
    DEPO — iki modu var.
@@ -26,10 +26,6 @@ const ISTEM_ANAHTARI = "sunum:istem";
 const SECIM_ANAHTARI = "sunum:istem-secim";
 /** Quiz gönderimleri: `sunum:quiz:<slaytId>` hash'i, alan = katılımcı id. */
 const QUIZ_ANAHTARI = "sunum:quiz";
-
-/** Atılan kimlik bu süre boyunca geri giremez. Kalıcı yasak değil —
- *  istemcinin durumu görüp çıkış yapmasına yetecek kadar. */
-const ATILMA_SURESI = 60;
 
 /** ZSET üyesi `id` ve `ad`ı birlikte taşıyor; isimlerde geçmeyecek bir ayraç. */
 const AYRAC = "\u0001";

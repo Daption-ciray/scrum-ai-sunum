@@ -8,6 +8,7 @@ import { Perde, Slayt } from "@/components/Slayt";
 import { OTURUMLAR } from "@/icerik";
 import { blokBul, tumBloklar } from "@/icerik/bloklar";
 import { kimlikAl, kimlikSil } from "@/lib/kimlik";
+import { ATILMA_SURESI } from "@/lib/durum";
 import { useYoklama } from "@/lib/yoklama";
 import k from "@/components/kabuk.module.css";
 
@@ -32,7 +33,10 @@ export default function Oda() {
     // Sunucu bu katılımcının oturumunu kapattıysa kimlik silinip
     // giriş ekranına dönülüyor. Kısa süreli bir kapatma; kalıcı yasak değil.
     onAtildi: () => {
-      kimlikSil();
+      // Süre de kaydediliyor: giriş ekranı "şu kadar saniye sonra
+      // girebilirsiniz" diyebilsin. Bu olmadan katılımcı sessizce düşüyor,
+      // adını tekrar yazıyor ve aynı kimlikle yeniden atılıyordu.
+      kimlikSil(ATILMA_SURESI);
       router.replace("/");
     },
   });

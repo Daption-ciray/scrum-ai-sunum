@@ -203,7 +203,7 @@ export const oturum1: Oturum = {
       satirlar: [
         ["Product Owner", "Sprint", "Product Backlog"],
         ["Scrum Master", "Sprint Planning", "Sprint Backlog"],
-        ["Geliştiriciler", "Daily Scrum", "Increment"],
+        ["Developers", "Daily Scrum", "Increment"],
         ["", "Sprint Review", ""],
         ["", "Sprint Retrospective", ""],
       ],
@@ -227,7 +227,7 @@ export const oturum1: Oturum = {
           "Sürece dair karar verir, işin içeriğine değil",
         ],
         [
-          "Geliştiriciler",
+          "Developers",
           "Her Sprint'te kullanılabilir bir Increment üretmek",
           "İşin nasıl yapılacağına birlikte karar verir",
         ],
@@ -421,7 +421,7 @@ export const oturum1: Oturum = {
           "Toplantı: Tactiq · Fathom — Atölye: Miro AI — Özet: NotebookLM",
         ],
         [
-          "Geliştiriciler",
+          "Developers",
           "Araçları tanımlamak ve yapılandırmak; agent'ların ürettiği işi gözden geçirip yönetmek.",
           "Kod: GitHub Copilot · Cursor — Arayüz: Figma AI · v0.dev — Test: Testim · Mabl — Dağıtım: Harness · CircleCI",
         ],
@@ -458,7 +458,7 @@ export const oturum1: Oturum = {
           secenekler: [
             "Product Owner",
             "Scrum Master",
-            "Geliştiriciler",
+            "Developers",
             "Paydaşlar",
           ],
         },

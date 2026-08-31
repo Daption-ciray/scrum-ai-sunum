@@ -76,7 +76,7 @@ export const REHBER: Record<string, RehberKaydi> = {
   },
   "s1-sorumluluklar": {
     bilgi:
-      "Ayrımın özü karar yetkisinde: PO neyin yapılacağına, Geliştiriciler nasıl yapılacağına, Scrum Master sürece karar verir — işin içeriğine değil. Üçüncü satır ikinci oturumdaki çalışma anlaşmasının temeli: \"nasıl\" kararı ekipte olduğu için AI'ın nerede kullanılacağına da ekip karar verir.",
+      "Ayrımın özü karar yetkisinde: PO neyin yapılacağına, Developers nasıl yapılacağına, Scrum Master sürece karar verir — işin içeriğine değil. Üçüncü satır ikinci oturumdaki çalışma anlaşmasının temeli: \"nasıl\" kararı ekipte olduğu için AI'ın nerede kullanılacağına da ekip karar verir.",
   },
 
   /* ---- Blok 04 · AI temelleri ve sınırları ---- */

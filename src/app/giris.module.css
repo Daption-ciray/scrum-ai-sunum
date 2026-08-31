@@ -71,3 +71,23 @@
   transition: color var(--gecis);
 }
 .sunucuAc:hover { color: var(--vurgu); }
+
+
+/* Atılma bildirimi. Sessiz düşürmek yerine ne olduğunu ve ne kadar
+   bekleneceğini söylüyor; aynı kimlikle tekrar denenip yeniden atılma
+   döngüsünü kıran şey bu. */
+.atildi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .45rem;
+  background: var(--kotu-zemin);
+  border: var(--kenar) solid var(--cizgi-2);
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  padding: .8rem .9rem;
+  font-size: var(--ol-kucuk);
+  line-height: 1.5;
+  color: var(--kotu-metin);
+}
+.atildiEtiket { background: var(--kotu); color: var(--yuzey); padding: .3em .6em; }
+.atildi b { font-weight: 700; }

@@ -55,13 +55,16 @@ Kendi çevirinizi uydurmayın, oradan bakın:
 | Inspection | **gözlem** | gözden geçirme |
 | Adaptation | **adaptasyon** | uyarlama |
 | Accountabilities | **sorumluluk** | rol |
+| Developers | **Developers** | Geliştiriciler |
 | Definition of Done | **Bitti Tanımı** | DoD (tek başına) |
 | Product Goal | **Ürün Hedefi** | ürün amacı |
 | Sprint Goal | **Sprint Hedefi** | sprint hedefi (küçük) |
 | Increment | **Increment** | artış |
 
 Rol, etkinlik ve eser ADLARI İngilizce kalıyor — kılavuz da öyle yapıyor:
-Product Owner, Scrum Master, Developers, Sprint Planning, Daily Scrum,
+Product Owner, Scrum Master, **Developers** (kılavuz bunu özellikle açıklıyor: kelime
+yazılım geliştiriciden geniş tutulmuş, analist ve tasarımcı da dahil;
+Türkçeye çevirince o kapsayıcılık kayboluyor), Sprint Planning, Daily Scrum,
 Sprint Review, Sprint Retrospective, Product Backlog, Sprint Backlog,
 Increment. Türkçeleşenler: Ürün Hedefi, Sprint Hedefi, Bitti Tanımı, Taahhüt.
 
@@ -190,9 +193,24 @@ Sayı `ZCOUNT` ile tek komut ve birkaç bayt; eskiden her yoklamada tüm liste
 trafiği demekti. Tam liste yalnızca panele gidiyor.
 
 **Sunucu bir katılımcının oturumunu kapatabiliyor** (`at` komutu). Kaydı
-silmek yetmiyor; kişi bir sonraki bildirimde kendini geri eklerdi. 60 saniyelik
-bir işaret bırakılıyor: istemci `acik: false` görüp kimliği siliyor ve giriş
-ekranına dönüyor. Kalıcı yasak değil, "şimdi çık" demek.
+silmek yetmiyor; kişi bir sonraki bildirimde kendini geri eklerdi. `ATILMA_SURESI`
+(30 sn, `src/lib/durum.ts`) boyunca bir işaret bırakılıyor: istemci
+`acik: false` görüp adı siliyor ve giriş ekranına dönüyor. Kalıcı yasak değil,
+"şimdi çık" demek.
+
+**Atılan kişi neden takılıyordu.** Canlı bir provada yanlışlıkla atılan
+yönetici geri giremedi. Sebep: kimlik siliniyor ama **id kalıyordu** (kasıtlı —
+aynı kişi yeni katılımcı sayılmasın diye). Kişi adını tekrar yazıyor, aynı
+id'yle yeniden atılıyor, hiçbir açıklama görmüyordu; süre dolana kadar döngü.
+
+Çözüm iki parça, ikisi de gerekli:
+1. `kimlikSil(ATILMA_SURESI)` bitiş anını `localStorage`'a yazıyor; giriş
+   ekranı `atilmaKalan()` ile **geri sayım gösteriyor** ve Katıl düğmesini
+   kilitliyor. Sessiz düşürme yok.
+2. Süre 60 → **30 saniye**. Bildirim aralığı 10 sn olduğu için 30 sn zaten üç
+   tur; yanlışlıkla atılan biri bir dakika beklemesin.
+
+Acil durumda işareti Redis'ten elle silebilirsiniz: `KEYS sunum:atilan:*` → `DEL`.
 
 **Depo iki modlu.** Upstash Redis REST varsa onu, yoksa bellek yedeğini
 kullanır (`src/lib/depo.ts`). Bellek modu yerelde sorunsuz ama Vercel'de her

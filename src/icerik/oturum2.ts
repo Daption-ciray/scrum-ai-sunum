@@ -155,7 +155,7 @@ export const oturum2: Oturum = {
         [
           "Sonrası",
           "Sprint Backlog kırılımı",
-          "Jira / ADO AI — görev kırılımı taslağı üretir. Kimin neyi alacağı kararı Geliştiricilerde kalır.",
+          "Jira / ADO AI — görev kırılımı taslağı üretir. Kimin neyi alacağı kararı Developers'ta kalır.",
         ],
       ],
       not: "Araç adlarını tek tek okuma — \"her satırda bir örnek var\" de, üçüncü sütunun NASIL kısmını oku. ÖNEMLİ: bu liste örnek, tavsiye değil; kurumun onaylı araç listesi neyse o geçerli. Bu cümleyi söylemeden geçme, güvenlik bloğuyla çelişmesin.",
@@ -172,7 +172,7 @@ export const oturum2: Oturum = {
         maddeler: [
           "Her iş öğesi için ayrı yazılır",
           "\"Bu özellik ne yaparsa doğru çalışmış olur?\"",
-          "Product Owner ve Geliştiriciler birlikte netleştirir",
+          "Product Owner ve Developers birlikte netleştirir",
           "AI taslağını üretebilir",
         ],
       },
@@ -221,7 +221,7 @@ export const oturum2: Oturum = {
       blok: "Daily Scrum'da AI",
       tip: "adim",
       baslik: "Daily Scrum — üç aşama",
-      giris: "Daily bir durum raporu değil; Geliştiricilerin günlük planını kurduğu on beş dakika. Bu blokta orta aşama diğer ikisinden farklı: AI kapalı.",
+      giris: "Daily bir durum raporu değil; Developers'ın günlük planını kurduğu on beş dakika. Bu blokta orta aşama diğer ikisinden farklı: AI kapalı.",
       adimlar: [
         {
           ad: "Öncesi",
@@ -231,7 +231,7 @@ export const oturum2: Oturum = {
         {
           ad: "Sırasında",
           aciklama: "AI kapalı. Konuşan ekiptir; toplantıda kimse pano ya da özet okumaz.",
-          ornek: "Ekran paylaşımı yok, kaydedici yok. On beş dakika yalnızca Geliştiricilerin konuşması",
+          ornek: "Ekran paylaşımı yok, kaydedici yok. On beş dakika yalnızca Developers'ın konuşması",
         },
         {
           ad: "Sonrası",

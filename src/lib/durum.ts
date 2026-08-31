@@ -55,6 +55,11 @@ export const BASLANGIC: Durum = {
   zaman: 0,
 };
 
+/** Atılan katılımcı bu kadar saniye geri giremez. Kalıcı yasak değil.
+ *  Hem sunucu (işareti bu süreyle yazıyor) hem istemci (geri sayımı bununla
+ *  gösteriyor) okuduğu için burada duruyor — `depo.ts` sunucu tarafı. */
+export const ATILMA_SURESI = 30;
+
 /** Soru başına cevaplama süresi. On soruda toplam 200 saniye. */
 export const SORU_SURESI = 20_000;
 /** Ağ gecikmesi payı: sunucu bu kadar geç gelen cevabı da kabul ediyor. */

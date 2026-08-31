@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { kimlikAl, kimlikYaz } from "@/lib/kimlik";
+import { atilmaKalan, atilmayiUnut, kimlikAl, kimlikYaz } from "@/lib/kimlik";
 import { anahtarDogrula } from "@/lib/yoklama";
 import g from "./giris.module.css";
 
@@ -19,6 +19,23 @@ export default function Giris() {
   const [sunucuAcik, setSunucuAcik] = useState(false);
   const [anahtar, setAnahtar] = useState("");
   const [deniyor, setDeniyor] = useState(false);
+
+  /* Eğitmen bu kişinin oturumunu kapattıysa geri sayım gösteriliyor.
+     Bu olmadan katılımcı sessizce giriş ekranına düşüyor, adını tekrar
+     yazıyor ve AYNI kimlikle yeniden atılıyordu — ne olduğunu anlamadan
+     birkaç kez deneyip vazgeçiyordu. */
+  const [atilmaMs, setAtilmaMs] = useState(0);
+  useEffect(() => {
+    const tik = () => {
+      const kalan = atilmaKalan();
+      setAtilmaMs(kalan);
+      if (kalan <= 0) atilmayiUnut();
+    };
+    tik();
+    const sayac = setInterval(tik, 500);
+    return () => clearInterval(sayac);
+  }, []);
+  const atilmaSn = Math.ceil(atilmaMs / 1000);
 
   // Daha önce girmişse doğrudan odaya al — kopan bağlantı sonrası
   // kimse ismini yeniden yazmak zorunda kalmasın.
@@ -39,6 +56,7 @@ export default function Giris() {
       setHata("Ad çok uzun. 40 karakteri geçmesin.");
       return;
     }
+    if (atilmaKalan() > 0) return;
     kimlikYaz(temiz);
     router.push("/oda");
   }
@@ -73,6 +91,19 @@ export default function Giris() {
           uygulama açmanız gerekmiyor.
         </p>
 
+        {atilmaMs > 0 && (
+          <div className={g.atildi}>
+            <span className={`etiket ${g.atildiEtiket}`}>Oturumunuz kapatıldı</span>
+            {/* Cümle tek bir öğede: sarmalayıcı flex sütun olduğu için ayrı
+                metin düğümleri alt alta düşüp cümleyi kırıyordu. */}
+            <span>
+              Eğitmen oturumunuzu kapattı. Kalıcı değil —{" "}
+              <b className="mono">{atilmaSn}</b> saniye sonra aynı adla tekrar
+              girebilirsiniz.
+            </span>
+          </div>
+        )}
+
         <form className={g.form} onSubmit={gonder}>
           <label className={`etiket ${g.etiketAlan}`} htmlFor="ad">
             Görünecek adınız
@@ -91,7 +122,11 @@ export default function Giris() {
             maxLength={40}
           />
           {!sunucuAcik && hata && <p className={g.hata}>{hata}</p>}
-          <button className={g.dugme} type="submit" disabled={ad.trim().length < 2}>
+          <button
+            className={g.dugme}
+            type="submit"
+            disabled={ad.trim().length < 2 || atilmaMs > 0}
+          >
             Katıl
           </button>
         </form>

@@ -2,6 +2,8 @@
 
 const ANAHTAR_ID = "sunum.katilimci.id";
 const ANAHTAR_AD = "sunum.katilimci.ad";
+/** Atılma bitiş zamanı. Giriş ekranı bunu okuyup geri sayım gösteriyor. */
+const ANAHTAR_ATILDI = "sunum.katilimci.atildi";
 
 function guvenliOku(k: string): string | null {
   try {
@@ -36,9 +38,36 @@ export function kimlikYaz(ad: string): { id: string; ad: string } {
   return { id, ad };
 }
 
-export function kimlikSil() {
+/**
+ * Adı siler, kimliği bırakır. Kimlik kalıyor ki aynı kişi tekrar girdiğinde
+ * yeni bir katılımcı olarak sayılmasın.
+ *
+ * `atildiMi` verilirse atılmanın bittiği an da kaydediliyor: giriş ekranı
+ * bunu okuyup "şu kadar saniye sonra girebilirsiniz" diyor. Bu olmadan
+ * katılımcı sessizce giriş ekranına düşüyor, adını tekrar yazıyor ve AYNI
+ * kimlikle yeniden atılıyordu — kimse ne olduğunu anlamıyordu.
+ */
+export function kimlikSil(atilmaSaniyesi?: number) {
   try {
     window.localStorage.removeItem(ANAHTAR_AD);
+    if (atilmaSaniyesi) {
+      guvenliYaz(ANAHTAR_ATILDI, String(Date.now() + atilmaSaniyesi * 1000));
+    }
+  } catch {
+    /* yok say */
+  }
+}
+
+/** Atılma bitene kaç ms kaldı. Bitmişse 0. */
+export function atilmaKalan(): number {
+  const ham = guvenliOku(ANAHTAR_ATILDI);
+  if (!ham) return 0;
+  return Math.max(0, Number(ham) - Date.now());
+}
+
+export function atilmayiUnut() {
+  try {
+    window.localStorage.removeItem(ANAHTAR_ATILDI);
   } catch {
     /* yok say */
   }
