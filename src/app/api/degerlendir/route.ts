@@ -54,9 +54,11 @@ export async function POST(istek: Request) {
     secilen.set(i.id, { id: i.id, metin: i.metin });
   }
 
-  const notlar = await hakemeSor([...secilen.values()]);
+  const { notlar, hata } = await hakemeSor([...secilen.values()]);
   return Response.json(
-    { notlar, denenen: secilen.size },
+    // `hata` doluysa panel bunu ekranda gösteriyor: sunucu canlı oturumda
+    // terminale bakamaz, neden olmadığını arayüzden görmeli.
+    { notlar, hata, denenen: secilen.size },
     { headers: { "cache-control": "no-store" } },
   );
 }

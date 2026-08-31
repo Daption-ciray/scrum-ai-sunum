@@ -11,9 +11,15 @@ import type { Istem } from "./depo";
    veriyor ve puanlar birbiriyle tutarlı çıkıyor. Ayrı ayrı sorulsaydı aynı
    istem farklı turlarda farklı puan alırdı.
 
-   YEDEK ZORUNLU: bu dosyadaki her hata yolu `null` döndürür, atırlmaz.
+   YEDEK ZORUNLU: bu dosyadaki her hata yolu `notlar: null` döndürür, atmaz.
    API çökerse atölye durmaz — panel anahtar kelime sıralamasıyla devam eder.
    Yönetici önünde tek hata noktası bırakılmıyor.
+
+   SEBEP DE DÖNÜYOR. Eskiden yalnızca `null` vardı; sebep sunucu günlüğüne
+   yazılıyordu ve canlı oturumda sunucunun terminali önünde olmuyor. Panelde
+   "değerlendirilemedi" yazıp neden olmadığını söylememek, oturum ortasında
+   sunucuyu karanlıkta bırakıyordu — kota mı doldu, model adı mı değişti,
+   yavaş mı kaldı, ayırt edilemiyordu.
 
    Katılımcı ADI gönderilmiyor. Hakem yalnızca id ve metin görüyor.
    ============================================================================= */
@@ -23,8 +29,23 @@ const ANAHTAR =
   dolu(process.env.GOOGLE_AI_API_KEY) ?? dolu(process.env.GEMINI_API_KEY);
 /* Model adı ENV'den geçersiz kılınabiliyor: Google eski adları kapatınca
    (gemini-2.5-flash bu şekilde 404 vermeye başladı) kod değişikliği
-   gerekmesin, tek satır ortam değişkeni yetsin. */
-const MODEL = dolu(process.env.HAKEM_MODEL) ?? "gemini-3.6-flash";
+   gerekmesin, tek satır ortam değişkeni yetsin.
+
+   Varsayılan LITE ve bu bilinçli. ÖLÇÜLDÜ, 10 istemlik gerçek yükle:
+
+   | model                 | süre      |
+   |-----------------------|-----------|
+   | gemini-3.6-flash      | 96–207 sn |
+   | gemini-3.1-flash-lite | 4,0 sn    |
+   | gemini-3.5-flash-lite | 1,4–2,8 sn|
+
+   3.6-flash düşünen bir model; yanıt vermesi dakikaları buluyor ve 20
+   saniyelik zaman aşımına HER SEFERİNDE takılıyordu — panelde
+   "değerlendirilemedi" yazmasının sebebi buydu. Lite'a geçmenin puana
+   bedeli yok: aynı sette kelime salatası 20, tam istem 95, boş istem 5
+   aldı; sıralama ağır modelinkiyle birebir aynı çıktı. Sunucu 75 kişinin
+   önünde üç dakika bekleyemez, zaten. */
+const MODEL = dolu(process.env.HAKEM_MODEL) ?? "gemini-3.5-flash-lite";
 
 /** Anahtar yoksa panel düğmeyi hiç göstermiyor. */
 export const hakemVar = Boolean(ANAHTAR);
@@ -33,7 +54,19 @@ export const hakemVar = Boolean(ANAHTAR);
 export const UC_SAYISI = 5;
 const ZAMAN_ASIMI = 20_000;
 
+/** HTTP durumunu sunucunun okuyup ne yapacağını bilebileceği cümleye çevirir. */
+function sebep(durum: number): string {
+  if (durum === 404) return "model adı geçersiz, HAKEM_MODEL değişkenine bakın.";
+  if (durum === 429) return "kota doldu, biraz bekleyin.";
+  if (durum === 401 || durum === 403) return "anahtar geçersiz veya yetkisiz.";
+  if (durum >= 500) return "Google tarafında geçici hata.";
+  return "beklenmeyen yanıt.";
+}
+
 export type HakemNotu = { id: string; puan: number; gerekce: string };
+
+/** Başarısızlıkta `notlar: null` ve panelde gösterilecek tek cümlelik sebep. */
+export type HakemSonucu = { notlar: HakemNotu[] | null; hata?: string };
 
 const YONERGE = `Sen bir Scrum eğitiminde katılımcıların yazdığı yapay zeka istemlerini değerlendiren jürisin.
 
@@ -60,8 +93,9 @@ Gerekçe TEK CÜMLE ve Türkçe olsun. Eğitmen odada yüksek sesle okuyacak, o 
  */
 export async function hakemeSor(
   istemler: Pick<Istem, "id" | "metin">[],
-): Promise<HakemNotu[] | null> {
-  if (!ANAHTAR || istemler.length === 0) return null;
+): Promise<HakemSonucu> {
+  if (!ANAHTAR) return { notlar: null, hata: "Değerlendirme anahtarı tanımlı değil." };
+  if (istemler.length === 0) return { notlar: null };
 
   const iptal = new AbortController();
   const sayac = setTimeout(() => iptal.abort(), ZAMAN_ASIMI);
@@ -105,31 +139,40 @@ export async function hakemeSor(
     );
 
     if (!yanit.ok) {
-      console.error("[hakem] yanıt", yanit.status, (await yanit.text()).slice(0, 300));
-      return null;
+      const govde = (await yanit.text()).slice(0, 300);
+      console.error("[hakem] yanıt", yanit.status, govde);
+      return { notlar: null, hata: `${MODEL} ${yanit.status} döndü — ${sebep(yanit.status)}` };
     }
 
     const govde = (await yanit.json()) as {
       candidates?: { content?: { parts?: { text?: string }[] } }[];
     };
     const ham = govde.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!ham) return null;
+    if (!ham) return { notlar: null, hata: "Model boş yanıt döndürdü." };
 
     const cozulen = JSON.parse(ham) as HakemNotu[];
-    if (!Array.isArray(cozulen)) return null;
+    if (!Array.isArray(cozulen)) return { notlar: null, hata: "Yanıt beklenen biçimde değil." };
 
     // Modelin uydurduğu id'ler elensin, puan aralığa sıkıştırılsın.
     const gecerli = new Set(istemler.map((i) => i.id));
-    return cozulen
-      .filter((n) => gecerli.has(n.id))
-      .map((n) => ({
-        id: n.id,
-        puan: Math.max(0, Math.min(100, Math.round(Number(n.puan) || 0))),
-        gerekce: String(n.gerekce ?? "").slice(0, 400),
-      }));
+    return {
+      notlar: cozulen
+        .filter((n) => gecerli.has(n.id))
+        .map((n) => ({
+          id: n.id,
+          puan: Math.max(0, Math.min(100, Math.round(Number(n.puan) || 0))),
+          gerekce: String(n.gerekce ?? "").slice(0, 400),
+        })),
+    };
   } catch (e) {
     console.error("[hakem] hata", e);
-    return null;
+    const asim = (e as Error)?.name === "AbortError";
+    return {
+      notlar: null,
+      hata: asim
+        ? `Model ${ZAMAN_ASIMI / 1000} saniyede yanıt vermedi.`
+        : "Değerlendirme servisine ulaşılamadı.",
+    };
   } finally {
     clearTimeout(sayac);
   }

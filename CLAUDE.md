@@ -516,6 +516,23 @@ ortam değişkeni — Google bir adı daha kapatırsa kod değişikliği değil 
 env yeter. Anahtar **başlıkta** gönderiliyor (`x-goog-api-key`), sorgu dizesinde
 değil: sorgu dizeleri günlüklere düşüyor.
 
+**Hakem modeli LITE olmalı — düşünen model zaman aşımına takılıyor.** Panelde
+zaman zaman çıkan "değerlendirilemedi" satırının sebebi buydu. ÖLÇÜLDÜ, 10
+istemlik gerçek yükle: `gemini-3.6-flash` **96–207 saniye**,
+`gemini-3.1-flash-lite` 4,0 sn, `gemini-3.5-flash-lite` **1,4–2,8 sn**.
+Zaman aşımı 20 sn olduğu için düşünen model her seferinde kesiliyordu.
+Varsayılan `gemini-3.5-flash-lite`. Puan kaybı yok: aynı sette kelime salatası
+20, tam istem 95, boş istem 5 aldı — sıralama ağır modelinkiyle birebir aynı.
+Sunucu 75 kişinin önünde üç dakika zaten bekleyemez. **Yeni bir modele
+geçerken bu ölçümü tekrarlayın**, ad "flash" diye hızlı sanmayın.
+
+**Hakem başarısızlığının SEBEBİ panele gidiyor.** Eskiden `hakemeSor` her
+hata yolunda yalnızca `null` döndürüyor, sebep sunucu günlüğüne yazılıyordu —
+canlı oturumda kimse terminale bakmıyor. Şimdi `{ notlar, hata }` dönüyor ve
+panel cümleyi gösteriyor: 404'te "model adı geçersiz, HAKEM_MODEL değişkenine
+bakın", 429'da "kota doldu", zaman aşımında "model 20 saniyede yanıt vermedi".
+Yedek davranış değişmedi — atölye elek sıralamasıyla çalışmaya devam eder.
+
 **Olgunluk eğrisinde çizilme animasyonu denemeyin.** İki yol da kırıldı ve
 sebep ortak: SVG `preserveAspectRatio="none"` ile esnetiliyor, çizgi kalınlığı
 `vector-effect: non-scaling-stroke` ile düzeltiliyor. (1) `stroke-dasharray`:
