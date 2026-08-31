@@ -9,8 +9,13 @@ import c from "./cevir.module.css";
    yoksa çözülme sırasında metin "neredeyse doğru" görünüp etkiyi kaybediyor. */
 const GLIFLER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>-_/\\[]{}=+*^?#@$%&";
 
-/** Kaç rAF karesinde bir glif değişsin. 3 ≈ 20 fps — 8-bit adımlı his. */
-const KARE_ADIMI = 3;
+/** Glif değişim aralığı (ms). 50 ≈ 20 fps — 8-bit adımlı his. */
+const TIK = 50;
+/** Çözülmenin toplam yayılımı ve tek karakterin çözülme süresi (ms). */
+const YAYILIM = 1300;
+const SAPMA = 700;
+const KARAKTER_SURESI = 250;
+const KARAKTER_SAPMA = 600;
 
 type Plan = { bas: number; sure: number };
 
@@ -34,7 +39,7 @@ export function IstemCevir({ slayt }: { slayt: Extract<Slayt, { tip: "cevir" }> 
   const kareRef = useRef<number | null>(null);
 
   const durdur = () => {
-    if (kareRef.current !== null) cancelAnimationFrame(kareRef.current);
+    if (kareRef.current !== null) clearInterval(kareRef.current);
     kareRef.current = null;
   };
 
@@ -61,46 +66,51 @@ export function IstemCevir({ slayt }: { slayt: Extract<Slayt, { tip: "cevir" }> 
 
     const n = Math.max(kaynak.length, hedef.length);
     const plan: Plan[] = Array.from({ length: n }, (_, i) => ({
-      bas: Math.floor((i / n) * 26) + Math.floor(Math.random() * 14),
-      sure: 5 + Math.floor(Math.random() * 12),
+      bas: (i / n) * YAYILIM + Math.random() * SAPMA,
+      sure: KARAKTER_SURESI + Math.random() * KARAKTER_SAPMA,
     }));
 
     setCozuluyor(true);
-    let kare = 0;
-    let alt = 0;
+    const t0 = Date.now();
 
+    /* İlerleme KARE SAYISINDAN değil GEÇEN SÜREDEN hesaplanıyor ve döngü
+       `setInterval` ile sürüyor.
+
+       Önce `requestAnimationFrame` kullanılıyordu ve ÖLÇÜLDÜ: sekme arka
+       plana düşünce rAF hiç çalışmıyor, kart `cozuluyor` durumunda kalıcı
+       olarak donuyordu — katılımcı karta basıp Teams'e geçse geri döndüğünde
+       bozuk bir kart buluyordu. `setInterval` arka planda seyrelir ama
+       ÇALIŞIR; ilerleme süreden hesaplandığı için sekme geri geldiğinde
+       animasyon doğru yere atlayıp tamamlanıyor. */
     const tik = () => {
-      alt += 1;
-      if (alt % KARE_ADIMI === 0) {
-        let cikti = "";
-        let biten = 0;
-        for (let i = 0; i < n; i++) {
-          const h = hedef[i] ?? "";
-          const k = kaynak[i] ?? "";
-          const { bas, sure } = plan[i];
-          if (kare < bas) cikti += k;
-          else if (kare < bas + sure) {
-            // Satır yapısı çözülme boyunca hedefinkine göre oturuyor;
-            // yoksa metin her karede zıplar ve okunmaz olur.
-            cikti += h === "\n" ? "\n" : GLIFLER[(Math.random() * GLIFLER.length) | 0];
-          } else {
-            cikti += h;
-            biten += 1;
-          }
-        }
-        setMetin(cikti);
-        kare += 1;
-        if (biten >= n) {
-          setCozuluyor(false);
-          setAcik((a) => !a);
-          kareRef.current = null;
-          return;
+      const gecen = Date.now() - t0;
+      let cikti = "";
+      let biten = 0;
+      for (let i = 0; i < n; i++) {
+        const h = hedef[i] ?? "";
+        const k = kaynak[i] ?? "";
+        const { bas, sure } = plan[i];
+        if (gecen < bas) cikti += k;
+        else if (gecen < bas + sure) {
+          // Satır yapısı çözülme boyunca hedefinkine göre oturuyor;
+          // yoksa metin her karede zıplar ve okunmaz olur.
+          cikti += h === "\n" ? "\n" : GLIFLER[(Math.random() * GLIFLER.length) | 0];
+        } else {
+          cikti += h;
+          biten += 1;
         }
       }
-      kareRef.current = requestAnimationFrame(tik);
+      setMetin(cikti);
+      if (biten >= n) {
+        clearInterval(sayac);
+        kareRef.current = null;
+        setCozuluyor(false);
+        setAcik((a) => !a);
+      }
     };
 
-    kareRef.current = requestAnimationFrame(tik);
+    const sayac = setInterval(tik, TIK);
+    kareRef.current = sayac as unknown as number;
   }, [acik, cozuluyor, slayt.on.metin, slayt.arka.metin]);
 
   const yuz = acik ? slayt.arka : slayt.on;

@@ -1,4 +1,5 @@
 import { durumuOku, katilimciSay, paylasimliDepo } from "@/lib/depo";
+import { quizKalanHesapla } from "@/lib/durum";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export async function GET() {
   const [durum, bagli] = await Promise.all([durumuOku(), katilimciSay()]);
 
   return Response.json(
-    { durum, bagli, paylasimli: paylasimliDepo },
+    { durum: { ...durum, quizKalan: quizKalanHesapla(durum) }, bagli, paylasimli: paylasimliDepo },
     {
       headers: {
         /* ÖLÇÜLDÜ: `stale-while-revalidate=4` ile slayt geçişi katılımcıya

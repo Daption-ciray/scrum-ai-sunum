@@ -12,6 +12,7 @@ import { PARCA_ADI, istemPuanla } from "@/lib/istemPuan";
 import { hakemVar } from "@/lib/hakem";
 import { CEVAPLAR } from "@/icerik/cevaplar";
 import { REHBER } from "@/icerik/rehber";
+import { CANLI_ESIGI, quizKalanHesapla } from "@/lib/durum";
 
 export const dynamic = "force-dynamic";
 
@@ -90,18 +91,25 @@ export async function GET(istek: Request) {
 
   return Response.json(
     {
-      durum,
+      durum: { ...durum, quizKalan: quizKalanHesapla(durum) },
       quiz,
       /* Sunucu rehberi. `not` alanının aksine bu içerik istemci paketinde
          DEĞİL — yalnızca bu korumalı uçtan geliyor. */
       rehber: slayt ? (REHBER[slayt.id] ?? null) : null,
-      bagli: katilimcilar.length,
+      /* İki ayrı sayı, iki ayrı soru:
+         `bagli`  — şu an ekranda olan (son 20 sn'de bildirim gönderen)
+         `odada`  — katılan ama sekmesi arka planda olabilen herkes
+         Ayrım gerekli: donmuş sekme bildirim göndermiyor, kişi gitmiş
+         değil. Tek sayı gösterilseydi sunucu oturum ortasında sayının
+         erimesini kopma sanırdı. */
+      bagli: katilimcilar.filter((k) => k.son >= Date.now() - CANLI_ESIGI).length,
+      odada: katilimcilar.length,
       paylasimli: paylasimliDepo,
       atolye,
       /* Değerlendirme anahtarı tanımlı mı — panel düğmeyi ona göre gösteriyor. */
       hakemVar,
       katilimcilar: katilimcilar
-        .map((k) => ({ id: k.id, ad: k.ad }))
+        .map((k) => ({ id: k.id, ad: k.ad, son: k.son }))
         .sort((a, b) => a.ad.localeCompare(b.ad, "tr")),
     },
     { headers: { "cache-control": "no-store" } },

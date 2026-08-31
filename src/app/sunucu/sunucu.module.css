@@ -158,6 +158,8 @@
 .sayiEtiket { color: var(--metin-3); }
 
 .adlar { display: flex; flex-wrap: wrap; gap: .35rem; }
+/* Sekmesi arka planda olan katılımcı: odada sayılıyor ama solgun. */
+.uzakta { opacity: .45; }
 .ad {
   font-size: var(--ol-kucuk);
   color: var(--metin-2);

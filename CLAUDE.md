@@ -198,6 +198,24 @@ silmek yetmiyor; kişi bir sonraki bildirimde kendini geri eklerdi. `ATILMA_SURE
 `acik: false` görüp adı siliyor ve giriş ekranına dönüyor. Kalıcı yasak değil,
 "şimdi çık" demek.
 
+**Panelde iki sayı var: "Ekranda" ve "Odada".** ÖLÇÜLDÜ: Chrome beş
+dakikadan uzun arka planda kalan sekmeyi donduruyor — zamanlayıcılar
+tamamen duruyor, "buradayım" bildirimi kesiliyor. Eğitim tamamen online
+olduğu için katılımcıların çoğunda Teams penceresi önde; sekmeleri bu
+duruma düşüyor. Tek sayı gösterilseydi sunucu oturum ortasında sayının
+erimesini "herkes gitti" sanardı. Ayrım:
+
+- **Ekranda** — son 20 sn'de bildirim gönderen (`CANLI_ESIGI`). Gerçekten
+  bakan kişi sayısı; sunucuya "kaç kişi ekranda" bilgisini verir.
+- **Odada** — son 30 dk'da bir kez görülen herkes (`UZAK_ESIGI`). Sekmesi
+  donmuş katılımcı burada kalır, isim listesinde solgun görünür.
+
+Sekme öne gelince `visibilitychange` anında yeniden soruyor; katılımcı
+gitmiş değil, sadece bakmıyor. **Çıkış'a basan bunun istisnası:**
+`/api/buradayim` gövdesine `ayril: true` gidiyor ve kayıt hemen siliniyor
+(`katilimciAyril`). Yoksa kendi çıkan kişi panelde yarım saat "odada"
+kalırdı — donmuş sekmeyle aynı kefeye konamaz, çıkış kesin bilgi.
+
 **Atılan kişi neden takılıyordu.** Canlı bir provada yanlışlıkla atılan
 yönetici geri giremedi. Sebep: kimlik siliniyor ama **id kalıyordu** (kasıtlı —
 aynı kişi yeni katılımcı sayılmasın diye). Kişi adını tekrar yazıyor, aynı
@@ -426,6 +444,16 @@ ve `-webkit-font-smoothing: none`; rakamlar ise piksel fontta değil, `.sayi`
 sınıfıyla mono'da. **Kural: harf piksel, rakam mono.** Boyut değiştirecekseniz
 yine tam sayı verin.
 
+**Arka plan sekmesinde `requestAnimationFrame` HİÇ çalışmaz.** `cevir`
+kartının şifre çözülme animasyonu rAF ile ve KARE SAYARAK ilerliyordu.
+Katılımcı karta basıp Teams'e geçince kart `cozuluyor` durumunda kalıcı
+olarak donuyordu: karışık metin, `cursor: progress`, tıklanamaz. Geri
+dönen katılımcı bozuk bir kart buluyordu. İki parçalı çözüm, ikisi de
+gerekli: döngü `setInterval` (arka planda seyrelir ama ÇALIŞIR) ve
+ilerleme kare değil GEÇEN SÜRE üzerinden — sekme geri gelince animasyon
+doğru yere atlayıp tamamlanıyor. **Sayfada süreye bağlı başka bir
+animasyon yazarsanız aynı kuralı uygulayın.**
+
 **Dar ekranda tablolar karta dönüşüyor.** `slayt.module.css` içinde 680 px
 altı için tablo satırları kart oluyor, `data-etiket` ile sütun başlıkları her
 hücrenin üstünde tekrar ediyor. Telefondan katılan biri yatay kaydırma
@@ -633,6 +661,32 @@ Pay As You Go'ya geçmek şart, iki oturum ~$0,34. **Aylık sabit ücreti yok**,
 ~~Vercel Hobby planı ticari kullanım~~ — **kapatıldı, kullanıcı kararı.**
 Proje açık kaynak paylaşıldığı ve ölçek denetim eşiğinin çok altında olduğu
 için risk kabul edildi. Tekrar açmayın.
+
+## E2E testi — iki oturumla, tarayıcıda
+
+Sunucu paneli + katılımcı sekmesi aynı anda açılıp her işlev tek tek
+denendi (30 Ağustos 2026). Geçenler: gezinme (sınırlar dahil — `git 999`
+son slayda sıkışıyor), perde, `oturum 2` / `kilitle` / `sifirla`,
+`katilimcilari-temizle`, ikinci oturum kilidi, galeri kartı + serbest
+gezinme şeridi + "Takibe dön", quizin tamamı (başlat → cevap → dağılım →
+bitir), sıralama, atölye (gönderim, ikinci gönderimin reddi, elek
+sıralaması, AI hakem, tam/eksik işaretleme, anonim karşılaştırma),
+`cevir` kartı, çıkarma → geri sayım → tekrar giriş, Çıkış, oturum
+ortasında yenileme, yetkisiz komut (401), bellek modu uyarısı.
+
+Testte bulunup düzeltilenler:
+
+1. **Katılımcı galeride açılıyordu**, quiz açıldığında slaydı görmüyordu.
+   `gorunum` varsayılanı `"slayt"`; quiz/atölye açılınca ekran kendiliğinden
+   slayda çekiliyor.
+2. **Geç katılan 20 sn'lik yeni geri sayım alıyordu.** Kalan süre artık
+   sunucuda hesaplanıyor (`quizKalan`); geç katılan 6 sn görüyor.
+3. **Puanlama Türkçe işaret istiyordu** — "varsayim" yazan puan
+   kaybediyordu. `sadelestir()` eklendi; iki yazım da 93 alıyor.
+4. **`cevir` kartı arka plan sekmesinde donuyordu** (rAF). Tuzaklar
+   bölümüne bakın.
+5. **Panelde sayı eriyordu** — donmuş sekmeler listeden düşüyordu.
+   "Ekranda / Odada" ayrımı ve `ayril` bildirimi eklendi.
 
 ## Kullanıcıdan bekleyenler
 

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Perde, Slayt } from "@/components/Slayt";
 import { OTURUMLAR, bloklar } from "@/icerik";
-import { SORU_SURESI, type Durum } from "@/lib/durum";
+import { CANLI_ESIGI, SORU_SURESI, type Durum } from "@/lib/durum";
 import {
   anahtarDogrula,
   komutGonder,
@@ -261,7 +261,11 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
           <div className={p.sayilar}>
             <div>
               <div className={`mono ${p.sayi}`}>{yoklama.bagli}</div>
-              <div className={`etiket ${p.sayiEtiket}`}>Bağlı</div>
+              <div className={`etiket ${p.sayiEtiket}`}>Ekranda</div>
+            </div>
+            <div>
+              <div className={`mono ${p.sayi}`}>{yoklama.odada ?? yoklama.bagli}</div>
+              <div className={`etiket ${p.sayiEtiket}`}>Odada</div>
             </div>
             <div>
               <div className={`mono ${p.sayi}`}>
@@ -273,8 +277,13 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
           </div>
           {yoklama.katilimcilar && yoklama.katilimcilar.length > 0 && (
             <div className={p.adlar}>
-              {yoklama.katilimcilar.map((k) => (
-                <span key={k.id} className={p.ad}>
+              {yoklama.katilimcilar.map((k) => {
+                /* Sekmesi arka plandaki katılımcı bildirim gönderemiyor
+                   (Chrome donduruyor). Listeden düşürmek yerine soluk
+                   gösteriliyor: odada ama şu an bakmıyor. */
+                const uzakta = Date.now() - k.son > CANLI_ESIGI;
+                return (
+                <span key={k.id} className={`${p.ad} ${uzakta ? p.uzakta : ""}`} title={uzakta ? `${k.ad} — sekmesi arka planda` : k.ad}>
                   {k.ad}
                   <button
                     type="button"
@@ -286,7 +295,8 @@ function Panel({ anahtar, onCik }: { anahtar: string; onCik: () => void }) {
                     ✕
                   </button>
                 </span>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -384,12 +394,13 @@ function QuizKarti({
       return;
     }
     const bas = Date.now();
-    setKalan(SORU_SURESI);
+    const baslangic = durum.quizKalan ?? SORU_SURESI;
+    setKalan(baslangic);
     const sayac = setInterval(() => {
-      setKalan(Math.max(0, SORU_SURESI - (Date.now() - bas)));
+      setKalan(Math.max(0, baslangic - (Date.now() - bas)));
     }, 250);
     return () => clearInterval(sayac);
-  }, [durum.quizAcik, durum.quizAcildi]);
+  }, [durum.quizAcik, durum.quizAcildi, durum.quizKalan]);
   const basladi = aktif >= 0;
   const bitti = aktif >= sorular.length;
   const sonSoru = aktif >= sorular.length - 1;

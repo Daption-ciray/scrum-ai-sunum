@@ -53,26 +53,35 @@ export function Quiz({
   const soru = slayt.sorular[aktif];
   const secilen = verilen[aktif];
 
-  /* Geri sayım: sunucunun damgasından fark hesaplanmıyor, damganın DEĞİŞTİĞİ
-     an yerel saatte işaretleniyor. Katılımcının cihaz saati birkaç saniye
-     kaymış olabilir ve kimse sayaç yüzünden soru kaybetmemeli. Senkron kayması
-     en fazla bir yoklama turu (~2 sn) kadar. */
-  const [kalan, setKalan] = useState(SORU_SURESI);
+  /* Geri sayım.
+     İstemcinin cihaz saati sunucununkinden kaymış olabilir, o yüzden mutlak
+     zaman karşılaştırması yapılmıyor. Bunun yerine sorunun ne kadar süredir
+     açık olduğu SUNUCUNUN KENDİ İKİ SAYISININ FARKINDAN çıkarılıyor
+     (`durum.zaman - durum.quizAcildi`); iki sayı da aynı saatten geldiği için
+     kayma sadeleşiyor. Kalan süre oradan başlatılıyor.
+
+     Bu olmadan sonradan katılan veya sayfayı yenileyen kişi taze 20 saniye
+     görüyordu, oysa sunucu ilk açılıştan sayıyor: sayaçta süre varken cevabı
+     "Süre doldu" ile reddediliyordu. */
+  const [kalan, setKalan] = useState(0);
   useEffect(() => {
     if (!acik || !acildi) {
       setKalan(0);
       return;
     }
-    const baslangic = Date.now();
-    setKalan(SORU_SURESI);
+    // Sunucunun hesapladığı kalan süreden başla. `quizKalan` yoksa (eski
+    // yanıt) tam süreye düş.
+    const baslangicKalan = durum?.quizKalan ?? SORU_SURESI;
+    const yerelBaslangic = Date.now();
+    setKalan(baslangicKalan);
     const tik = () => {
-      const k = Math.max(0, SORU_SURESI - (Date.now() - baslangic));
+      const k = Math.max(0, baslangicKalan - (Date.now() - yerelBaslangic));
       setKalan(k);
       if (k <= 0) clearInterval(sayac);
     };
     const sayac = setInterval(tik, 250);
     return () => clearInterval(sayac);
-  }, [acik, acildi]);
+  }, [acik, acildi, durum?.quizKalan]);
 
   const suresiDoldu = acik && kalan <= 0;
   const saniye = Math.ceil(kalan / 1000);

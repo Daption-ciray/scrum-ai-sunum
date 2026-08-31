@@ -1,4 +1,4 @@
-import { ATILMA_SURESI, BASLANGIC, CANLI_ESIGI, type Durum, type Katilimci } from "./durum";
+import { ATILMA_SURESI, BASLANGIC, CANLI_ESIGI, UZAK_ESIGI, type Durum, type Katilimci } from "./durum";
 
 /* =============================================================================
    DEPO — iki modu var.
@@ -171,10 +171,16 @@ export async function katilimciSay(): Promise<number> {
   return await redis<number>(["ZCOUNT", KATILIMCI_ANAHTARI, esik, "+inf"]);
 }
 
-/** Tam liste. Yalnızca sunucu paneli çağırıyor; katılımcıya asla gitmiyor. */
+/**
+ * Tam liste. Yalnızca sunucu paneli çağırıyor; katılımcıya asla gitmiyor.
+ *
+ * CANLI_ESIGI'ne göre değil UZAK_ESIGI'ne göre süzülüyor: donmuş sekmesi
+ * olan katılımcı listede kalsın, panel onu "uzakta" diye işaretlesin.
+ * Kimin ekranda olduğu `son` damgasından okunuyor.
+ */
 export async function katilimcilariOku(): Promise<Katilimci[]> {
   const simdi = Date.now();
-  const esik = simdi - CANLI_ESIGI;
+  const esik = simdi - UZAK_ESIGI;
 
   if (!paylasimliDepo) {
     return [...bellek().katilimcilar.values()].filter((k) => k.son >= esik);
@@ -195,6 +201,23 @@ export async function katilimcilariOku(): Promise<Katilimci[]> {
     if (c) liste.push({ ...c, son: Number(uyeler[i + 1]) || simdi });
   }
   return liste;
+}
+
+/**
+ * Katılımcı kendi çıktı: kaydı hemen siliniyor, yasak yok.
+ *
+ * Gerekli çünkü liste artık UZAK_ESIGI'ne (30 dk) göre süzülüyor —
+ * donmuş sekmesi olan kişi listede kalsın diye. Kendi çıkanı aynı kefeye
+ * koymak "Odada" sayısını yarım saat şişirirdi; oysa çıkış kesin bilgi.
+ */
+export async function katilimciAyril(id: string): Promise<void> {
+  if (!paylasimliDepo) {
+    bellek().katilimcilar.delete(id);
+    return;
+  }
+  const uyeler = await redis<string[] | null>(["ZRANGE", KATILIMCI_ANAHTARI, 0, -1]);
+  const silinecek = (uyeler ?? []).filter((u) => uyeCoz(u)?.id === id);
+  if (silinecek.length > 0) await redis(["ZREM", KATILIMCI_ANAHTARI, ...silinecek]);
 }
 
 /** Bir katılımcının oturumunu kapatır: kaydı silinir, kısa süre geri giremez. */

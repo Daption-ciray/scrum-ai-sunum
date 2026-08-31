@@ -37,6 +37,16 @@ export type Durum = {
    * soru kaybetmemeli. Kayma en fazla bir yoklama turu (2 sn) kadar.
    */
   quizAcildi: number;
+  /**
+   * Aktif soruda kalan süre (ms). DEPODA TUTULMAZ — `/api/durum` ve
+   * `/api/panel` yanıtı üretilirken sunucu saatiyle hesaplanıp ekleniyor.
+   *
+   * Neden istemci kendisi hesaplamıyor: cihaz saati sunucununkinden kaymış
+   * olabilir ve kimse saati yüzünden soru kaybetmemeli. Neden `quizAcildi`
+   * farkı yetmiyor: `zaman` alanı soruyla aynı anda yazılıyor, aradaki fark
+   * her zaman sıfır çıkıyor. Sunucunun kendi "şimdi"si gerekiyordu.
+   */
+  quizKalan?: number;
   /** Her değişiklikte artar. İstemci bunu karşılaştırıp gereksiz render etmez. */
   surum: number;
   zaman: number;
@@ -51,6 +61,7 @@ export const BASLANGIC: Durum = {
   quizSoru: -1,
   quizAcik: false,
   quizAcildi: 0,
+  quizKalan: 0,
   surum: 0,
   zaman: 0,
 };
@@ -69,6 +80,22 @@ export type Katilimci = { id: string; ad: string; son: number };
 
 /** Bu süre boyunca haber vermeyen katılımcı "bağlı" sayılmaz. */
 export const CANLI_ESIGI = 20_000;
+
+/* Kayıt ne kadar sonra tamamen silinsin (ms).
+   ÖLÇÜLDÜ: Chrome beş dakikadan uzun arka planda kalan sekmeyi donduruyor —
+   zamanlayıcılar tamamen duruyor, "buradayım" bildirimi kesiliyor. Teams
+   penceresi öndeyken katılımcının sekmesi bu duruma düşüyor ve 20 saniyede
+   listeden siliniyordu; sunucu panelinde sayı erimiş gibi görünüyordu.
+   Sekme öne gelince `visibilitychange` anında yeniden soruyor, yani kişi
+   gitmiş değil — sadece bakmıyor. Bu yüzden iki ayrı sayı var: CANLI_ESIGI
+   "şu an ekranda", UZAK_ESIGI "odada ama başka yere bakıyor". */
+export const UZAK_ESIGI = 30 * 60_000;
+
+/** Aktif soruda kalan süreyi sunucu saatiyle hesaplar. */
+export function quizKalanHesapla(durum: Durum): number {
+  if (!durum.quizAcik || !durum.quizAcildi) return 0;
+  return Math.max(0, SORU_SURESI - (Date.now() - durum.quizAcildi));
+}
 
 export type DurumYaniti = {
   durum: Durum;

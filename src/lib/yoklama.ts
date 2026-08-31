@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { BASLANGIC, type Durum } from "./durum";
 
-export type Katilan = { id: string; ad: string };
+/** `son` = son "buradayım" damgası. Panel ekranda/uzakta ayrımını buradan yapıyor. */
+export type Katilan = { id: string; ad: string; son: number };
 
 /** Atölye gönderimi — YALNIZCA sunucu panelinde. Ad burada var. */
 export type AtolyeIstem = {
@@ -35,7 +36,10 @@ export type AtolyeVerisi = {
 
 export type YoklamaSonucu = {
   durum: Durum;
+  /** Şu an ekranda olan katılımcı sayısı (son CANLI_ESIGI içinde bildirim). */
   bagli: number;
+  /** Odaya girmiş herkes — sekmesi arka planda olanlar dahil. Yalnızca panelde. */
+  odada?: number;
   paylasimli: boolean;
   /** Yalnızca sunucu panelinde dolu. */
   katilimcilar?: Katilan[];

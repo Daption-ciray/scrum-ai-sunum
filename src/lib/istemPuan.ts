@@ -20,34 +20,49 @@ export const PARCA_ADI: Record<Parca, string> = {
   durustluk: "dürüstlük",
 };
 
-/* Desenler Türkçe küçük harfe çevrilmiş metinde aranıyor. Kapsam bilerek
-   geniş: amaç kesin tespit değil, sıralama. Yanlış pozitif, sunucunun
-   listeyi gözden geçirmesiyle düzeliyor. */
+/* Metin ÖNCE sadeleştiriliyor: küçük harfe çevrilip Türkçe işaretler
+   düşürülüyor (ı→i, ğ→g, ş→s, ç→c, ö→o, ü→u). Desenler de bu yüzden
+   işaretsiz yazılmış.
+
+   Sebebi ölçüldü: "varsayım yaptığın yeri işaretle" dürüstlük parçasını
+   tetikliyordu ama "varsayim yaptigin yeri isaretle" tetiklemiyordu. Türkçe
+   klavyesi olmayan veya hızlı yazan katılımcı haksız yere puan kaybediyordu.
+   Kapsam bilerek geniş: amaç kesin tespit değil, sıralama. */
+const ISARETLER: Record<string, string> = {
+  ı: "i", i: "i", ğ: "g", ş: "s", ç: "c", ö: "o", ü: "u",
+  â: "a", î: "i", û: "u",
+};
+
+export function sadelestir(metin: string): string {
+  return metin
+    .toLocaleLowerCase("tr")
+    .replace(/[ıiğşçöüâîû]/g, (h) => ISARETLER[h] ?? h);
+}
+
 const DESENLER: Record<Parca, RegExp[]> = {
   rol: [
-    /gibi davran/, /rolünde/, /rolüne bürün/, /olarak davran/, /sen bir /,
-    /deneyimli bir /, /kıdemli /, /uzmanı olarak/, /uzman bir /,
+    /gibi davran/, /rolunde/, /roluna burun/, /olarak davran/, /sen bir /,
+    /deneyimli bir /, /kidemli /, /uzmani olarak/, /uzman bir /,
   ],
-  /* Ünsüz yumuşaması: "ekip" ekli hâlde "ekibimiz" oluyor, /ekip/ kaçırıyor.
-     Türkçe metinde p→b, t→d, k→ğ, ç→c dönüşümleri sık; köke kadar yazıp
-     son ünsüğü sınıf içine alıyoruz. */
+  /* Ünsüz yumuşaması: "ekip" ekli hâlde "ekibimiz" oluyor; köke kadar yazıp
+     son ünsüzü sınıf içine alıyoruz. */
   baglam: [
-    /eki[pb]/, /takım/, /ürün/, /kullanıcı/, /müşteri/, /kısı[td]/, /bağlam/,
-    /sprint/, /backlog/, /proje/, /paydaş/, /iş öğe/, /hedef kitle/, /ekibi/,
+    /eki[pb]/, /takim/, /urun/, /kullanici/, /musteri/, /kisi[td]/, /baglam/,
+    /sprint/, /backlog/, /proje/, /paydas/, /is oge/, /hedef kitle/, /ekibi/,
   ],
   format: [
-    /biçim/, /format/, /madde/, /given\s*\/?\s*when/, /tablo/, /liste/,
-    /en fazla/, /en çok \d/, /başlık/, /kelimeyi geçme/, /punto/, /json/,
-    /yapısında/, /şeklinde/, /şablon/, /sırayla/, /numaraland/,
+    /bicim/, /format/, /madde/, /given\s*\/?\s*when/, /tablo/, /liste/,
+    /en fazla/, /en cok \d/, /baslik/, /kelimeyi gecme/, /punto/, /json/,
+    /yapisinda/, /seklinde/, /sablon/, /sirayla/, /numaraland/,
   ],
   sinir: [
-    /önerme\b/, /yazma\b/, /yapma\b/, /sadece/, /yalnızca/, /girme\b/,
-    /ekleme\b/, /kaçın/, /dahil etme/, /uzatma/, /kullanma\b/, /verme\b/,
-    /dışına çıkma/, /kısa tut/, /girişme/,
+    /onerme\b/, /yazma\b/, /yapma\b/, /sadece/, /yalnizca/, /girme\b/,
+    /ekleme\b/, /kacin/, /dahil etme/, /uzatma/, /kullanma\b/, /verme\b/,
+    /disina cikma/, /kisa tut/, /girisme/,
   ],
   durustluk: [
-    /varsayım/, /emin değil/, /emin olmadığın/, /bilmiyorsan/, /işaretle/,
-    /belirt/, /kaynak göster/, /uydurma/, /bilmediğin/, /eksik bilgi/,
+    /varsayim/, /emin degil/, /emin olmadigin/, /bilmiyorsan/, /isaretle/,
+    /belirt/, /kaynak goster/, /uydurma/, /bilmedigin/, /eksik bilgi/,
   ],
 };
 
@@ -61,7 +76,7 @@ export type IstemPuani = {
 };
 
 export function istemPuanla(metin: string): IstemPuani {
-  const m = metin.toLocaleLowerCase("tr");
+  const m = sadelestir(metin);
   const bulunan: Parca[] = [];
 
   for (const parca of Object.keys(DESENLER) as Parca[]) {

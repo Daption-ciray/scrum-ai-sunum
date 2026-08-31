@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Kabuk } from "@/components/Kabuk";
 import { Galeri } from "@/components/Galeri";
@@ -18,7 +18,12 @@ type Yerel = { oturum: 1 | 2; slayt: number } | null;
 export default function Oda() {
   const router = useRouter();
   const [kimlik, setKimlik] = useState<{ id: string; ad: string } | null>(null);
-  const [gorunum, setGorunum] = useState<"galeri" | "slayt">("galeri");
+  /* Slayt görünümü VARSAYILAN, galeri değil.
+     Galeriyle açılıyordu ve katılımcı bir karta tıklamadan sunumu hiç
+     görmüyordu — sunucu "slaytlar sizin ekranınızda" derken katılımcı hareketsiz
+     bir kart yığınına bakıyordu. Quiz veya atölye açıldığında da katılamıyordu.
+     Galeri bir tık uzakta duruyor; harita olarak değerli ama iniş sayfası değil. */
+  const [gorunum, setGorunum] = useState<"galeri" | "slayt">("slayt");
   const [yerel, setYerel] = useState<Yerel>(null);
 
   useEffect(() => {
@@ -46,6 +51,21 @@ export default function Oda() {
   useEffect(() => {
     if (yerel && yerel.oturum > durum.acilan) setYerel(null);
   }, [durum.acilan, yerel]);
+
+  /* Quiz veya atölye AÇILDIĞI anda katılımcıyı sunucunun yanına çek.
+     Serbest gezinme bir kolaylık; cevaplanacak bir şey açıldığında ise
+     katılımcının başka yerde olması doğrudan katılım kaybı. Yalnızca
+     kapalıdan açığa geçişte tetikleniyor, sürekli değil — açıkken geri
+     gezinmek isterse engellenmiyor. */
+  const oncekiAcik = useRef(false);
+  useEffect(() => {
+    const acik = durum.quizAcik || durum.istemAcik;
+    if (acik && !oncekiAcik.current) {
+      setGorunum("slayt");
+      setYerel(null);
+    }
+    oncekiAcik.current = acik;
+  }, [durum.quizAcik, durum.istemAcik]);
 
   // Sunucu katılımcının durduğu slayda gelirse takip kendiliğinden yeniden başlar.
   useEffect(() => {
@@ -102,6 +122,15 @@ export default function Oda() {
         bagli={bagli}
         ad={kimlik.ad}
         onCik={() => {
+          /* Sunucuya haber ver: liste 30 dakikalık pencereye göre süzülüyor,
+             haber verilmezse çıkan kişi panelde yarım saat "odada" kalır.
+             `keepalive` — sayfa hemen değişiyor, istek yarıda kalmasın. */
+          void fetch("/api/buradayim", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ id: kimlik.id, ayril: true }),
+            keepalive: true,
+          }).catch(() => {});
           // Yalnızca ad siliniyor; katılımcı kimliği localStorage'da kalıyor,
           // aynı cihazdan tekrar girildiğinde aynı kişi olarak dönülüyor.
           kimlikSil();
