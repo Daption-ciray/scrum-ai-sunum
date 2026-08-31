@@ -7,12 +7,13 @@ import k from "./kabuk.module.css";
  * Slayt kabuğu.
  *
  * Üst ve alt şeritler kaldırıldı: katılımcının bakması gereken şey slaytın
- * kendisi. Geriye dört köşe kaldı — galeriye dönüş, slayt sayacı, bağlantı
- * durumu ve imza. Hepsi piksel fontta ve küçük.
+ * kendisi. Geriye üç köşe göstergesi kaldı — galeriye dönüş, slayt sayacı,
+ * bağlantı durumu. Hepsi piksel fontta ve küçük.
  *
- * İmza sağ altta ve bilerek en soluk öğe (`--metin-3`): 70 slaytın hepsinde
- * duruyor, o yüzden okunabilir olmalı ama hiçbir karede slaydın önüne
- * geçmemeli. Renk kullanılmıyor — yeşil yalnızca "sunucu burada" demek.
+ * SLAYTTA İMZA YOK. Bir kez sağ alt köşeye marka imzası konuldu ve geri
+ * alındı: kurumsal bir iç eğitimde 70 slaydın her birinde duran marka
+ * satırı ekranı sahiplenmiş gibi duruyor. Sahiplik LICENSE dosyasında
+ * duruyor, katılımcının ekranında değil.
  */
 export function Kabuk({
   slayt,
@@ -62,10 +63,6 @@ export function Kabuk({
       >
         <span className={k.baglıNokta} aria-hidden />
         <span className={`sayi ${k.bagliSayi}`}>{saglikli ? bagli : "—"}</span>
-      </div>
-
-      <div className={`${k.kose} ${k.sagAlt}`}>
-        <span className={`etiket ${k.imza}`}>Daption</span>
       </div>
 
       {uyari}

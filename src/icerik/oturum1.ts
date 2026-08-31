@@ -24,7 +24,6 @@ export const oturum1: Oturum = {
       ust: "Scrum + AI · Kurum İçi Eğitim",
       baslik: "Scrum'ın temelleri ve üretken AI",
       alt: "Birinci oturum · 60 dakika",
-      meta: "Daption · Abdullah Gökalp Çıray",
       not: "Katılım beklenen düzeye ulaşana kadar bu slaytta bekle. Sağ üstteki bağlı sayacını izle.",
     },
     {

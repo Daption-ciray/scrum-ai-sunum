@@ -48,16 +48,6 @@
 .hata { color: var(--yanlis); font-size: var(--ol-kucuk); }
 .dipnot { color: var(--metin-3); font-size: var(--ol-kucuk); max-width: 40ch; }
 
-/* Giriş ekranının imzası — dipnottan da sessiz. */
-.imza {
-  color: var(--metin-3);
-  font-family: var(--yazi-piksel);
-  font-size: 10px;
-  letter-spacing: .12em;
-  opacity: .7;
-  -webkit-font-smoothing: none;
-}
-
 /* Sunucu girişi — katılımcı akışının altında, kapalı duruyor.
    Odada 15 katılımcı bir sunucu var; sunucu alanı ana formu bastırmamalı. */
 .sunucuAlan {
