@@ -129,3 +129,11 @@ renkten anlar.
 1. Quiz motoru — soru açma, cihaz başına geri sayım, liderlik tablosu
 2. Site içi AI — `/api/ai` sunucu tarafı vekil, kişi başı limit, hazır yedek çıktı
 3. Quiz ve atölye içeriğinin yazılması
+
+## Lisans
+
+MIT — bkz. [LICENSE](LICENSE). Telif: Abdullah Gökalp Çıray — Daption.
+
+Depo açık kaynak paylaşıldı: kurum içi bir eğitim için yazıldı ama senkron
+slayt motoru, atölye puanlaması ve quiz altyapısı başka eğitimlerde de
+kullanılabilir. Kullanan varsa telif satırını korusun, yeter.

@@ -2,6 +2,8 @@
   "name": "scrum-ai-sunum",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "author": "Abdullah Gökalp Çıray (Daption)",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -135,6 +135,8 @@ export default function Giris() {
           Bu ad değerlendirme sonuç tablosunda görünecek.
         </p>
 
+        <p className={g.imza}>Daption · Abdullah Gökalp Çıray</p>
+
         <div className={g.sunucuAlan}>
           {!sunucuAcik ? (
             <button

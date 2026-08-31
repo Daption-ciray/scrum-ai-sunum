@@ -23,6 +23,17 @@
 .solUst { top: clamp(.7rem, 2vw, 1.2rem); left: clamp(.7rem, 2vw, 1.2rem); pointer-events: auto; }
 .sagUst { top: clamp(.7rem, 2vw, 1.2rem); right: clamp(.7rem, 2vw, 1.2rem); }
 .solAlt { bottom: clamp(.7rem, 2vw, 1.2rem); left: clamp(.7rem, 2vw, 1.2rem); }
+.sagAlt { bottom: clamp(.7rem, 2vw, 1.2rem); right: clamp(.7rem, 2vw, 1.2rem); }
+
+/* İmza: sayfadaki en sessiz öğe. Piksel font tam sayı px — kesirli boyutta
+   glifler birbirine karışıyor (bkz. CLAUDE.md, piksel font tuzağı). */
+.imza {
+  color: var(--metin-3);
+  font-size: 10px;
+  letter-spacing: .14em;
+  opacity: .75;
+  -webkit-font-smoothing: none;
+}
 
 .sayac {
   color: var(--metin-3);
