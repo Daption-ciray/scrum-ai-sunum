@@ -8,17 +8,23 @@ import q from "./quiz.module.css";
 
 const yerelAnahtar = (slaytId: string) => `sunum.quiz.${slaytId}`;
 
-/** Cihazda tutulan cevaplar: soru indeksi → seçilen şık. */
-function yerelOku(slaytId: string): Record<number, number> {
+/* Cihazda tutulan cevaplar: soru indeksi → seçilen şık. Sıfırlama damgasıyla
+   birlikte saklanıyor; sunucu quizi sıfırladığında damga değişiyor ve eski
+   cevaplar yok sayılıyor. Yoksa provada cevaplayan katılımcı gerçek turda
+   şıkka basamıyordu. */
+function yerelOku(slaytId: string, tur: number): Record<number, number> {
   try {
-    return JSON.parse(window.localStorage.getItem(yerelAnahtar(slaytId)) ?? "{}");
+    const ham = window.localStorage.getItem(yerelAnahtar(slaytId));
+    if (!ham) return {};
+    const kayit = JSON.parse(ham) as { tur?: number; harita?: Record<number, number> };
+    return kayit?.tur === tur && kayit.harita ? kayit.harita : {};
   } catch {
     return {};
   }
 }
-function yerelYaz(slaytId: string, harita: Record<number, number>) {
+function yerelYaz(slaytId: string, harita: Record<number, number>, tur: number) {
   try {
-    window.localStorage.setItem(yerelAnahtar(slaytId), JSON.stringify(harita));
+    window.localStorage.setItem(yerelAnahtar(slaytId), JSON.stringify({ tur, harita }));
   } catch {
     /* gizli sekme: kayıt yine sunucuda */
   }
@@ -48,6 +54,7 @@ export function Quiz({
   const [kimlikVar, setKimlikVar] = useState(true);
 
   const aktif = durum?.quizSoru ?? -1;
+  const tur = durum?.sifirlandi ?? 0;
   const acik = durum?.quizAcik ?? false;
   const acildi = durum?.quizAcildi ?? 0;
   const soru = slayt.sorular[aktif];
@@ -86,10 +93,11 @@ export function Quiz({
   const suresiDoldu = acik && kalan <= 0;
   const saniye = Math.ceil(kalan / 1000);
 
+  // Damga değişirse (sunucu quizi sıfırladı) cihazdaki cevaplar düşüyor.
   useEffect(() => {
-    setVerilen(yerelOku(slayt.id));
+    setVerilen(yerelOku(slayt.id, tur));
     setKimlikVar(Boolean(kimlikAl()?.id));
-  }, [slayt.id]);
+  }, [slayt.id, tur]);
 
   // Soru değişince hata mesajı önceki sorudan taşınmasın.
   useEffect(() => {
@@ -118,7 +126,7 @@ export function Quiz({
           return;
         }
         const yeni = { ...verilen, [aktif]: sik };
-        yerelYaz(slayt.id, yeni);
+        yerelYaz(slayt.id, yeni, tur);
         setVerilen(yeni);
       } catch {
         setHata("Sunucuya ulaşılamadı. Tekrar deneyin.");

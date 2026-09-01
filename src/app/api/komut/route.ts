@@ -75,7 +75,7 @@ export async function POST(istek: Request) {
       yeni.perde = !onceki.perde;
       break;
     case "sifirla":
-      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false, quizAcik: false, quizSoru: -1, quizAcildi: 0 };
+      yeni = { ...onceki, slayt: 0, perde: false, acilan: 1, istemAcik: false, quizAcik: false, quizSoru: -1, quizAcildi: 0, sifirlandi: Date.now() };
       break;
     case "istem": {
       // Hangi atölye olduğu slayttan çıkarılıyor; panel id göndermiyor.
@@ -96,6 +96,8 @@ export async function POST(istek: Request) {
       if (govde.eylem === "sifirla") {
         await atolyeSifirla(hedefId);
         yeni.istemAcik = false;
+        // Damga değişince katılımcının cihazındaki gönderim de geçersizleşiyor.
+        yeni.sifirlandi = Date.now();
         break;
       }
       // iyi / kotu: yan yana yazılmasın diye önce okunup birleştiriliyor.
@@ -146,6 +148,9 @@ export async function POST(istek: Request) {
           yeni.quizSoru = -1;
           yeni.quizAcik = false;
           yeni.quizAcildi = 0;
+          // Cihazdaki cevaplar da geçersizleşsin, yoksa katılımcı provadaki
+          // cevaplarıyla kilitli kalır ve gerçek turda şıkka basamaz.
+          yeni.sifirlandi = Date.now();
           break;
       }
       break;

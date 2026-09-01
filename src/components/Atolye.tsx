@@ -11,16 +11,24 @@ const SINIR = 2000;
 /** Gönderilen istem cihazda da tutuluyor: sayfa yenilenirse kaybolmasın. */
 const yerelAnahtar = (slaytId: string) => `sunum.istem.${slaytId}`;
 
-function yerelOku(slaytId: string): string | null {
+/* Kayıt sıfırlama damgasıyla birlikte tutuluyor. Damga uyuşmuyorsa kayıt
+   yok sayılıyor: sunucu sıfırladığında sunucu tarafı boşalıyordu ama cihazdaki
+   metin duruyor, katılımcı "gönderildi" ekranında kilitli kalıyordu. Provadan
+   sonra gerçek turda kimse yazamazdı. */
+function yerelOku(slaytId: string, tur: number): string | null {
   try {
-    return window.localStorage.getItem(yerelAnahtar(slaytId));
+    const ham = window.localStorage.getItem(yerelAnahtar(slaytId));
+    if (!ham) return null;
+    const kayit = JSON.parse(ham) as { tur?: number; metin?: string };
+    return kayit?.tur === tur && typeof kayit.metin === "string" ? kayit.metin : null;
   } catch {
+    // Eski biçim (düz metin) da buraya düşüyor; yok sayılması doğru.
     return null;
   }
 }
-function yerelYaz(slaytId: string, metin: string) {
+function yerelYaz(slaytId: string, metin: string, tur: number) {
   try {
-    window.localStorage.setItem(yerelAnahtar(slaytId), metin);
+    window.localStorage.setItem(yerelAnahtar(slaytId), JSON.stringify({ tur, metin }));
   } catch {
     /* gizli sekme: gönderim yine sunucuda duruyor, sorun değil */
   }
@@ -48,11 +56,14 @@ export function Atolye({
   const [kimlikVar, setKimlikVar] = useState(true);
 
   const acik = durum?.istemAcik ?? false;
+  const tur = durum?.sifirlandi ?? 0;
 
+  // Damga değişirse (sunucu sıfırladı) yerel kayıt geçersiz sayılıyor ve
+  // katılımcı yeniden yazabiliyor.
   useEffect(() => {
-    setGonderilen(yerelOku(slayt.id));
+    setGonderilen(yerelOku(slayt.id, tur));
     setKimlikVar(Boolean(kimlikAl()?.id));
-  }, [slayt.id]);
+  }, [slayt.id, tur]);
 
   // Sunucu gönderimi açtığı anda imleç kutuya gitsin; katılımcı aramasın.
   useEffect(() => {
@@ -86,7 +97,7 @@ export function Atolye({
       }
       // kabul=false: bu kişi zaten göndermiş. Yine de kilitliyoruz, çünkü
       // sunucudaki kayıt geçerli olan.
-      yerelYaz(slayt.id, temiz);
+      yerelYaz(slayt.id, temiz, tur);
       setGonderilen(temiz);
     } catch {
       setHata("Sunucuya ulaşılamadı. Tekrar deneyin.");

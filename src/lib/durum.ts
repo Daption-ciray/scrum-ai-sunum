@@ -22,6 +22,18 @@ export type Durum = {
    */
   istemAcik: boolean;
   /**
+   * Sıfırlama damgası — sunucu her "sıfırla" bastığında değişiyor.
+   *
+   * Katılımcının gönderimi cihazında da duruyor (`localStorage`) ki sayfa
+   * yenilenince kaybolmasın. Ama sunucu sıfırlayınca sunucu tarafı boşalıyor,
+   * cihazdaki kayıt duruyordu: katılımcı "GÖNDERİLDİ" ekranında kilitli
+   * kalıyor, provadan sonra gerçek turda yazamıyordu. İstemci bu damgayı
+   * kendi kaydettiği damgayla karşılaştırıyor; farklıysa yerel kaydı yok
+   * sayıyor. Tek alan hem quizi hem atölyeyi kapsıyor — sıfırlama zaten
+   * ikisini de baştan alıyor.
+   */
+  sifirlandi: number;
+  /**
    * Quizde aktif soru indeksi. -1 = henüz başlamadı, soru sayısına eşit veya
    * büyük = bitti. Sorular tek tek geliyor; katılımcı yalnızca bunu görüyor.
    */
@@ -53,6 +65,7 @@ export type Durum = {
 };
 
 export const BASLANGIC: Durum = {
+  sifirlandi: 0,
   oturum: 1,
   slayt: 0,
   perde: false,
