@@ -32,7 +32,7 @@ export default function Oda() {
     else setKimlik(kk);
   }, [router]);
 
-  const { durum, bagli, saglikli, yukleniyor } = useYoklama({
+  const { durum, saglikli, yukleniyor } = useYoklama({
     id: kimlik?.id,
     ad: kimlik?.ad,
     // Sunucu bu katılımcının oturumunu kapattıysa kimlik silinip
@@ -119,7 +119,6 @@ export default function Oda() {
     return (
       <Galeri
         durum={durum}
-        bagli={bagli}
         ad={kimlik.ad}
         onCik={() => {
           /* Sunucuya haber ver: liste 30 dakikalık pencereye göre süzülüyor,
@@ -153,7 +152,6 @@ export default function Oda() {
       <Kabuk
         slayt={indeks}
         toplam={toplam}
-        bagli={bagli}
         saglikli={saglikli}
         galeriyeDon={() => setGorunum("galeri")}
         uyari={

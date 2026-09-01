@@ -36,8 +36,9 @@ export type AtolyeVerisi = {
 
 export type YoklamaSonucu = {
   durum: Durum;
-  /** Şu an ekranda olan katılımcı sayısı (son CANLI_ESIGI içinde bildirim). */
-  bagli: number;
+  /** Şu an ekranda olan katılımcı sayısı. YALNIZCA sunucu panelinde dolu —
+      `/api/durum` bu sayıyı artık döndürmüyor, bkz. o dosyadaki gerekçe. */
+  bagli?: number;
   /** Odaya girmiş herkes — sekmesi arka planda olanlar dahil. Yalnızca panelde. */
   odada?: number;
   paylasimli: boolean;
@@ -94,7 +95,6 @@ export function useYoklama(ayar: Ayar = {}): YoklamaSonucu {
 
   const [sonuc, setSonuc] = useState<YoklamaSonucu>({
     durum: BASLANGIC,
-    bagli: 0,
     paylasimli: true,
     saglikli: true,
     yukleniyor: true,

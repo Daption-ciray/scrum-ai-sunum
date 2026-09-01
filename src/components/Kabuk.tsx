@@ -18,7 +18,6 @@ import k from "./kabuk.module.css";
 export function Kabuk({
   slayt,
   toplam,
-  bagli,
   saglikli,
   galeriyeDon,
   uyari,
@@ -26,7 +25,6 @@ export function Kabuk({
 }: {
   slayt: number;
   toplam: number;
-  bagli: number;
   saglikli: boolean;
   galeriyeDon: () => void;
   uyari?: ReactNode;
@@ -57,12 +55,15 @@ export function Kabuk({
         </span>
       </div>
 
+      {/* Yalnızca bağlantı ışığı. Rakam kaldırıldı: katılımcı sayısı
+          `/api/durum`'dan çıkarıldı çünkü her yoklamada fazladan bir Redis
+          komutu demekti. Sayı sunucu panelinde duruyor. */}
       <div
         className={`${k.kose} ${k.solAlt} ${saglikli ? "" : k.kopuk}`}
-        title={saglikli ? `${bagli} kişi bağlı` : "Bağlantı koptu, yeniden deniyorum"}
+        title={saglikli ? "Bağlantı iyi" : "Bağlantı koptu, yeniden deniyorum"}
       >
         <span className={k.baglıNokta} aria-hidden />
-        <span className={`sayi ${k.bagliSayi}`}>{saglikli ? bagli : "—"}</span>
+        {!saglikli && <span className={`sayi ${k.bagliSayi}`}>—</span>}
       </div>
 
       {uyari}

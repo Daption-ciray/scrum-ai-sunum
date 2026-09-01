@@ -1,4 +1,4 @@
-import { durumuOku, katilimciSay, paylasimliDepo } from "@/lib/depo";
+import { durumuOku, paylasimliDepo } from "@/lib/depo";
 import { quizKalanHesapla } from "@/lib/durum";
 
 /**
@@ -14,10 +14,16 @@ import { quizKalanHesapla } from "@/lib/durum";
  * "Buradayım" bildirimi ayrı uçta (/api/buradayim) — o önbelleklenemez.
  */
 export async function GET() {
-  const [durum, bagli] = await Promise.all([durumuOku(), katilimciSay()]);
+  /* TEK Redis komutu. Eskiden burada bir de `katilimciSay()` (ZCOUNT) vardı;
+     katılımcı ekranındaki "kaç kişi bağlı" sayacını besliyordu. ÖLÇÜLDÜ:
+     origin'e saniyede ~19 istek iniyor, yani o sayaç tek başına oturumda
+     ~68.000 Redis komutu demekti. Sayı sunucu panelinde duruyor (orası
+     zaten tam listeyi çekiyor); katılımcının ekranında bağlantı noktası
+     kaldı, rakam kalktı. Bir dekorasyon için kotanın yarısı harcanmaz. */
+  const durum = await durumuOku();
 
   return Response.json(
-    { durum: { ...durum, quizKalan: quizKalanHesapla(durum) }, bagli, paylasimli: paylasimliDepo },
+    { durum: { ...durum, quizKalan: quizKalanHesapla(durum) }, paylasimli: paylasimliDepo },
     {
       headers: {
         /* ÜÇ BAŞLIK, ÜÇÜ DE GEREKLİ — ve `dynamic = "force-dynamic"` YOK.
@@ -34,12 +40,20 @@ export async function GET() {
            için; `cache-control` ise tarayıcı için (0 = tarayıcı saklamasın,
            bayat slayt gösterilmesin).
 
+           TTL neden 2 saniye: 1 saniyede önbellek dolmadan boşalıyordu —
+           ölçülen isabet %27, origin'e 38,7 istek/sn. 2 saniyede isabet
+           yaklaşık ikiye katlanıyor ve slayt gecikmesi medyan ~1,9 sn'de
+           kalıyor; ekran paylaşımının 2-5 saniyesinin hâlâ altında. Daha
+           uzun TTL komut sayısını daha da düşürür ama bayat slayt riski
+           büyür — asıl çözüm sunucu ilerlettiğinde önbelleği purge etmek,
+           o eğitimden sonraki iş.
+
            swr GERİ EKLENMEYECEK: `stale-while-revalidate=4` ölçüldüğünde slayt
            geçişi katılımcıya medyan 3,9 saniyede ulaşıyordu. `stale-if-error`
            kalsın — origin tökezlerse oda donmasın. */
         "cache-control": "public, max-age=0, must-revalidate",
-        "cdn-cache-control": "public, s-maxage=1, stale-if-error=10",
-        "vercel-cdn-cache-control": "public, s-maxage=1, stale-if-error=10",
+        "cdn-cache-control": "public, s-maxage=2, stale-if-error=10",
+        "vercel-cdn-cache-control": "public, s-maxage=2, stale-if-error=10",
       },
     },
   );

@@ -39,13 +39,11 @@ function yuva(derinlik: number, toplam: number, dar: boolean) {
  */
 export function Galeri({
   durum,
-  bagli,
   ad,
   onAc,
   onCik,
 }: {
   durum: Durum;
-  bagli: number;
   ad: string;
   onAc: (oturum: 1 | 2, slayt: number) => void;
   /** Katılımcı adını bırakıp giriş ekranına döner. */
@@ -145,7 +143,6 @@ export function Galeri({
         </button>
         <span className={`sayi ${g.bagli}`}>
           <span className={g.baglıNokta} aria-hidden />
-          {bagli}
         </span>
       </div>
 
