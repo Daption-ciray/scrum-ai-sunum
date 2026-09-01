@@ -671,9 +671,20 @@ için yazılmış sitede 3,9 sn kabul edilemezdi. **swr'yi geri eklemeyin.**
 origin tökezlerse oda donmamalı. Fonksiyon yükü değişmedi: `s-maxage=1`
 origin'i yine saniyede bir kez vuruyor.
 
-**Darboğaz Vercel değil, Upstash.** Ücretsiz katman günde 10.000 komut; bir
-oturum bunun 8,6 katı ve yaklaşık 7. dakikada Redis hata dönmeye başlar.
-Pay As You Go'ya geçmek şart, iki oturum ~$0,34. **Aylık sabit ücreti yok**, boştaki veritabanı $0 — test aşamasında geçmek maliyet doğurmuyor. $10/ay olan sabit plana geçmeyin.
+**Upstash ücretsiz katmanı YETİYOR — eski not yanlıştı.** Burada bir ara
+"ücretsiz katman günde 10.000 komut, oturum 7. dakikada patlar, Pay As You Go
+şart" yazıyordu. DOĞRULANDI (1 Eylül 2026, upstash.com/pricing): ücretsiz
+katman **ayda 500K komut**, 256 MB veri, 10 GB bant genişliği. Günlük limit
+diye bir şey yok — muhtemelen hiç olmadı, not eski bir fiyatlandırmadan
+kalmıştı ve kullanıcıyı gereksiz yere acele ettirdi.
+
+Hesap: koddan sayılan yük 100 kişilik oturumda ~86K komut, 75 kişide ~65K.
+İki oturum ~130-150K, yani 500K'nın içinde üç kat pay var. Sayaç aylık
+sıfırlanıyor; provalar da aynı havuzdan yiyor ama sığıyor.
+
+**Kullanıcı kararı: ücretsiz katmanda kalınıyor, kart girilmedi.** Pay As You
+Go hâlâ mantıklı bir sigorta (tavan kalkıyor, iki oturum ~$0,35, aylık sabit
+ücret yok) ama zorunlu değil. $10/ay olan sabit plana geçmeyin.
 
 ~~Vercel Hobby planı ticari kullanım~~ — **kapatıldı, kullanıcı kararı.**
 Proje açık kaynak paylaşıldığı ve ölçek denetim eşiğinin çok altında olduğu
@@ -713,8 +724,8 @@ Testte bulunup düzeltilenler:
    edin. Production için ayrıca Vercel'e `GOOGLE_AI_API_KEY` eklenecek;
    eklenmezse atölye çalışır, yalnızca AI değerlendirmesi kapalı kalır.
 2. **Tarih/saat teyidi** — hangi günler, saat kaç, daveti kim gönderiyor
-3. **Upstash Pay As You Go** — 75 kişide oturum başına ~150K komut, ücretsiz
-   katman 10K/gün. İki oturum ~$0,60. Gerçek oturumdan önce şart.
+3. ~~**Upstash Pay As You Go** — şart~~ — **kapatıldı.** Ücretsiz katman
+   ayda 500K komut; iki oturum ~130-150K. Yetiyor. PAYG isteğe bağlı sigorta.
 4. **Production'a yeni sürümü çıkarmak** — canlıdaki deploy 30 Ağustos
    öncesinden; 75 kişilik ölçek ve çıkış düğmesi orada yok.
 5. ~~`SUNUCU_ANAHTARI` kontrolü~~ — **kapatıldı, kullanıcı kararı.** Depo
