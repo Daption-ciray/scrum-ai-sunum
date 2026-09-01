@@ -1,8 +1,6 @@
 import { durumuOku, katilimciSay, paylasimliDepo } from "@/lib/depo";
 import { quizKalanHesapla } from "@/lib/durum";
 
-export const dynamic = "force-dynamic";
-
 /**
  * Katılımcı yoklamasının tek uğrak yeri: slayt durumu ve bağlı sayısı.
  *
@@ -22,19 +20,26 @@ export async function GET() {
     { durum: { ...durum, quizKalan: quizKalanHesapla(durum) }, bagli, paylasimli: paylasimliDepo },
     {
       headers: {
-        /* ÖLÇÜLDÜ: `stale-while-revalidate=4` ile slayt geçişi katılımcıya
-           medyan 3,9 saniyede ulaşıyordu — CDN dört saniyeye kadar bayat
-           içerik servis ediyor. Ekran paylaşımının gecikmesi zaten 2-5 sn;
-           o gecikmeyi kaldırmak için yazılan sitede bu kabul edilemez.
+        /* ÜÇ BAŞLIK, ÜÇÜ DE GEREKLİ — ve `dynamic = "force-dynamic"` YOK.
 
-           swr kaldırıldı: bayatlık en fazla 1 saniye. Fonksiyon yükü
-           değişmiyor, `s-maxage=1` origin'i yine saniyede bir kez vuruyor
-           (CDN istekleri birleştiriyor).
+           ÖLÇÜLDÜ (1 Eylül 2026, production): route `force-dynamic` iken
+           yanıttaki `cache-control` başlığı kenarda `public`e indirgeniyordu,
+           `s-maxage` düşüyordu. Sonuç: 75 eşzamanlı istekte CDN isabeti %0-1,
+           yani her katılımcının her yoklaması fonksiyona VE Redis'e iniyordu
+           — dakikada ~7.500 komut, 60 dakikalık oturumda ~450.000. Upstash'in
+           aylık 500K sınırı tek oturumda biterdi.
 
-           `stale-if-error` bilerek duruyor: normal sürede bayat servis etmek
-           yanlış, ama origin veya Redis tökezlerse oda donmasın diye on
-           saniyeye kadar eski durumu göstermek doğru. */
-        "cache-control": "public, s-maxage=1, stale-if-error=10",
+           `Vercel-CDN-Cache-Control` yalnızca Vercel'in kenarını hedefliyor ve
+           framework tarafından ezilmiyor; `CDN-Cache-Control` diğer CDN'ler
+           için; `cache-control` ise tarayıcı için (0 = tarayıcı saklamasın,
+           bayat slayt gösterilmesin).
+
+           swr GERİ EKLENMEYECEK: `stale-while-revalidate=4` ölçüldüğünde slayt
+           geçişi katılımcıya medyan 3,9 saniyede ulaşıyordu. `stale-if-error`
+           kalsın — origin tökezlerse oda donmasın. */
+        "cache-control": "public, max-age=0, must-revalidate",
+        "cdn-cache-control": "public, s-maxage=1, stale-if-error=10",
+        "vercel-cdn-cache-control": "public, s-maxage=1, stale-if-error=10",
       },
     },
   );
