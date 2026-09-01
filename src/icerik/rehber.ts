@@ -126,7 +126,7 @@ export const REHBER: Record<string, RehberKaydi> = {
     bilgi:
       "Kaynak MIT Sloan, \"When AI Gets It Wrong\". Üçüncü neden en çok şaşırtan: yalnızca doğru veriyle eğitilse bile model örüntüleri beklenmedik biçimde birleştirip yeni bir yanlış üretebilir. Yani halüsinasyon bir veri hatası değil, mekanizmanın kendisi.",
     soru:
-      "\"O zaman bu araca hiç güvenilmez mi?\" → Güvenilir ama doğrulanarak. Halüsinasyon bir arıza değil, tasarımın sonucu — model doğruyu değil, en olası devamı üretiyor. Bu yüzden bir sonraki slayt 'nerede güçlü, nerede zayıf' diye ayırıyor; kural basit: girdi sizdeyse çıktıyı doğrulayabilirsiniz.",
+      "\"O zaman bu araca hiç güvenilmez mi?\" → Güvenilir ama doğrulanarak. Halüsinasyon bir arıza değil, tasarımın sonucu — model doğruyu değil, en olası devamı üretiyor. Bu yüzden bir sonraki slayt 'nerede güçlü, nerede zayıf' diye ayırıyor; kural basit: girdi sizdeyse çıktıyı doğrulayabilirsiniz. · \"Devamı değil de cevabı üretmesi gerekmez mi?\" → Kelime bilerek 'devam': model cevap ARAMIYOR, metni sürdürüyor. 'Cevabı üretir' deseydik modelin cevaplamaya çalıştığını ama bazen ıskaladığını söylemiş olurduk; oysa doğruluk hedefi hiç yok. Halüsinasyonun açıklaması tam olarak burada — uydurma bir kaynak adı, gerçek olan kadar 'olası' görünüyor.",
   },
   "s1-llm-yapar": {
     bilgi:
