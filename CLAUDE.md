@@ -180,12 +180,27 @@ geri çekilme) yeterli. 75 kişide çalışması için üç ayrım yapıldı:
 saniyede bir yetiyor (canlılık eşiği 20 sn), durum 2 saniyede bir isteniyor.
 Yazma trafiği altıda birine indi. `POST /api/buradayim`.
 
-**2. `/api/durum` kişiye özel hiçbir şey döndürmüyor** — bu yüzden CDN'de bir
-saniye önbelleklenebiliyor (`s-maxage=1, stale-while-revalidate=4`). 75 kişinin
-isteği kenardan karşılanıyor, fonksiyon saniyede bir kez çalışıyor.
-**Bu uca kişiye özel bir alan eklerseniz önbelleği kaldırın**, yoksa bir
-katılımcının verisi başkasına servis edilir. İsim listesi bu yüzden ayrı uçta:
-`/api/panel`, yalnızca sunucu anahtarıyla, `no-store`.
+**2. `/api/durum` kişiye özel hiçbir şey döndürmüyor** — bu yüzden CDN'de
+önbelleklenebiliyor. 75 kişinin isteği kenardan karşılanıyor, fonksiyon
+saniyede birkaç kez çalışıyor. **Bu uca kişiye özel bir alan eklerseniz
+önbelleği kaldırın**, yoksa bir katılımcının verisi başkasına servis edilir.
+İsim listesi bu yüzden ayrı uçta: `/api/panel`, yalnızca sunucu anahtarıyla,
+`no-store`.
+
+**Önbellek başlıkları `Vercel-CDN-Cache-Control` ile veriliyor ve route
+`force-dynamic` DEĞİL — ikisi de zorunlu.** ÖLÇÜLDÜ (1 Eylül 2026,
+production): route `force-dynamic` işaretliyken yanıttaki `cache-control`
+kenarda `public`e indirgeniyor, `s-maxage` düşüyordu. Sonuç: 75 eşzamanlı
+istekte CDN isabeti **%0-1** — yani mimarinin bütün dayanağı kâğıt üstündeydi,
+her yoklama fonksiyona VE Redis'e iniyordu. Düzeltmeden sonra isabet **%86**,
+origin'e inen 38,7/sn → **7,4/sn**. Başlığı değiştirirseniz isabeti yeniden
+ölçün; `x-vercel-cache` yanıt başlığı HIT/MISS diyor.
+
+**Durum yanıtı TEK Redis komutu çalıştırıyor.** Bir ara burada `katilimciSay()`
+(ZCOUNT) de vardı, katılımcı ekranındaki "kaç kişi bağlı" rakamını besliyordu.
+Origin'e saniyede ~19 istek indiği ölçülünce görüldü ki o dekorasyon oturumda
+~68.000 komut ediyor. Rakam katılımcıdan kaldırıldı (bağlantı ışığı kaldı),
+sayı sunucu panelinde duruyor — orası zaten tam listeyi çekiyor.
 
 **3. Katılımcılar HASH değil ZSET.** Üye `id\u0001ad`, skor son görülme anı.
 Sayı `ZCOUNT` ile tek komut ve birkaç bayt; eskiden her yoklamada tüm liste
@@ -632,14 +647,27 @@ Baştan başlayın, blok blok ilerleyin.
 20 sn): **1118 istek, 50,3 istek/sn, %0 hata**, hepsi HTTP 200. 50 istek/sn
 zaten gerçek oturum hızı. Vercel tarafı rahat.
 
-Tam oturum yükü, koddan sayarak (100 kişi × 60 dk):
+**Redis yükü ÖLÇÜLDÜ, artık tahmin değil** (1 Eylül 2026, production,
+75 sanal katılımcı + 1 panel, gerçek yoklama deseniyle):
 
 | | |
 |---|---|
-| Fonksiyon çalıştırma | 42.140 |
-| — `/api/durum` | 3.600 · CDN emiyor, kenara 50/sn geliyor fonksiyona ~1 |
-| — `/api/buradayim` | 36.000 · önbelleklenemez |
-| Redis komutu | **86.060** · iki oturum 172.120 |
+| İstek | 57,9/sn · **0 hata** |
+| CDN isabeti (`/api/durum`) | %86 |
+| Redis komutu | **1.374/dk** |
+| 60 dakikalık oturum | **82.432** |
+| İki oturum | **164.864** |
+| Upstash ücretsiz katman (aylık) | 500.000 → **%33 kullanım** |
+
+Dağılım: `/api/buradayim` en pahalı kalem (önbelleklenemez, kişi başı 10
+saniyede bir, 2 komut). `/api/durum` artık ucuz — %86'sı kenardan dönüyor ve
+origin'e inen her istek TEK komut çalıştırıyor. Panel (sunucunun kendi sekmesi)
+önbelleklenmiyor ama tek kullanıcı.
+
+Bu sayıyı bir daha ölçerken aynı harness'ı kullanın: 75 eşzamanlı istemci,
+durum 1,2 sn, buradayim 10 sn, panel 1,2 sn. Tek istemciyle ölçmeyin —
+`s-maxage` kısa olduğu için tek istemci her seferinde MISS alır ve önbellek
+çalışmıyor sanırsınız.
 
 **Yerel geliştirme production ile AYNI Redis'e bağlıydı.** `vercel env pull`
 Upstash bağlantısını `.env.local`'e indiriyor ve o bağlantı production'ın ta
@@ -656,20 +684,26 @@ silin — ama o sırada canlı oturum olmadığından emin olun. Panelde yerelde
 sarı "Bellek modu" uyarısı görünmesi artık NORMAL; o uyarı production için
 anlamlı.
 
-**Slayt geçiş gecikmesi ölçüldü ve düşürüldü.** Sunucu ilerlettiğinde
-katılımcının ekranına ulaşma süresi (production, 20 eşzamanlı istemci):
+**Slayt geçiş gecikmesi ölçüldü.** Sunucu ilerlettiğinde katılımcının
+ekranına ulaşma süresi (production, eşzamanlı istemciler):
 
-| | medyan | en kötü |
-|---|---|---|
-| `swr=4`, yoklama 2000 ms | 3.943 ms | 4.061 ms |
-| **swr yok, yoklama 1200 ms** | **1.408 ms** | **1.699 ms** |
+| | medyan | p95 | en kötü |
+|---|---|---|---|
+| `swr=4`, yoklama 2000 ms | 3.943 ms | — | 4.061 ms |
+| swr yok, yoklama 1200 ms, önbellek ÇALIŞMIYOR | 1.408 ms | — | 1.699 ms |
+| **swr yok, yoklama 1200 ms, kenar TTL 2 sn** | **1.341 ms** | 2.387 ms | 2.402 ms |
 
-Sebep `stale-while-revalidate=4` idi: CDN dört saniyeye kadar bayat içerik
-servis ediyordu. Ekran paylaşımının gecikmesi 2-5 sn; o gecikmeyi kaldırmak
-için yazılmış sitede 3,9 sn kabul edilemezdi. **swr'yi geri eklemeyin.**
-`stale-if-error=10` kalsın — normal sürede bayat servis etmek yanlış, ama
-origin tökezlerse oda donmamalı. Fonksiyon yükü değişmedi: `s-maxage=1`
-origin'i yine saniyede bir kez vuruyor.
+İlk düşüşün sebebi `stale-while-revalidate=4` idi: CDN dört saniyeye kadar
+bayat içerik servis ediyordu. Ekran paylaşımının gecikmesi 2-5 sn; o gecikmeyi
+kaldırmak için yazılmış sitede 3,9 sn kabul edilemezdi. **swr'yi geri
+eklemeyin.** `stale-if-error=10` kalsın — normal sürede bayat servis etmek
+yanlış, ama origin tökezlerse oda donmamalı.
+
+Üçüncü satır şaşırtıcı görünüyor: TTL 1'den 2 saniyeye ÇIKARILDIĞI hâlde
+medyan düştü. Sebep, isabet %86'ya çıkınca yanıtların çoğunun kenardan
+gelmesi — istek süresi p50 273 ms'den 82 ms'ye indi ve bu, bayatlıktan gelen
+gecikmeyi fazlasıyla karşılıyor. TTL'i daha da uzatmayın: kazanç azalıyor,
+bayat slayt riski büyüyor.
 
 **Upstash ücretsiz katmanı YETİYOR — eski not yanlıştı.** Burada bir ara
 "ücretsiz katman günde 10.000 komut, oturum 7. dakikada patlar, Pay As You Go
