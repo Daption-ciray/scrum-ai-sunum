@@ -664,6 +664,17 @@ saniyede bir, 2 komut). `/api/durum` artık ucuz — %86'sı kenardan dönüyor 
 origin'e inen her istek TEK komut çalıştırıyor. Panel (sunucunun kendi sekmesi)
 önbelleklenmiyor ama tek kullanıcı.
 
+**Upstash panosuyla doğrulandı (ground truth).** 60 saniyelik 75 kişilik test
+öncesi/sonrası aylık sayaç: 11.000 → 12.075 komut, yani **+1.087**
+(writes 1.888 → 2.215, reads 9.100 → 9.860). Koddan türettiğim beklenti 1.480
+idi; gerçek %27 DAHA AZ çıktı. Yani buradaki hesaplar kötümser tarafta —
+sapmanın sebebi panonun gecikmesi ya da benim panel tarafında fazladan
+saydığım bir komut olabilir, ikisi de yük lehine.
+
+Muhafazakâr rakamla oturum başına ~89.000, iki oturum ~178.000 komut: aylık
+500.000 sınırının **%36'sı**. 100 kişide bile ~240.000, yarının altında.
+Ücretsiz katman yetiyor.
+
 Bu sayıyı bir daha ölçerken aynı harness'ı kullanın: 75 eşzamanlı istemci,
 durum 1,2 sn, buradayim 10 sn, panel 1,2 sn. Tek istemciyle ölçmeyin —
 `s-maxage` kısa olduğu için tek istemci her seferinde MISS alır ve önbellek
