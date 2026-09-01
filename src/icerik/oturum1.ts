@@ -340,7 +340,7 @@ export const oturum1: Oturum = {
       giris: "Sınırlarını anlamak için mekanizmayı bilmek gerekiyor. Üç nedeni var.",
       maddeler: [
         { ana: "Eğitim verisi karışıktır", alt: "İnternetin tamamıyla eğitilir; doğru bilgi de yanlış bilgi ve toplumsal önyargı da o veride vardır." },
-        { ana: "Amacı doğruluk değil, olasılıktır", alt: "Gelişmiş bir otomatik tamamlama gibi çalışır: en olası devamı üretir. Doğru çıkması çoğu zaman bunun yan ürünüdür." },
+        { ana: "Doğruyu aramaz, cümleyi tamamlar", alt: "Gelişmiş bir otomatik tamamlama gibi çalışır: yazdığınız metni en olası şekilde sürdürür. Doğru çıkması çoğu zaman bunun yan ürünüdür." },
         { ana: "Tasarımı doğruyu yanlıştan ayırmaz", alt: "Yalnızca doğru veriyle eğitilse bile, örüntüleri beklenmedik biçimde birleştirip yeni bir yanlış üretebilir." },
       ],
       not: "Kaynak: MIT Sloan, \"When AI Gets It Wrong\". 'Veri tabanından çekmiyor, tahmin ediyor' cümlesini iki kez söyle — sonraki iki slaytın gerekçesi bu.",
@@ -493,7 +493,7 @@ export const oturum1: Oturum = {
           soru: "Bir dil modeli neden \"halüsinasyon\" görür?",
           secenekler: [
             "Eğitim verisinde o bilgi bulunmadığı için",
-            "Amacı doğruluk değil, en olası devamı üretmek olduğu için",
+            "Doğruyu aramayıp cümleyi en olası şekilde tamamladığı için",
             "Soru yeterince açık sorulmadığı için",
             "İnternete bağlı olmadığı için",
           ],
