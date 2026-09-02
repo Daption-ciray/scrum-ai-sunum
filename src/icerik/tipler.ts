@@ -28,6 +28,13 @@ export type SlaytGovde =
       baslik: string;
       giris?: string;
       adimlar: { ad: string; aciklama: string; ornek?: string }[];
+      /**
+       * Katılımcının kendi cihazından tıklayıp gidebileceği bağlantılar.
+       * Sitedeki TEK dış bağlantı yeri burası: slaytlar okunacak metin,
+       * araç slaytları ise denenecek şey. Yeni sekmede açılıyor — sunum
+       * sekmesi kapanırsa katılımcı akıştan düşer.
+       */
+      baglantilar?: { ad: string; url: string }[];
       kaynak?: string;
     }
   /** Tek eksen üzerinde iki uç. `ikili`den farkı: karşılaştırma değil, terazi. */

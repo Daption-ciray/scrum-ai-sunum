@@ -24,6 +24,24 @@ export function Adimlar({ slayt }: { slayt: Extract<Slayt, { tip: "adim" }> }) {
         ))}
       </ol>
 
+      {slayt.baglantilar && slayt.baglantilar.length > 0 && (
+        <div className={a.baglantilar}>
+          {slayt.baglantilar.map((b) => (
+            <a
+              key={b.url}
+              className={`etiket ${a.baglanti}`}
+              href={b.url}
+              target="_blank"
+              /* Yeni sekme zorunlu: aynı sekmede açılırsa katılımcı sunumdan
+                 düşer ve geri dönene kadar slaytları kaçırır. */
+              rel="noopener noreferrer"
+            >
+              {b.ad} ↗
+            </a>
+          ))}
+        </div>
+      )}
+
       {slayt.kaynak && <p className={a.kaynak}>{slayt.kaynak}</p>}
     </div>
   );

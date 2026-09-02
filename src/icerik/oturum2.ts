@@ -335,7 +335,8 @@ export const oturum2: Oturum = {
           ornek: "Rakamlar panodan doğrulanır, uydurulmuş bir başarı cümlesi varsa silinir",
         },
       ],
-      kaynak: "gamma.app · ücretsiz hesapla denenebiliyor, üretim kredi harcıyor; güncel sınırlar gamma.app/pricing",
+      baglantilar: [{ ad: "gamma.app", url: "https://gamma.app/" }],
+      kaynak: "Ücretsiz hesapla denenebiliyor. Bugün açıp tek bir deneme yapmanız yeterli.",
       not: "İki dakika. Girdi metnini ÖNCEDEN hazırla ve panoya kopyalamış ol — canlıda yazmaya kalkarsan blok şişer. Çıkan sunumu güzel bulsalar bile bir yanlışını göstermeden geçme; bu bloğun işi hayranlık değil, ölçü.",
     },
 
@@ -362,7 +363,8 @@ export const oturum2: Oturum = {
           ornek: "Ekrandan çıkan kabul kriterleri Sprint Backlog'a yazılır; kodun kendisi çöpe gidebilir, konuşma kalır",
         },
       ],
-      kaynak: "v0.app · ücretsiz plan: aylık 5 dolarlık kredi, günde 7 mesaj sınırı (v0.app/pricing, Eylül 2026)",
+      baglantilar: [{ ad: "v0.app", url: "https://v0.app/" }],
+      kaynak: "Ücretsiz hesapla denenebiliyor; günlük birkaç istem hakkı var, bir ekran taslağı için fazlasıyla yeter.",
       not: "İki dakika. İstemi önceden hazırla. Odaya sor: \"bu ekranda ilk gözünüze çarpan eksik ne?\" — gelen cevaplar zaten kabul kriteri, bunu yüksek sesle söyle. Kodun üretime gitmeyeceğini net söyle, yoksa yazılım ekibi savunmaya geçiyor.",
     },
 

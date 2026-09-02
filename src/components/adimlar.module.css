@@ -56,3 +56,32 @@
   }
 }
 @media (prefers-reduced-motion: reduce) { .adim { animation: none; opacity: 1; transform: none; } }
+
+/* Dış bağlantılar — katılımcı kendi cihazından tıklıyor.
+   Telefonda parmakla basılacak: yükseklik 44 px'in altına düşmesin. */
+.baglantilar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .8rem;
+}
+.baglanti {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 .9rem;
+  border: var(--kenar) solid var(--cizgi);
+  background: var(--yuzey);
+  color: var(--metin);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: .04em;
+  box-shadow: 3px 3px 0 0 var(--cizgi-2);
+  -webkit-font-smoothing: none;
+  transition: transform .08s steps(2), box-shadow .08s steps(2);
+}
+.baglanti:hover,
+.baglanti:focus-visible {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 var(--cizgi-2);
+}

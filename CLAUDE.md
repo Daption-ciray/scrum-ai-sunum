@@ -460,10 +460,17 @@ aşaması "çıktı gözden geçirilmeden paylaşılmaz" diyor ve bir sonraki bl
 Süre `Sorumlu kullanım` bloğundan alındı (19 → 11 dk, kullanıcı kararı).
 O blokta 12 slayt kaldığı için artık slayt başına ~55 saniye var: önyargı
 (`s2-onyargi`, `s2-onyargi-nerede`) ve `s2-guvenilir-ai` hızlı geçilecek
-slaytlar. **Ücretsiz katman sınırları slaytta yazılı; v0'ınki doğrulandı
-(aylık 5 dolarlık kredi, günde 7 mesaj — v0.app/pricing). Gamma'nınki
-doğrulanamadı** (sayfa bota kapalı), o yüzden slaytta sayı yok, yalnızca
-"kredi harcıyor" deniyor. Sayı yazacaksanız önce siteden teyit edin.
+slaytlar. **Slaytta fiyat/kota SAYISI yok, tıklanabilir link var** (kullanıcı kararı).
+Katılımcı fiyat tablosu okumuyor; hesap açıp tek bir istem deneyecek ya da hiç
+açmayacak. Sayı yazmak ayrıca çürüyen bilgi: v0'ın ücretsiz planı ölçüldüğünde
+aylık 5 dolarlık kredi ve günde 7 mesajdı (v0.app/pricing, Eylül 2026), gamma
+sayfası bota kapalı olduğu için hiç doğrulanamadı. Slaytlar yalnızca "ücretsiz
+hesapla denenebiliyor" diyor.
+
+Bağlantılar `adim` tipine eklenen `baglantilar` alanıyla geliyor ve
+**sitedeki tek dış bağlantı**. `target="_blank"` zorunlu: aynı sekmede
+açılırsa katılımcı sunumdan düşer, geri dönene kadar slaytları kaçırır.
+Dokunma hedefi 44 px'in altına inmesin, oda telefondan katılıyor.
 
 **`Daily` araç tablosunda bir hücre bilerek boş.** `s2-daily-araclar` içindeki
 "Sırasında · Araç yok" satırı eksiklik değil, slaytın mesajı. Doldurmayın.
