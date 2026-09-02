@@ -106,8 +106,8 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
 - Sunucu paneli: canlı önizleme, sunucu notları, blok atlama, perde, klavye,
   katılımcı listesi ve tek tek oturum kapatma
 - Giriş sayfasından sunucu girişi; galeride katılımcı için çıkış düğmesi
-- Galeri: 13 blok 3B kart yığını (GSAP), ikinci oturum kilitli
-- **70 slayt, 13 blok** — kurumsal eğitim dilinde, kaynakları slaytın içinde
+- Galeri: 14 blok 3B kart yığını (GSAP), ikinci oturum kilitli
+- **36 slayt (oturum 2), 14 blok** — kurumsal eğitim dilinde, kaynakları slaytın içinde
 - 20 slayt tipi; `bolum` ayraçları, `sayi`, `adim`, `terazi`, `kartlar`,
   `alinti`, `roller`, `olgunluk`, `cevir`, `atolye`, `karsilastirma`, `quiz`, `siralama` dahil
 - Upstash Redis bağlı, 75 kişilik yüke göre kurgulanmış
@@ -125,10 +125,11 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
 | 7 | İkinci oturum açılışı | 2 | 2 |
 | 8 | Sprint Planning'de AI | 14 | 2 |
 | 9 | Daily Scrum'da AI | 10 | 2 |
-| 10 | AI çıktısını değerlendirme | 8 | 2 |
-| 11 | Sorumlu kullanım: güvenlik ve etik | 19 | 2 |
-| 12 | Ekip çalışma anlaşması | 5 | 2 |
-| 13 | Eylem planı | 2 | 2 |
+| 10 | Canlı araç denemesi | 8 | 2 | ← gamma + v0 demosu
+| 11 | AI çıktısını değerlendirme | 8 | 2 |
+| 12 | Sorumlu kullanım: güvenlik ve etik | 11 | 2 |
+| 13 | Ekip çalışma anlaşması | 5 | 2 |
+| 14 | Eylem planı | 2 | 2 |
 
 **Yok — sıradaki iş**
 1. **Slayt slayt içerik gözden geçirmesi** — 13 bloğu baştan sona konuşmak.
@@ -444,6 +445,25 @@ ilk cümlesi ("ortak bir yaklaşım oluşturmayı amaçlamaktadır") tam olarak 
 vaat ettiği için geri kondu. Slayt kimlikleri taşınırken yenilendi: prefiks
 oturum numarasını taşıyor (`s1-baglam`, `s2-planning-akis`), kod hiçbir yerde
 slayt id'si aramıyor.
+
+**Canlı araç denemesi bloğu DEMO, atölye değil.** Kullanıcı iki ürün
+gösterilmesini istedi: gamma.app (dağınık nottan sunuma) ve v0.app (cümleden
+tıklanabilir ekrana). Katılımcıya "siz de açın" DENMİYOR — 75 kişilik online
+odada hesap açtırmak üç dakika yer ve bağlantı sorunlarıyla blok dağılır.
+Sunucu ekranını paylaşıp iki dakikada gösteriyor, linkler slaytta kalıyor.
+
+İki slayt da üç aşama (`adim`) kalıbında: aynı çerçeve `s2-asamalar`'dan
+geliyor, yani araç değişse de yöntem aynı kalıyor. Her ikisinin de son
+aşaması "çıktı gözden geçirilmeden paylaşılmaz" diyor ve bir sonraki blok
+(`AI çıktısını değerlendirme`) tam olarak onu anlatıyor — sıralama bilinçli.
+
+Süre `Sorumlu kullanım` bloğundan alındı (19 → 11 dk, kullanıcı kararı).
+O blokta 12 slayt kaldığı için artık slayt başına ~55 saniye var: önyargı
+(`s2-onyargi`, `s2-onyargi-nerede`) ve `s2-guvenilir-ai` hızlı geçilecek
+slaytlar. **Ücretsiz katman sınırları slaytta yazılı; v0'ınki doğrulandı
+(aylık 5 dolarlık kredi, günde 7 mesaj — v0.app/pricing). Gamma'nınki
+doğrulanamadı** (sayfa bota kapalı), o yüzden slaytta sayı yok, yalnızca
+"kredi harcıyor" deniyor. Sayı yazacaksanız önce siteden teyit edin.
 
 **`Daily` araç tablosunda bir hücre bilerek boş.** `s2-daily-araclar` içindeki
 "Sırasında · Araç yok" satırı eksiklik değil, slaytın mesajı. Doldurmayın.

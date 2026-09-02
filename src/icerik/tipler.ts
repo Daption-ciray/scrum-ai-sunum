@@ -55,7 +55,13 @@ export type SlaytGovde =
       tip: "sayi";
       baslik?: string;
       giris?: string;
-      sayilar: { deger: string; birim?: string; aciklama: string }[];
+      /**
+       * `etki` kartın içine yaşayan bir katman koyuyor: `su` çatlayıp
+       * boşalan bir su seviyesi, `elektrik` akım dalgalanması. Yalnızca
+       * rakamın kendisi bir kaynağı temsil ettiğinde kullanın — süs değil,
+       * rakamın anlamı.
+       */
+      sayilar: { deger: string; birim?: string; aciklama: string; etki?: "su" | "elektrik" }[];
       kaynak?: string;
     }
   /** Rol birleşme akışı. Sahnelenerek açılıyor; bağlanmayan kutu asıl mesaj. */

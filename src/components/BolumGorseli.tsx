@@ -183,7 +183,7 @@ export function BolumGorseli({ numara }: { numara: string }) {
       );
 
     /* Eylem planı — hedefe doğru yürüyen kişi. */
-    case "12":
+    case "13":
       return (
         <Sarma etiket="Hedefe yürüyen kişi">
           <rect x={4} y={88} width={92} height={7} rx={3.5} className={g.ton1} />
@@ -193,6 +193,21 @@ export function BolumGorseli({ numara }: { numara: string }) {
           <circle cx={68} cy={58} r={5} className={g.ton2} />
           <rect x={78} y={14} width={8} height={74} rx={4} className={g.ton2} />
           <path d="M86 18 C94 20 98 25 99 30 C93 35 88 37 86 37 Z" className={g.uc} />
+        </Sarma>
+      );
+
+    /* Canlı araç denemesi — iki kişi tek ekrana bakıyor: biri aracı sürüyor,
+       diğeri çıktıyı sorguluyor. Blok tam olarak bu ikiliyi anlatıyor. */
+    case "09":
+      return (
+        <Sarma etiket="Ekrana birlikte bakan iki kişi">
+          <rect x={30} y={20} width={56} height={38} rx={4} className={g.ton1} />
+          <rect x={38} y={28} width={26} height={4} rx={2} className={g.ton2} />
+          <rect x={38} y={36} width={38} height={4} rx={2} className={g.ton2} />
+          <rect x={38} y={44} width={18} height={4} rx={2} className={g.ton3} />
+          <rect x={52} y={58} width={12} height={6} rx={2} className={g.ton2} />
+          <Kisi x={8} y={44} r={10} ton={g.ton3} kol="M18 60 C24 60 28 56 31 50" />
+          <Kisi x={72} y={52} r={9} ton={g.ton2} kol="M78 66 C72 66 68 62 66 56" />
         </Sarma>
       );
 

@@ -300,11 +300,77 @@ export const oturum2: Oturum = {
 
     /* ---- 00:30 · AI çıktısını değerlendirme ---- */
 
+    /* ---- Canlı araç denemesi ---- */
+
+    {
+      id: "b-arac",
+      blok: "Canlı araç denemesi",
+      tip: "bolum",
+      numara: "09",
+      baslik: "Canlı araç denemesi",
+      ozet: "İki araç, iki dakikalık gösterim. Amaç aracı öğretmek değil, çıktının nasıl bir şey olduğunu görmek — sonraki blok tam olarak o çıktıyı değerlendirmeyi anlatıyor.",
+      not: "Ayraç. Beş saniye dur, blok adını söyle, geç.",
+    },
+
+    {
+      id: "s2-arac-gamma",
+      blok: "Canlı araç denemesi",
+      tip: "adim",
+      baslik: "Gamma — dağınık nottan sunuma",
+      giris: "Ekranı paylaşıp canlı yapacağım; siz izleyin, linkler slaytta kalıyor. Amaç aracı satmak değil, üç aşamanın burada da geçerli olduğunu görmek.",
+      adimlar: [
+        {
+          ad: "Öncesi — girdiyi siz hazırlarsınız",
+          aciklama: "Araç sizin bilmediğiniz bir şeyi bilmiyor. Ne kadar bağlam verirseniz o kadar az uyduruyor.",
+          ornek: "Sprint Review gündemi: bu sprintte biten üç iş öğesi, açılan iki engel, bir sonraki Sprint Hedefi taslağı — ham not olarak yapıştırılır",
+        },
+        {
+          ad: "Sırasında — yapıyı o kurar, kararı siz verirsiniz",
+          aciklama: "Başlıkları, sırayı ve düzeni öneriyor. Öneriyi kabul etmek zorunda değilsiniz; sunum sizin adınıza çıkıyor.",
+          ornek: "Çıkan taslakta hangi başlık gereksiz, hangi rakam yanlış yerde — canlı olarak birlikte bakacağız",
+        },
+        {
+          ad: "Sonrası — çıktı gözden geçirilmeden paylaşılmaz",
+          aciklama: "Sunumu paydaşa gönderen kişi içeriğin sahibidir. Aracın ürettiği cümleyi okumadan göndermek, imzasız belge göndermektir.",
+          ornek: "Rakamlar panodan doğrulanır, uydurulmuş bir başarı cümlesi varsa silinir",
+        },
+      ],
+      kaynak: "gamma.app · ücretsiz hesapla denenebiliyor, üretim kredi harcıyor; güncel sınırlar gamma.app/pricing",
+      not: "İki dakika. Girdi metnini ÖNCEDEN hazırla ve panoya kopyalamış ol — canlıda yazmaya kalkarsan blok şişer. Çıkan sunumu güzel bulsalar bile bir yanlışını göstermeden geçme; bu bloğun işi hayranlık değil, ölçü.",
+    },
+
+    {
+      id: "s2-arac-v0",
+      blok: "Canlı araç denemesi",
+      tip: "adim",
+      baslik: "v0 — cümleden tıklanabilir ekrana",
+      giris: "Bir iş öğesini tarif eden cümleyi çalışan bir arayüz taslağına çeviriyor. Refinement'ta \"biz bunu aynı mı anlıyoruz\" sorusunu somutlaştırmak için.",
+      adimlar: [
+        {
+          ad: "Öncesi — iş öğesini cümleye dökün",
+          aciklama: "Girdi bir istem: rol, bağlam, format, sınır. Birinci oturumdaki beş parçalı kalıp aynen geçerli.",
+          ornek: "\"Bireysel bankacılık uygulaması için şifre sıfırlama ekranı: e-posta girişi, doğrulama kodu, yeni şifre. Kurumsal ton, sade.\"",
+        },
+        {
+          ad: "Sırasında — taslak çıkar, tartışma başlar",
+          aciklama: "Çıkan ekran doğru değil, TARTIŞILABİLİR. Değeri de bu: ekip aynı şeyi konuşmaya başlıyor.",
+          ornek: "\"Doğrulama kodu ekranı eksik\", \"hata durumu yok\" — bunlar aslında kabul kriteri; toplantıda konuşulmayan şey burada görünür oluyor",
+        },
+        {
+          ad: "Sonrası — taslak üretim değildir",
+          aciklama: "Çıkan kod tasarım değil, konuşma malzemesi. Erişilebilirlik, güvenlik ve gerçek veri akışı hâlâ ekibin işi.",
+          ornek: "Ekrandan çıkan kabul kriterleri Sprint Backlog'a yazılır; kodun kendisi çöpe gidebilir, konuşma kalır",
+        },
+      ],
+      kaynak: "v0.app · ücretsiz plan: aylık 5 dolarlık kredi, günde 7 mesaj sınırı (v0.app/pricing, Eylül 2026)",
+      not: "İki dakika. İstemi önceden hazırla. Odaya sor: \"bu ekranda ilk gözünüze çarpan eksik ne?\" — gelen cevaplar zaten kabul kriteri, bunu yüksek sesle söyle. Kodun üretime gitmeyeceğini net söyle, yoksa yazılım ekibi savunmaya geçiyor.",
+    },
+
     {
       id: "b-atolye2-ders",
       blok: "AI çıktısını değerlendirme",
       tip: "bolum",
-      numara: "09",
+      numara: "10",
       baslik: "AI çıktısını değerlendirme",
       ozet: "AI neyi görür, neyi göremez — ve yanlış çıktıya karşı ne yaparsınız.",
       not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Katılımcı nerede olduğunu bilsin diye var.",
@@ -357,7 +423,7 @@ export const oturum2: Oturum = {
       id: "b-yapistirma",
       blok: "Sorumlu kullanım: güvenlik ve etik",
       tip: "bolum",
-      numara: "10",
+      numara: "11",
       baslik: "Sorumlu kullanım: güvenlik ve etik",
       ozet: "Ne aktarılmaz, önyargı nereden gelir, denetim kimde.",
       not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Katılımcı nerede olduğunu bilsin diye var.",
@@ -557,9 +623,9 @@ export const oturum2: Oturum = {
       baslik: "Görünmeyen maliyet",
       giris: "\"Bulut bilişim\" deniyor ama donanım bulutta durmuyor. Sorumlu kullanımın bir de fatura tarafı var.",
       sayilar: [
-        { deger: "460", birim: "TWh", aciklama: "Veri merkezlerinin 2022'deki küresel elektrik tüketimi — bir ülke olsaydı dünyada 11. sırada, Suudi Arabistan ile Fransa arasında" },
+        { deger: "460", birim: "TWh", etki: "elektrik", aciklama: "Veri merkezlerinin 2022'deki küresel elektrik tüketimi — bir ülke olsaydı dünyada 11. sırada, Suudi Arabistan ile Fransa arasında" },
         { deger: "7-8", birim: "kat", aciklama: "Üretken AI eğitim kümesinin sıradan bir bilişim yüküne göre enerji tüketimi" },
-        { deger: "2", birim: "litre", aciklama: "Her kilovat-saat için soğutmada harcanan su" },
+        { deger: "2", birim: "litre", etki: "su", aciklama: "Her kilovat-saat için soğutmada harcanan su" },
       ],
       kaynak: "Kaynak: MIT News, \"Explained: Generative AI's environmental impact\", 17 Ocak 2025.",
       not: "Bu slayt suçlamak için değil, ölçek duygusu vermek için. Bağlanacak yer: gereksiz istem gereksiz maliyet. \"Her soruyu AI'a sormak zorunda değilsiniz\" cümlesini burada söyle. 2026 beklentisi 1.050 TWh — istersen ekle, ama üç rakam yeter.",
@@ -596,7 +662,7 @@ export const oturum2: Oturum = {
       id: "b-anlasma",
       blok: "Ekip çalışma anlaşması",
       tip: "bolum",
-      numara: "11",
+      numara: "12",
       baslik: "Ekip çalışma anlaşması",
       ozet: "Eğitimin amacı buydu: ortak ve yazılı bir yaklaşım.",
       not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Eğitimin duyurusunda \"ortak bir yaklaşım oluşturmak\" yazıyordu — bu blok o sözün karşılığı, bunu söyle.",
@@ -657,7 +723,7 @@ export const oturum2: Oturum = {
       id: "b-eylem-plani",
       blok: "Eylem planı",
       tip: "bolum",
-      numara: "12",
+      numara: "13",
       baslik: "Eylem planı",
       ozet: "Kişi başı bir deney, iki Sprint sonra ölçüm.",
       not: "Ayraç. Beş saniye dur, blok adını söyle, geç. Katılımcı nerede olduğunu bilsin diye var.",

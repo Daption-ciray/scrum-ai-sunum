@@ -82,3 +82,144 @@
 @media (prefers-reduced-motion: reduce) {
   .kutu { animation: none; opacity: 1; transform: none; }
 }
+
+/* ===========================================================================
+   ETKİ KATMANLARI — `etki` alanı olan kartlarda.
+
+   İkisi de rakamın anlamını canlandırıyor: su kartı doluyor, çatlıyor,
+   boşalıyor; elektrik kartı akım dalgalanması yaşıyor. Hepsi CSS animasyonu —
+   `requestAnimationFrame` kullanılmıyor, arka plan sekmesinde donmasın.
+   =========================================================================== */
+
+.etkili { position: relative; overflow: hidden; isolation: isolate; }
+/* Metin katmanların ÜSTÜNDE kalmalı, yoksa su rakamı yutuyor. */
+.etkili .deger,
+.etkili .aciklama { position: relative; z-index: 2; }
+
+/* --- su ------------------------------------------------------------------ */
+
+.suKatman { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+.su {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 0;
+  background: var(--su);
+  /* Seviye `steps()` ile iniyor: su akmıyor, blok blok çekiliyor. Sayfanın
+     8-bit dili için akışkan bir geçiş yanlış register olurdu. */
+  animation: suDongusu 11s steps(14, end) infinite;
+}
+/* Yüzey çizgisi — dalga değil, tek piksel kalınlığında koyu bir sınır. */
+.su::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 3px;
+  background: var(--su-koyu);
+}
+
+@keyframes suDongusu {
+  0%           { height: 0; }
+  18%          { height: 46%; }   /* doluyor — metnin altında kalıyor */
+  30%          { height: 46%; }   /* dolu bekliyor — çatlak burada beliriyor */
+  88%          { height: 0; }     /* ağır ağır boşalıyor */
+  100%         { height: 0; }
+}
+
+/* Çatlak kartın SOL KENARINDA, dar ve ince: cam duvarda bir yarık.
+   İlk sürüm kartın ortasından geçen kalın bir zikzaktı — metnin üstüne
+   binip karalama gibi duruyordu. Çatlak metne DEĞMEMELİ; okunurluk her
+   zaman efektten önce gelir. */
+.catlak {
+  position: absolute;
+  left: 5%;
+  bottom: 0;
+  width: 10%;
+  max-width: 26px;
+  height: 48%;
+  fill: none;
+  stroke: var(--metin);
+  stroke-width: 1.1;
+  stroke-linejoin: miter;
+  opacity: 0;
+  animation: catlakBelir 11s steps(1, end) infinite;
+}
+@keyframes catlakBelir {
+  0%, 26%   { opacity: 0; }
+  28%       { opacity: .22; }
+  30%       { opacity: .5; }   /* çatladı — soluk kalıyor, dikkat çalmıyor */
+  92%       { opacity: .5; }
+  95%, 100% { opacity: 0; }
+}
+
+/* Damlalar çatlağın ucundan, kartın dibine. Küçük ve az: iki tane yeter,
+   üç tanesi ekranda "toz" gibi görünüyordu. */
+.damla {
+  position: absolute;
+  left: 7%;
+  bottom: 26%;
+  width: 3px;
+  height: 5px;
+  background: var(--su-koyu);
+  opacity: 0;
+  animation: damlaDus 2.2s steps(5, end) infinite;
+}
+.damla1 { animation-delay: 3.6s; }
+.damla2 { left: 10%; animation-delay: 5.2s; }
+.damla3 { display: none; }
+
+@keyframes damlaDus {
+  0%   { opacity: 0; transform: translateY(0); }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; transform: translateY(170%); }
+  100% { opacity: 0; transform: translateY(185%); }
+}
+
+/* --- elektrik ------------------------------------------------------------ */
+
+.elektrikKatman { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+.simsek {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: clamp(18px, 3vw, 26px);
+  height: auto;
+  fill: var(--metin);
+  opacity: .12;
+  animation: simsekCak 6.5s steps(1, end) infinite;
+}
+@keyframes simsekCak {
+  0%, 74%  { opacity: .12; }
+  76%      { opacity: 1; }
+  78%      { opacity: .12; }
+  81%      { opacity: 1; }
+  84%      { opacity: .12; }
+}
+
+/* Çarpma anında kart tersine dönüyor: beyaz katman `difference` ile altındaki
+   her şeyin rengini çeviriyor — zemin siyah, rakam beyaz. Ayrı bir renk
+   getirmeden "akım dalgalandı" hissi veren en ucuz yol. */
+.sok {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  mix-blend-mode: difference;
+  opacity: 0;
+  animation: sokVur 6.5s steps(1, end) infinite;
+}
+@keyframes sokVur {
+  0%, 75%   { opacity: 0; }
+  76%       { opacity: 1; }
+  77.5%     { opacity: 0; }
+  81%       { opacity: 1; }
+  82%       { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su      { animation: none; height: 46%; }
+  .catlak  { animation: none; opacity: .9; }
+  .damla   { display: none; }
+  .simsek  { animation: none; opacity: .35; }
+  .sok     { display: none; }
+}

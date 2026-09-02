@@ -54,6 +54,14 @@
   --sunucu:       #1F9D4D;
   --sunucu-zemin: #A9E4B8;
 
+  /* --- üçüncü renk: su -------------------------------------------------
+     Yalnızca `s2-cevre` slaydındaki "2 litre" kartında, kartın içinde akan
+     su katmanında. Yeşil "sunucu burada", kırmızı "eksik istem" diyor;
+     bu mavi hiçbir arayüz durumu anlatmıyor — suyun kendisini çiziyor.
+     Aynı karede yeşille de kırmızıyla da bulunmuyor.                       */
+  --su:        #A8DAF0;
+  --su-koyu:   #5FA8CE;
+
   /* --- ikinci renk: kötü istem -----------------------------------------
      Yeşil "sunucu burada" der; bu kırmızı yalnızca `cevir` kartının kötü
      yüzünde kullanılıyor. İkisi hiçbir yerde yan yana gelmiyor — kart tek

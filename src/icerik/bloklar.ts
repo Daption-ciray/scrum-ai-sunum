@@ -31,8 +31,9 @@ const SURELER: Record<string, number> = {
   "İkinci oturum açılışı": 2,
   "Sprint Planning'de AI": 14,
   "Daily Scrum'da AI": 10,
+  "Canlı araç denemesi": 8,
   "AI çıktısını değerlendirme": 8,
-  "Sorumlu kullanım: güvenlik ve etik": 19,
+  "Sorumlu kullanım: güvenlik ve etik": 11,
   "Ekip çalışma anlaşması": 5,
   "Eylem planı": 2,
 };
