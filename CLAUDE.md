@@ -35,7 +35,7 @@ bakın.**
 > planda tutulması gereken noktalar** değerlendirilecektir. Oturum **veri
 > güvenliği ve sorumlu kullanım** ilkeleriyle tamamlanacaktır.
 
-Karşılıkları: ortak yaklaşım → `Ekip çalışma anlaşması` bloğu · Agile/Scrum
+Karşılıkları: ortak yaklaşım → `Ekibin AI kuralları` bloğu · Agile/Scrum
 ilkeleri → `Scrum çerçevesi` · üretken AI mantığı ve sınırları →
 `AI temelleri ve sınırları` + `Etkili istem yazımı` · iki olayın üç aşaması →
 `Sprint Planning'de AI` + `Daily Scrum'da AI` · iletişimin ön planda kaldığı
@@ -127,8 +127,8 @@ Kaynak sayfa: scrum.org/assessments/preparing-professional-scrum-master-ai-essen
 | 9 | Daily Scrum'da AI | 10 | 2 |
 | 10 | Canlı araç denemesi | 8 | 2 | ← gamma + v0 demosu
 | 11 | AI çıktısını değerlendirme | 8 | 2 |
-| 12 | Sorumlu kullanım: güvenlik ve etik | 11 | 2 |
-| 13 | Ekip çalışma anlaşması | 5 | 2 |
+| 12 | Sorumlu kullanım: güvenlik ve etik | 10 | 2 |
+| 13 | Ekibin AI kuralları | 6 | 2 |
 | 14 | Eylem planı | 2 | 2 |
 
 **Yok — sıradaki iş**
@@ -480,6 +480,16 @@ Bağlantılar `adim` tipine eklenen `baglantilar` alanıyla geliyor ve
 **sitedeki tek dış bağlantı**. `target="_blank"` zorunlu: aynı sekmede
 açılırsa katılımcı sunumdan düşer, geri dönene kadar slaytları kaçırır.
 Dokunma hedefi 44 px'in altına inmesin, oda telefondan katılıyor.
+
+**Blok adı "Ekip çalışma anlaşması" değil "Ekibin AI kuralları".** Scrum'ın
+terimi çalışma anlaşması ve ayraç notunda bir kez söyleniyor, ama slaytlarda
+"kurallar" deniyor: kullanıcı "anlaşma kelimesi yavan kalmış, son slaytlar
+soyut, ben bile ne kastedildiğini anlamadım" dedi. Sorun kelimeden çok
+ÇIKTININ HİÇ GÖSTERİLMEMESİYDİ — beş başlık sayılıyor ama yazılmış hâli
+ekranda yok. `s2-anlasma-ornek` slaydı bunun için eklendi: gerçek bir ekibin
+yazdığı beş satır, panoya asılacak uzunlukta. Başlık kartları da soruya
+çevrildi ("Hangi toplantıda kullanıyoruz, hangisinde kullanmıyoruz?") —
+katılımcı cevaplayacağı şeyi soru olarak görünce ne yazacağını biliyor.
 
 **`Daily` araç tablosunda bir hücre bilerek boş.** `s2-daily-araclar` içindeki
 "Sırasında · Araç yok" satırı eksiklik değil, slaytın mesajı. Doldurmayın.
