@@ -401,7 +401,7 @@ export const oturum2: Oturum = {
         etiket: "Ağırlık",
         ton: "olumsuz",
         maddeler: [
-          "Bir kez söylenmiş ama ağır olan şey",
+          "Bir kez söylenmiş ama önemli olan şey",
           "Kimsenin yazmadığı, herkesin bildiği şey",
           "Notun arkasındaki ton ve gerilim",
         ],
