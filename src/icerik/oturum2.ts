@@ -772,7 +772,7 @@ export const oturum2: Oturum = {
         { ana: "Beş satırı ekibin gördüğü yere asın", alt: "Wiki'nin derinine değil, panonun üstüne. Görünmeyen kural yok sayılır." },
         { ana: "Retrospektif'te tek soruyla açın", alt: "\"Bu kurallar işe yaradı mı?\" Yaramayan maddeyi silin — yaşamayan kural güveni aşındırır." },
       ],
-      not: "Kapanışa köprü. Ekiplere şunu söyle: bu anlaşmayı yazmadan eğitim yarım kalır. Bir sonraki blok kişisel eylem planı; bu blok ekibin, o blok bireyin.",
+      not: "Kapanışa köprü. Ekiplere şunu söyle: bu beş satırı yazmadan eğitim yarım kalır. Bir sonraki blok kişisel eylem planı; bu blok ekibin, o blok bireyin.",
     },
 
     /* ---- 00:58 · Eylem planı ---- */
