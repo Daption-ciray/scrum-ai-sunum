@@ -336,6 +336,8 @@ export const oturum2: Oturum = {
         },
       ],
       baglantilar: [{ ad: "gamma.app", url: "https://gamma.app/" }],
+      ornekIstem:
+        "Deneyimli bir Scrum Master gibi davran. BAĞLAM: 6 kişilik bir yazılım ekibiyiz, iki haftalık Sprint'ler yapıyoruz ve ekip yapay zeka araçlarını yeni kullanmaya başlıyor. GÖREV: ekip içi 10 dakikalık bir bilgilendirme sunumu taslağı hazırla. Konu: Sprint Planning ve Daily Scrum'da yapay zekayı sorumlu şekilde kullanmak. BİÇİM: en fazla 6 bölüm, her bölümde en fazla 4 madde ve bir somut örnek. SINIR: araç reklamı yapma, teknik kurulum anlatma, Scrum Kılavuzu'nda olmayan bir sorumluluk uydurma. DÜRÜSTLÜK: ekibimiz hakkında varsaydığın şeyleri sonda ayrı bir başlıkta listele.",
       kaynak: "Ücretsiz hesapla denenebiliyor. Bugün açıp tek bir deneme yapmanız yeterli.",
       not: "İki dakika. Girdi metnini ÖNCEDEN hazırla ve panoya kopyalamış ol — canlıda yazmaya kalkarsan blok şişer. Çıkan sunumu güzel bulsalar bile bir yanlışını göstermeden geçme; bu bloğun işi hayranlık değil, ölçü.",
     },
@@ -364,6 +366,8 @@ export const oturum2: Oturum = {
         },
       ],
       baglantilar: [{ ad: "v0.app", url: "https://v0.app/" }],
+      ornekIstem:
+        "Bir Scrum ekibi için \"Daily Scrum hazırlık\" ekranı tasarla. BAĞLAM: 6 kişilik yazılım ekibi, iki haftalık Sprint, pano verisi Jira'dan geliyor. Ekran Daily'den önce iki dakika bakılmak için. EKRAN: en üstte Sprint Hedefi tek cümle; altında üç sütun — dün değişen iş öğeleri, bugün planlananlar, açık engeller. Her engelin yanında sahibi ve kaç gündür açık olduğu görünsün. SINIR: gerçek veri bağlama, yalnızca örnek veriyle göster. Grafik ekleme, sade ve kurumsal kalsın. DÜRÜSTLÜK: eksik bıraktığın veya varsaydığın alanları ekranın altında not olarak yaz.",
       kaynak: "Ücretsiz hesapla denenebiliyor; günlük birkaç istem hakkı var, bir ekran taslağı için fazlasıyla yeter.",
       not: "İki dakika. İstemi önceden hazırla. Odaya sor: \"bu ekranda ilk gözünüze çarpan eksik ne?\" — gelen cevaplar zaten kabul kriteri, bunu yüksek sesle söyle. Kodun üretime gitmeyeceğini net söyle, yoksa yazılım ekibi savunmaya geçiyor.",
     },

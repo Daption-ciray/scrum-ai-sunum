@@ -35,6 +35,12 @@ export type SlaytGovde =
        * sekmesi kapanırsa katılımcı akıştan düşer.
        */
       baglantilar?: { ad: string; url: string }[];
+      /**
+       * Katılımcının araca yapıştırıp deneyebileceği hazır istem. Tek
+       * tıklamayla panoya gidiyor: canlı oturumda ekrandaki uzun metni elle
+       * yazmaya kalkan kimse denemiyor, bakıp geçiyor.
+       */
+      ornekIstem?: string;
       kaynak?: string;
     }
   /** Tek eksen üzerinde iki uç. `ikili`den farkı: karşılaştırma değil, terazi. */

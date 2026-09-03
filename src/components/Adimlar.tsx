@@ -1,9 +1,25 @@
-import type { CSSProperties } from "react";
+"use client";
+
+import { useState, type CSSProperties } from "react";
 import type { Slayt } from "@/icerik/tipler";
 import a from "./adimlar.module.css";
 
 /** Sıralı adımlar — numaralı, birbirine bağlı, sırayla beliren. */
 export function Adimlar({ slayt }: { slayt: Extract<Slayt, { tip: "adim" }> }) {
+  const [kopyalandi, setKopyalandi] = useState(false);
+
+  const kopyala = async (metin: string) => {
+    try {
+      await navigator.clipboard.writeText(metin);
+      setKopyalandi(true);
+      setTimeout(() => setKopyalandi(false), 1800);
+    } catch {
+      /* Pano izni yoksa sessiz kal: metin zaten sunucunun ekranında,
+         katılımcı isterse elle yazar. Hata mesajı göstermek slaytın
+         ortasında gereksiz gürültü olurdu. */
+    }
+  };
+
   return (
     <div className={a.sarma}>
       <h2 className={a.baslik}>{slayt.baslik}</h2>
@@ -24,9 +40,9 @@ export function Adimlar({ slayt }: { slayt: Extract<Slayt, { tip: "adim" }> }) {
         ))}
       </ol>
 
-      {slayt.baglantilar && slayt.baglantilar.length > 0 && (
+      {(slayt.baglantilar?.length || slayt.ornekIstem) && (
         <div className={a.baglantilar}>
-          {slayt.baglantilar.map((b) => (
+          {slayt.baglantilar?.map((b) => (
             <a
               key={b.url}
               className={`etiket ${a.baglanti}`}
@@ -39,6 +55,16 @@ export function Adimlar({ slayt }: { slayt: Extract<Slayt, { tip: "adim" }> }) {
               {b.ad} ↗
             </a>
           ))}
+
+          {slayt.ornekIstem && (
+            <button
+              type="button"
+              className={`etiket ${a.baglanti} ${a.kopya}`}
+              onClick={() => kopyala(slayt.ornekIstem as string)}
+            >
+              {kopyalandi ? "Kopyalandı ✓" : "Örnek istemi kopyala"}
+            </button>
+          )}
         </div>
       )}
 

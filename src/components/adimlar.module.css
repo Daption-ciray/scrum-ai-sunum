@@ -85,3 +85,13 @@
   transform: translate(3px, 3px);
   box-shadow: 0 0 0 0 var(--cizgi-2);
 }
+
+/* Kopyala düğmesi bağlantılarla aynı geometride ama DOLU: biri seni siteden
+   götürüyor, diğeri panoya yazıyor — aynı görünmemeleri gerekiyor. */
+.kopya {
+  background: var(--metin);
+  color: var(--zemin);
+  border-color: var(--metin);
+  cursor: pointer;
+  font-family: inherit;
+}

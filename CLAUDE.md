@@ -467,6 +467,15 @@ aylık 5 dolarlık kredi ve günde 7 mesajdı (v0.app/pricing, Eylül 2026), gam
 sayfası bota kapalı olduğu için hiç doğrulanamadı. Slaytlar yalnızca "ücretsiz
 hesapla denenebiliyor" diyor.
 
+Her iki araç slaytında **"Örnek istemi kopyala"** düğmesi var (`ornekIstem`
+alanı): tek tıkla panoya gidiyor. Sebep basit — canlı oturumda ekrandaki uzun
+istemi elle yazmaya kalkan kimse denemiyor, bakıp geçiyor. İki istem de
+birinci oturumdaki BEŞ PARÇALI kalıba uyuyor (rol · bağlam · format · sınır ·
+dürüstlük) ve konuları Scrum'ın kendisi: gamma'da "Planning ve Daily'de AI"
+sunumu, v0'da "Daily Scrum hazırlık ekranı". Yani araç denemesi aynı zamanda
+birinci oturumun kalıbının tekrarı oluyor. Kopyalama düğmesi bağlantılarla
+aynı geometride ama DOLU: biri siteden götürüyor, diğeri panoya yazıyor.
+
 Bağlantılar `adim` tipine eklenen `baglantilar` alanıyla geliyor ve
 **sitedeki tek dış bağlantı**. `target="_blank"` zorunlu: aynı sekmede
 açılırsa katılımcı sunumdan düşer, geri dönene kadar slaytları kaçırır.
