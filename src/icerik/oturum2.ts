@@ -36,18 +36,18 @@ export const oturum2: Oturum = {
       adimlar: [
         {
           ad: "Öncesi",
-          aciklama: "Hazırlık. Katkının en yüksek olduğu aşama burası.",
-          ornek: "Planning: eksik kabul kriterlerini çıkarır · Daily: dünden bugüne panoda değişeni özetler",
+          aciklama: "AI'ın en çok işe yaradığı yer burası: hazırlık.",
+          ornek: "Planning'de eksik kabul kriterlerini çıkarır · Daily'de panoda dünden bugüne ne değiştiğini özetler",
         },
         {
           ad: "Sırasında",
-          aciklama: "Geri planda kalır. Konuşan ekiptir.",
-          ornek: "Planning: konuşulanı not alır, tahmine karışmaz · Daily: hiç açılmaz",
+          aciklama: "AI geri çekilir, konuşan ekiptir.",
+          ornek: "Planning'de yalnızca konuşulanı not alır, tahmine karışmaz · Daily'de hiç açılmaz",
         },
         {
           ad: "Sonrası",
-          aciklama: "Toparlama ve takip.",
-          ornek: "Planning: Sprint Hedefi taslağını yazar · Daily: engel kaydını biçimlendirir",
+          aciklama: "Konuşulanlar yazıya geçer.",
+          ornek: "Planning'de Sprint Hedefi taslağını yazar · Daily'de engel kaydını biçimlendirir",
         },
       ],
       kaynak: "Kaynak: Scrum.org, AI-Enhanced Scrum Events.",
@@ -74,17 +74,17 @@ export const oturum2: Oturum = {
       adimlar: [
         {
           ad: "Öncesi",
-          aciklama: "Backlog öğeleri toplantıya hazır gelsin. Katkının en yüksek olduğu aşama.",
+          aciklama: "Backlog öğeleri toplantıya hazır gelsin — AI'ın en çok işe yaradığı aşama bu.",
           ornek: "Üst sıradaki öğelerde eksik kabul kriteri, tanımsız hata durumu ve bağımlılık listesi çıkarılır; sorulacak sorular önceden hazırlanır",
         },
         {
           ad: "Sırasında",
-          aciklama: "Geri planda kalır. Tahmin ve taahhüt ekibin.",
+          aciklama: "AI geri çekilir; tahmin de taahhüt de ekibindir.",
           ornek: "Konuşulanı not alır. Efor tahminine, kapasiteye ve Sprint Hedefi'nin cümlesine karışmaz",
         },
         {
           ad: "Sonrası",
-          aciklama: "Toparlama. Karar verilmiş şeyi yazıya geçirir.",
+          aciklama: "Karar verilmiş olan yazıya geçer.",
           ornek: "Sprint Hedefi taslağını biçimlendirir, Sprint Backlog kırılımını önerir, açık kalan soruları listeler",
         },
       ],
