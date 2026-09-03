@@ -151,26 +151,36 @@
 }
 
 /* ---------------- katmanlar ---------------- */
-.katmanlar { display: flex; flex-direction: column; gap: .5rem; }
+
+/* Ölçüler `vh` ile: bu tipin sorunu genişlik değil YÜKSEKLİK. `s2-cerceve`
+   beş halka taşıyor ve açıklamaları uzun; global punto ölçüleriyle son halka
+   ile kaynak satırı ekranın altından taşıyordu. `vw` ile küçültmek dar
+   ekranda okunmaz hâle getirirdi — sığmayan şey dikey olduğu için ölçü de
+   dikeyden alınıyor. `clamp()` alt sınırı telefonu koruyor. */
+.katmanlar { display: flex; flex-direction: column; gap: clamp(.3rem, .65vh, .5rem); }
 .katman {
   display: grid;
   grid-template-columns: minmax(0, auto) 1fr;
-  gap: 0 clamp(1rem, 2vw, 1.8rem);
+  gap: 0 clamp(.8rem, 1.7vw, 1.5rem);
   align-items: center;
   background: var(--yuzey);
   border: 1px solid var(--cizgi);
   border-radius: var(--kose);
-  padding: clamp(.75rem, 1.6vw, 1.15rem) clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(.5rem, 1.15vh, 1rem) clamp(.85rem, 1.8vw, 1.4rem);
   /* İç içe geçme, sola artan girinti ile gösteriliyor. */
-  margin-left: calc(var(--derinlik) * clamp(.7rem, 2.2vw, 2.4rem));
+  margin-left: calc(var(--derinlik) * clamp(.5rem, 1.7vw, 1.9rem));
 }
 .katmanAd {
-  font-size: var(--ol-alt);
+  font-size: clamp(.92rem, 1.75vh, 1.2rem);
   font-weight: 600;
   white-space: nowrap;
   color: var(--vurgu);
 }
-.katmanAciklama { font-size: var(--ol-govde); color: var(--metin-2); }
+.katmanAciklama {
+  font-size: clamp(.82rem, 1.5vh, 1.05rem);
+  line-height: 1.38;
+  color: var(--metin-2);
+}
 
 /* Kaynak satırı — `katman` slaytları için. Diğer tipler kendi modülünde
    aynı biçimi taşıyor; ikisi değişirse birlikte değişsin. */

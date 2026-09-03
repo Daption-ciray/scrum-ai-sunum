@@ -22,6 +22,25 @@ export type SlaytGovde =
     }
   /** Tablo. Beş Scrum etkinliğinin AI karşılıkları gibi ızgara içerik için. */
   | { tip: "tablo"; baslik: string; sutunlar: string[]; satirlar: string[][] }
+  /**
+   * Maskeleme akışı — üç katmanlı canlı gösterim.
+   *
+   * Ham istem yazılı duruyor, üstünden bir tarama çizgisi geçiyor ve hassas
+   * alanlar maskeye dönüşüyor; sonra maskelenmiş hâl modele gidiyor.
+   * `parcalar` metni sırayla taşıyor: `maske` alanı olan parça hassas
+   * sayılıyor ve tarama ona değdiğinde değişiyor.
+   */
+  | {
+      tip: "maskeakis";
+      baslik: string;
+      giris?: string;
+      parcalar: { metin: string; maske?: string }[];
+      /** Üç katmanın adı — soldaki etiketler. */
+      katmanlar?: [string, string, string];
+      sonuc?: string;
+      kaynak?: string;
+      not?: string;
+    }
   /** Sıralı adımlar. Süreç anlatan içerik tabloya sıkıştırılmasın. */
   | {
       tip: "adim";

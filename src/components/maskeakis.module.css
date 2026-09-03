@@ -1,0 +1,142 @@
+/* Maskeleme akışı. Renk kodu yok, hepsi tema.css.
+   Döngü 9 saniye: 0-1,6 sn ham metin · 1,6-5 sn tarama yürüyor ve alanlar
+   maskeleniyor · 5-8 sn maskeli hâl duruyor · 8-9 sn başa dönüyor. */
+
+.sarma { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+
+.baslik { font-size: var(--ol-baslik); line-height: 1.1; letter-spacing: -.02em; }
+.giris {
+  color: var(--metin-2);
+  font-size: var(--ol-govde);
+  max-width: 58ch;
+  line-height: 1.45;
+}
+
+/* --- katman etiketleri --- */
+
+.katmanlar { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+.katman {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .3rem .6rem;
+  border: var(--kenar) solid var(--cizgi-2);
+  background: var(--yuzey);
+}
+/* Ortadaki katman işi yapan katman; kalın kenarla öne çıkıyor. */
+.katmanEtkin { border-color: var(--cizgi); box-shadow: 3px 3px 0 0 var(--cizgi-2); }
+
+.no { color: var(--metin-3); font-size: 11px; -webkit-font-smoothing: none; }
+.katmanAd { color: var(--metin); font-size: 12px; -webkit-font-smoothing: none; }
+
+/* --- sahne: istem metni + tarama çizgisi --- */
+
+.sahne {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem 1.1rem;
+  background: var(--yuzey);
+  border: var(--kenar) solid var(--cizgi);
+  box-shadow: 5px 5px 0 0 var(--cizgi-2);
+}
+
+.metin {
+  position: relative;
+  z-index: 2;
+  font-family: var(--yazi-mono), monospace;
+  font-size: clamp(.85rem, 1.7vw, 1.05rem);
+  line-height: 1.9;
+  color: var(--metin);
+  word-break: break-word;
+}
+
+/* Hassas parça: iki hâli üst üste duruyor, biri sönerken diğeri yanıyor.
+   Genişlik ikisinden geniş olana göre sabitlenmesin diye `inline-grid`:
+   iki çocuk da aynı hücrede, kutu doğal olarak geniş olana oturuyor. */
+.hassas {
+  display: inline-grid;
+  vertical-align: baseline;
+}
+.hassas > * { grid-area: 1 / 1; }
+
+.acik {
+  /* Ham hâl: altı çizili, "bu alan hassas" demek için. */
+  border-bottom: 2px solid var(--metin-3);
+  animation: acikSon 9s steps(1, end) infinite;
+  animation-delay: var(--gecikme, 2s);
+}
+.kapali {
+  opacity: 0;
+  background: var(--metin);
+  color: var(--zemin);
+  padding: 0 .2em;
+  animation: kapaliGel 9s steps(1, end) infinite;
+  animation-delay: var(--gecikme, 2s);
+}
+
+/* Gecikmeler tarama çizgisinin varış anına göre veriliyor; buradaki
+   yüzdeler döngünün kalanını tarif ediyor. */
+@keyframes acikSon {
+  0%        { opacity: 1; }
+  1%, 72%   { opacity: 0; }
+  73%, 100% { opacity: 1; }
+}
+@keyframes kapaliGel {
+  0%        { opacity: 0; }
+  1%, 72%   { opacity: 1; }
+  73%, 100% { opacity: 0; }
+}
+
+/* Maskeleme servisi: soldan sağa yürüyen çizgi. `steps()` ile adımlı —
+   sayfanın 8-bit dili akışkan bir süzülmeyi kaldırmıyor. */
+.tarama {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 10px;
+  z-index: 3;
+  background: var(--metin);
+  opacity: 0;
+  animation: taramaYuru 9s steps(22, end) infinite;
+}
+/* `left` yüzdesi kapsayan kutunun genişliğine göre çözülüyor; `translateX`
+   ile denenirse yüzde ÇİZGİNİN kendi genişliğine göre hesaplanır ve çizgi
+   10 piksel ilerleyip durur. */
+@keyframes taramaYuru {
+  0%        { left: 0; opacity: 0; }
+  16%       { left: 0; opacity: .85; }
+  60%       { left: 100%; opacity: .85; }
+  62%, 100% { left: 100%; opacity: 0; }
+}
+
+/* --- sonuç satırı --- */
+
+.sonuc {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  color: var(--metin-2);
+  font-size: var(--ol-govde);
+  line-height: 1.4;
+}
+.ok {
+  font-family: var(--yazi-mono), monospace;
+  color: var(--metin-3);
+}
+
+.kaynak {
+  color: var(--metin-3);
+  font-size: var(--ol-etiket);
+  font-family: var(--yazi-mono), monospace;
+  letter-spacing: .04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Hareket kapalıyken maskelenmiş hâl gösteriliyor: slaydın SÖYLEDİĞİ şey
+     maskelenmiş metin, ham metin değil. */
+  .tarama { display: none; }
+  .acik { animation: none; opacity: 0; }
+  .kapali { animation: none; opacity: 1; }
+}

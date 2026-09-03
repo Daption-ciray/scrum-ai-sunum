@@ -6,6 +6,7 @@ import { Sayilar } from "./Sayilar";
 import { Adimlar } from "./Adimlar";
 import { Terazi } from "./Terazi";
 import { Kartlar } from "./Kartlar";
+import { MaskelemeAkisi } from "./MaskelemeAkisi";
 import { Alinti } from "./Alinti";
 import { IstemCevir } from "./IstemCevir";
 import { BolumGorseli } from "./BolumGorseli";
@@ -165,6 +166,9 @@ function Govde({ slayt, durum }: { slayt: SlaytTipi; durum?: Durum }) {
 
     case "terazi":
       return <Terazi slayt={slayt} />;
+
+    case "maskeakis":
+      return <MaskelemeAkisi slayt={slayt} />;
 
     case "kartlar":
       return <Kartlar slayt={slayt} />;
